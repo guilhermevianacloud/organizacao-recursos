@@ -32,10 +32,14 @@ O Spring Boot sobe sozinho o PostgreSQL descrito em `compose.yaml` e aplica as m
 ## Documentação
 | Documento | Conteúdo |
 |---|---|
-| [docs/prd.md](docs/prd.md) | Produto, personas, requisitos e regras |
-| [docs/arquitetura.md](docs/arquitetura.md) | Arquitetura, decisões e análise ATAM |
-| [docs/plano-de-teste.md](docs/plano-de-teste.md) | Estratégia e plano de testes |
+| [docs/prd.md](docs/prd.md) | Produto, personas, 14 requisitos funcionais, 14 não funcionais, regras e estados |
+| [docs/arquitetura.md](docs/arquitetura.md) | C4, modelo de dados, fluxos críticos, utility tree, cenários e análise ATAM |
+| [docs/plano-de-teste.md](docs/plano-de-teste.md) | Estratégia e plano de testes (ISO/IEC/IEEE 29119-3) |
+| [docs/testes/plano-tdd.md](docs/testes/plano-tdd.md) | Inventário de casos de teste por regra de negócio |
+| [docs/rtm.md](docs/rtm.md) | Matriz de rastreabilidade requisito → risco → teste → evidência |
 | [docs/adr/](docs/adr/) | Registros de decisão arquitetural |
+| [docs/defeitos/](docs/defeitos/) | Registro de defeitos |
+| [docs/taticas-arquiteturais-len-bass.md](docs/taticas-arquiteturais-len-bass.md) | Catálogo de táticas (material de apoio da Aula 04) |
 
 ## Integração contínua
 O workflow [`qualidade`](.github/workflows/ci.yml) roda `./mvnw -B verify` a cada pull request e a cada push na `main`. Os relatórios de teste ficam como artifact de cada execução, inclusive quando ela falha.
