@@ -101,7 +101,7 @@ class ServicoDeReservasIT {
         @Test
         void rn02_09_reservaCanceladaLiberaOHorario() {
             Reserva outra = servicoDeReservas.solicitar(sala102.getId(), solicitante, das("13:00:00", "14:00:00"));
-            servicoDeReservas.cancelar(outra.getId());
+            servicoDeReservas.cancelar(outra.getId(), solicitante);
 
             Reserva nova = servicoDeReservas.solicitar(sala102.getId(), solicitante, das("13:00:00", "14:00:00"));
 
@@ -184,7 +184,7 @@ class ServicoDeReservasIT {
         @Test
         void manutencaoSobreReservaCanceladaEhAceita() {
             Reserva reserva = servicoDeReservas.solicitar(sala102.getId(), solicitante, das("09:00:00", "10:00:00"));
-            servicoDeReservas.cancelar(reserva.getId());
+            servicoDeReservas.cancelar(reserva.getId(), solicitante);
 
             assertThat(servicoDeManutencao.bloquear(sala102.getId(), das("08:00:00", "12:00:00"), "pintura").getId())
                     .isNotNull();

@@ -1,6 +1,7 @@
 package br.senac.organizacaorecursos.api;
 
 import br.senac.organizacaorecursos.dominio.AcessoNegadoException;
+import br.senac.organizacaorecursos.dominio.CredenciaisInvalidasException;
 import br.senac.organizacaorecursos.dominio.IntervaloInvalidoException;
 import br.senac.organizacaorecursos.dominio.RecursoNaoEncontradoException;
 import br.senac.organizacaorecursos.dominio.RegraDeNegocioException;
@@ -76,12 +77,16 @@ public class TratamentoDeErros extends ResponseEntityExceptionHandler {
         if (e instanceof AcessoNegadoException) {
             return HttpStatus.FORBIDDEN;
         }
+        if (e instanceof CredenciaisInvalidasException) {
+            return HttpStatus.UNAUTHORIZED;
+        }
         return HttpStatus.CONFLICT;
     }
 
     private static String tituloDe(HttpStatus status) {
         return switch (status) {
             case BAD_REQUEST -> "Dados inválidos";
+            case UNAUTHORIZED -> "Não autenticado";
             case NOT_FOUND -> "Não encontrado";
             case FORBIDDEN -> "Acesso negado";
             default -> "Conflito";

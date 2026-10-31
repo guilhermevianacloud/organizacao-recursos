@@ -23,7 +23,7 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "recurso_id")
     private Recurso recurso;
 
@@ -56,13 +56,42 @@ public class Reserva {
         this.estado = EstadoReserva.SOLICITADA;
     }
 
-    /** Toda reserva nasce SOLICITADA; recurso não restrito é aprovado na hora (D-08), restrito aguarda o Responsável. */
     public static Reserva solicitar(Recurso recurso, Long solicitanteId, Intervalo intervalo) {
+        return solicitar(recurso, solicitanteId, intervalo, null);
+    }
+
+    /** Toda reserva nasce SOLICITADA; recurso não restrito é aprovado na hora (D-08), restrito aguarda o Responsável. */
+    public static Reserva solicitar(Recurso recurso, Long solicitanteId, Intervalo intervalo, String motivo) {
         Reserva reserva = new Reserva(recurso, solicitanteId, intervalo);
+        reserva.motivo = motivo;
         if (!recurso.isRestrito()) {
             reserva.transitarPara(EstadoReserva.APROVADA);
         }
         return reserva;
+    }
+
+    /**
+     * Muda o horário de uma reserva ainda não iniciada. Reserva de recurso restrito já aprovada não muda:
+     * a aprovação valeu para o horário original (cancele e peça de novo).
+     */
+    public void alterarHorario(Intervalo novo) {
+        boolean podeAlterar = estado == EstadoReserva.SOLICITADA
+                || (estado == EstadoReserva.APROVADA && !recurso.isRestrito());
+        if (!podeAlterar) {
+            throw new RegraDeNegocioException("ALTERACAO_NAO_PERMITIDA",
+                    "Esta reserva não pode mais ter o horário alterado. Cancele e solicite novamente.");
+        }
+        this.inicio = novo.inicio();
+        this.termino = novo.termino();
+    }
+
+    /** RN-10: a reserva é do usuário? */
+    public boolean pertenceA(Long usuarioId) {
+        return solicitanteId.equals(usuarioId);
+    }
+
+    public String getMotivo() {
+        return motivo;
     }
 
     /** RN-07: só transições permitidas; a recusada não altera o estado. */
