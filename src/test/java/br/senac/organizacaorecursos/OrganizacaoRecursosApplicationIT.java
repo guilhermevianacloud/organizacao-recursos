@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest
-class OrganizacaoRecursosApplicationTests {
+class OrganizacaoRecursosApplicationIT {
 
     @Autowired
     private JdbcTemplate jdbc;
