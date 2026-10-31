@@ -150,18 +150,23 @@ Preenchida na Fase 3 em diante: cada caso recebe o caminho e o nome do teste, e 
 
 | Regra | Casos | Teste | Status |
 |---|---|---|---|
-| RN-01 | RN01-01..05 | — | a escrever |
-| RN-02 | RN02-01..11 | — | a escrever |
-| RN-03 | RN03-01..04 | — | a escrever |
-| RN-04 | RN04-01..07 | — | a escrever |
-| RN-05 | RN05-01..05 | — | a escrever |
-| RN-06 | RN06-01..02 | — | a escrever |
-| RN-07 | RN07-01..13 | — | a escrever |
-| RN-08 | RN08-01..04 | — | a escrever |
-| RN-09 | RN09-01..06 | — | a escrever |
-| RN-10 | RN10-01..04 | — | a escrever |
-| RN-11 | RN11-01..07 | — | a escrever |
-| RN-12 | RN12-01..04 | — | a escrever |
-| RN-13 | RN13-01..06 | — | a escrever |
+Caminhos relativos a `src/test/java/br/senac/organizacaorecursos/`. Atualizado em 2026-10-31 (Fase 3).
 
-**Regras sem teste:** todas, por enquanto (nenhum código de domínio escrito).
+| Regra | Casos | Teste | Status |
+|---|---|---|---|
+| RN-01 | RN01-01..05 | `dominio/IntervaloTest` (classe `TerminoPosteriorAoInicio`) | verde |
+| RN-02 | RN02-01..07 | `dominio/IntervaloTest` (classe `Sobreposicao`, parametrizado) | verde |
+| RN-02 | RN02-01, 02, 06, 08, 09, 10, 11 | `servico/ServicoDeReservasIT` (classe `Sobreposicao`, PostgreSQL real) | verde |
+| RN-03 | RN03-01..04 | `servico/DuplaReservaConcorrenciaIT`; constraint isolada em `servico/ProtecaoNoBancoIT` | verde (nível de serviço; 409 pela API na Fase 4) |
+| RN-04 | RN04-01..07 | `servico/ServicoDeReservasIT` (classe `EmManutencao`) | verde |
+| RN-05 | RN05-05 | `dominio/ReservaTest.rn05_05_recursoNaoRestritoNasceAprovado` | parcial — RN05-01..04 na Fase 4/5 |
+| RN-06 | RN06-01..02 | — | a escrever (Fase 4/5) |
+| RN-07 | RN07-01..13 | `dominio/EstadoReservaTest` (49 pares) + `dominio/ReservaTest` | verde |
+| RN-08 | RN08-01..03 | `dominio/EstadoReservaTest`, `dominio/ReservaTest.rn08_reservaIniciadaNaoPodeSerApagada` | parcial — RN08-04 (API sem exclusão física) na Fase 4 |
+| RN-09 | RN09-01..06 | — | a escrever (Fase 5) |
+| RN-10 | RN10-01..04 | — | a escrever (Fase 4) |
+| RN-11 | RN11-01..07 | — | a escrever (Fase 5) |
+| RN-12 | RN12-01..04 | — | a escrever (Fase 4) |
+| RN-13 | RN13-01..06 | — | a escrever (Fase 5) |
+
+**Regras sem teste:** RN-06, RN-09, RN-10, RN-11, RN-12, RN-13 (previstas para as Fases 4 e 5).
