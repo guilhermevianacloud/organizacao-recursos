@@ -2,6 +2,7 @@ package br.senac.organizacaorecursos.servico;
 
 import br.senac.organizacaorecursos.dominio.Intervalo;
 import br.senac.organizacaorecursos.dominio.Manutencao;
+import br.senac.organizacaorecursos.dominio.ManutencaoConflitaComReservaException;
 import br.senac.organizacaorecursos.dominio.Recurso;
 import br.senac.organizacaorecursos.dominio.RecursoNaoEncontradoException;
 import br.senac.organizacaorecursos.persistencia.ManutencaoRepository;
@@ -24,10 +25,15 @@ public class ServicoDeManutencao {
         this.reservas = reservas;
     }
 
+    /** RN-04 com a política provisória da Q-02: não bloqueia período que já tem reserva ativa. */
     @Transactional
     public Manutencao bloquear(Long recursoId, Intervalo intervalo, String motivo) {
         Recurso recurso = recursos.findById(recursoId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(recursoId));
+        if (reservas.existeSobreposicao(recursoId, intervalo.inicio(), intervalo.termino(),
+                ServicoDeReservas.ESTADOS_QUE_OCUPAM)) {
+            throw new ManutencaoConflitaComReservaException();
+        }
         return manutencoes.save(new Manutencao(recurso, intervalo, motivo));
     }
 }
