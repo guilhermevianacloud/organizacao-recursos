@@ -65,6 +65,10 @@ public final class Dtos {
             @Size(max = 255, message = "deve ter até 255 caracteres") String motivo) {
     }
 
+    public record AuditoriaResposta(Instant instante, Long usuarioId, String usuarioNome, EstadoReserva estadoAnterior,
+                                    EstadoReserva estadoNovo, String motivo) {
+    }
+
     public record AlteracaoPedido(
             @NotNull(message = "é obrigatório") Instant inicio,
             @NotNull(message = "é obrigatório") Instant termino) {

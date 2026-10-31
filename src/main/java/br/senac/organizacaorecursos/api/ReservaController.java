@@ -1,6 +1,12 @@
 package br.senac.organizacaorecursos.api;
 
 import br.senac.organizacaorecursos.api.Dtos.AlteracaoPedido;
+import br.senac.organizacaorecursos.api.Dtos.AuditoriaResposta;
+import br.senac.organizacaorecursos.dominio.AuditoriaReserva;
+import br.senac.organizacaorecursos.dominio.Usuario;
+import br.senac.organizacaorecursos.persistencia.UsuarioRepository;
+import java.util.Map;
+import java.util.stream.Collectors;
 import br.senac.organizacaorecursos.api.Dtos.ReservaPedido;
 import br.senac.organizacaorecursos.api.Dtos.ReservaResposta;
 import br.senac.organizacaorecursos.dominio.Intervalo;
@@ -30,9 +36,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservaController {
 
     private final ServicoDeReservas servico;
+    private final UsuarioRepository usuarios;
 
-    public ReservaController(ServicoDeReservas servico) {
+    public ReservaController(ServicoDeReservas servico, UsuarioRepository usuarios) {
         this.servico = servico;
+        this.usuarios = usuarios;
+    }
+
+    /** RES-13: histórico só para Responsável e Administrador (RN-09). Só leitura: não há rota para alterar ou apagar. */
+    @GetMapping("/{id}/historico")
+    @PreAuthorize("hasAnyRole('RESPONSAVEL','ADMINISTRADOR')")
+    public List<AuditoriaResposta> historico(@PathVariable Long id) {
+        List<AuditoriaReserva> trilha = servico.historico(id);
+        Map<Long, String> nomes = usuarios.findAllById(trilha.stream().map(AuditoriaReserva::getUsuarioId)
+                        .collect(Collectors.toSet())).stream()
+                .collect(Collectors.toMap(Usuario::getId, Usuario::getNome));
+        return trilha.stream().map(r -> new AuditoriaResposta(r.getInstante(), r.getUsuarioId(),
+                nomes.get(r.getUsuarioId()), r.getEstadoAnterior(), r.getEstadoNovo(), r.getMotivo())).toList();
     }
 
     @GetMapping
