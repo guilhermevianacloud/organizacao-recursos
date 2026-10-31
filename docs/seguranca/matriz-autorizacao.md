@@ -31,6 +31,8 @@ reserva em uso.
 | RES-10 | Registrar retirada | POST | /api/reservas/{reservaAprovada}/retirada | 401 | 403 | 200 | 403 |
 | RES-11 | Registrar devolução | POST | /api/reservas/{reservaEmUso}/devolucao | 401 | 403 | 200 | 403 |
 | RES-12 | Registrar não comparecimento | POST | /api/reservas/{reservaAprovada}/nao-comparecimento | 401 | 403 | 200 | 403 |
+| RES-13 | Histórico (auditoria) de uma reserva | GET | /api/reservas/{reservaPropria}/historico | 401 | 403 | 200 | 200 |
+| RES-14 | Reservas aguardando aprovação | GET | /api/reservas/pendentes | 401 | 403 | 200 | 403 |
 
 ## Rotas sem regra de segurança
 Nenhuma rota da API fica fora da matriz: a configuração nega (`denyAll`) qualquer rota que não seja da API,
