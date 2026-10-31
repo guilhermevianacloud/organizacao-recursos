@@ -37,4 +37,4 @@ Nenhuma rota da API fica fora da matriz: a configuração nega (`denyAll`) qualq
 da interface, da documentação ou do login.
 
 ## Divergências encontradas
-Registradas em `docs/defeitos/` antes da correção, quando houver.
+Nenhuma até 2026-10-31: as 76 células passaram na primeira execução da implementação (ver `docs/testes/evidencia-tdd.md`).
