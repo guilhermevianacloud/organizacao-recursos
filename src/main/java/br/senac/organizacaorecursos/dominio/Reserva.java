@@ -56,16 +56,26 @@ public class Reserva {
         this.estado = EstadoReserva.SOLICITADA;
     }
 
+    /** Toda reserva nasce SOLICITADA; recurso não restrito é aprovado na hora (D-08), restrito aguarda o Responsável. */
     public static Reserva solicitar(Recurso recurso, Long solicitanteId, Intervalo intervalo) {
-        return new Reserva(recurso, solicitanteId, intervalo);
+        Reserva reserva = new Reserva(recurso, solicitanteId, intervalo);
+        if (!recurso.isRestrito()) {
+            reserva.transitarPara(EstadoReserva.APROVADA);
+        }
+        return reserva;
     }
 
+    /** RN-07: só transições permitidas; a recusada não altera o estado. */
     public void transitarPara(EstadoReserva novo) {
+        if (!estado.podeTransitarPara(novo)) {
+            throw new TransicaoInvalidaException(estado, novo);
+        }
         this.estado = novo;
     }
 
+    /** RN-08: reserva iniciada não pode ser apagada. */
     public boolean podeSerApagada() {
-        return true;
+        return !estado.iniciada();
     }
 
     public Intervalo intervalo() {
