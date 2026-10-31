@@ -26,7 +26,7 @@ class OrganizacaoRecursosApplicationTests {
                 "select count(*) from flyway_schema_history where version = '1' and success",
                 Integer.class);
 
-        assertThat(banco).startsWith("PostgreSQL 17");
+        assertThat(banco).startsWith("PostgreSQL 16");
         assertThat(migracoesComSucesso).isEqualTo(1);
     }
 }
