@@ -1,6 +1,9 @@
 package br.senac.organizacaorecursos.servico;
 
 import br.senac.organizacaorecursos.dominio.AcessoNegadoException;
+import br.senac.organizacaorecursos.dominio.AuditoriaReserva;
+import br.senac.organizacaorecursos.persistencia.AuditoriaReservaRepository;
+import java.time.Clock;
 import br.senac.organizacaorecursos.dominio.ConflitoDeHorarioException;
 import br.senac.organizacaorecursos.dominio.EstadoReserva;
 import br.senac.organizacaorecursos.dominio.Intervalo;
@@ -38,12 +41,16 @@ public class ServicoDeReservas {
     private final RecursoRepository recursos;
     private final ReservaRepository reservas;
     private final ManutencaoRepository manutencoes;
+    private final AuditoriaReservaRepository auditoria;
+    private final Clock relogio;
 
     public ServicoDeReservas(RecursoRepository recursos, ReservaRepository reservas,
-                             ManutencaoRepository manutencoes) {
+                             ManutencaoRepository manutencoes, AuditoriaReservaRepository auditoria, Clock relogio) {
         this.recursos = recursos;
         this.reservas = reservas;
         this.manutencoes = manutencoes;
+        this.auditoria = auditoria;
+        this.relogio = relogio;
     }
 
     @Transactional
@@ -62,7 +69,13 @@ public class ServicoDeReservas {
     public Reserva solicitar(Long recursoId, Long solicitanteId, Intervalo intervalo, String motivo) {
         Recurso recurso = travarRecurso(recursoId);
         verificarDisponibilidade(recursoId, intervalo, null);
-        return gravar(Reserva.solicitar(recurso, solicitanteId, intervalo, motivo));
+        Reserva reserva = gravar(Reserva.solicitar(recurso, solicitanteId, intervalo, motivo));
+        auditar(reserva, solicitanteId, null, EstadoReserva.SOLICITADA, "Pedido de reserva");
+        if (reserva.getEstado() == EstadoReserva.APROVADA) {
+            auditar(reserva, solicitanteId, EstadoReserva.SOLICITADA, EstadoReserva.APROVADA,
+                    "Aprovação automática: recurso não restrito");
+        }
+        return reserva;
     }
 
     /** Muda o horário de uma reserva própria (RN-10), com as mesmas verificações da criação. */
@@ -72,8 +85,13 @@ public class ServicoDeReservas {
         exigirDono(reserva, usuarioId);
         travarRecurso(reserva.getRecurso().getId());
         verificarDisponibilidade(reserva.getRecurso().getId(), novo, reservaId);
+        Intervalo anterior = reserva.intervalo();
         reserva.alterarHorario(novo);
-        return gravar(reserva);
+        Reserva alterada = gravar(reserva);
+        auditar(alterada, usuarioId, alterada.getEstado(), alterada.getEstado(),
+                "Horário alterado de " + anterior.inicio() + "–" + anterior.termino()
+                        + " para " + novo.inicio() + "–" + novo.termino());
+        return alterada;
     }
 
     /** Cancelar muda o estado (RN-07); nunca apaga a reserva (RN-08). Só o dono cancela (RN-10). */
@@ -81,7 +99,7 @@ public class ServicoDeReservas {
     public Reserva cancelar(Long reservaId, Long usuarioId) {
         Reserva reserva = obter(reservaId);
         exigirDono(reserva, usuarioId);
-        return transitar(reserva, EstadoReserva.CANCELADA);
+        return transitar(reserva, EstadoReserva.CANCELADA, usuarioId, "Cancelada pelo solicitante");
     }
 
     /** RN-05 (perfil verificado na API) e RN-06: quem pediu não aprova a própria reserva. */
@@ -91,29 +109,36 @@ public class ServicoDeReservas {
         if (reserva.pertenceA(responsavelId)) {
             throw new AcessoNegadoException("Quem solicitou a reserva não pode aprová-la.");
         }
-        return transitar(reserva, EstadoReserva.APROVADA);
+        return transitar(reserva, EstadoReserva.APROVADA, responsavelId, "Aprovada pelo responsável");
     }
 
     @Transactional
     public Reserva rejeitar(Long reservaId, Long responsavelId) {
-        return transitar(obter(reservaId), EstadoReserva.REJEITADA);
+        return transitar(obter(reservaId), EstadoReserva.REJEITADA, responsavelId, "Rejeitada pelo responsável");
     }
 
     /** RF-09: retirada do material ou início do uso. */
     @Transactional
     public Reserva registrarRetirada(Long reservaId, Long responsavelId) {
-        return transitar(obter(reservaId), EstadoReserva.EM_USO);
+        return transitar(obter(reservaId), EstadoReserva.EM_USO, responsavelId, "Retirada registrada");
     }
 
     /** RF-09: devolução do material ou fim do uso. */
     @Transactional
     public Reserva registrarDevolucao(Long reservaId, Long responsavelId) {
-        return transitar(obter(reservaId), EstadoReserva.CONCLUIDA);
+        return transitar(obter(reservaId), EstadoReserva.CONCLUIDA, responsavelId, "Devolução registrada");
     }
 
     @Transactional
     public Reserva registrarNaoComparecimento(Long reservaId, Long responsavelId) {
-        return transitar(obter(reservaId), EstadoReserva.NAO_COMPARECEU);
+        return transitar(obter(reservaId), EstadoReserva.NAO_COMPARECEU, responsavelId, "Não compareceu");
+    }
+
+    /** RF-10: trilha completa da reserva, na ordem em que aconteceu. */
+    @Transactional(readOnly = true)
+    public List<AuditoriaReserva> historico(Long reservaId) {
+        obter(reservaId);
+        return auditoria.findByReservaIdOrderByIdAsc(reservaId);
     }
 
     @Transactional(readOnly = true)
@@ -133,9 +158,17 @@ public class ServicoDeReservas {
         return reservas.findByEstadoOrderByInicioAsc(EstadoReserva.SOLICITADA);
     }
 
-    private Reserva transitar(Reserva reserva, EstadoReserva novo) {
+    /** RN-07 + RN-09: muda o estado e grava a auditoria na mesma transação. */
+    private Reserva transitar(Reserva reserva, EstadoReserva novo, Long usuarioId, String motivo) {
+        EstadoReserva anterior = reserva.getEstado();
         reserva.transitarPara(novo);
-        return reservas.saveAndFlush(reserva);
+        Reserva salva = reservas.saveAndFlush(reserva);
+        auditar(salva, usuarioId, anterior, novo, motivo);
+        return salva;
+    }
+
+    private void auditar(Reserva reserva, Long usuarioId, EstadoReserva anterior, EstadoReserva novo, String motivo) {
+        auditoria.save(new AuditoriaReserva(reserva.getId(), usuarioId, relogio.instant(), anterior, novo, motivo));
     }
 
     private Reserva obter(Long reservaId) {
