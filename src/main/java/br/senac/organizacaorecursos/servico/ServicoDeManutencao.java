@@ -28,7 +28,7 @@ public class ServicoDeManutencao {
     /** RN-04 com a política provisória da Q-02: não bloqueia período que já tem reserva ativa. */
     @Transactional
     public Manutencao bloquear(Long recursoId, Intervalo intervalo, String motivo) {
-        Recurso recurso = recursos.findById(recursoId)
+        Recurso recurso = recursos.buscarTravandoParaReserva(recursoId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(recursoId));
         if (reservas.existeSobreposicao(recursoId, intervalo.inicio(), intervalo.termino(),
                 ServicoDeReservas.ESTADOS_QUE_OCUPAM)) {

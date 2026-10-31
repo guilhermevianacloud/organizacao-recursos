@@ -3,7 +3,7 @@
 | Campo | Valor |
 |---|---|
 | Identificador | DEF-001 |
-| Situação | corrigido (ver "Correção") |
+| Situação | corrigido (ver "Correção" e DEF-002) |
 | Requisito afetado | RF-06 / RN-03 (crítico, limitador de nota) · também RF-05 / RN-02 na agenda do professor |
 | Encontrado por | `DuplaReservaConcorrenciaIT` (teste de concorrência, Aula 10) |
 | Data | 2026-10-31 |
