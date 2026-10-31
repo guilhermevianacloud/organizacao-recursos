@@ -22,6 +22,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntFunction;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -57,9 +58,19 @@ class DuplaReservaConcorrenciaIT {
 
     @BeforeEach
     void bancoLimpo() {
-        jdbc.execute("TRUNCATE reserva, manutencao, recurso, usuario RESTART IDENTITY CASCADE");
+        limparTabelas();
         solicitante = usuarios.save(
                 new Usuario("Marina Teste", "marina@exemplo.invalid", Perfil.SOLICITANTE, "hash-ficticio")).getId();
+    }
+
+    /** Sem transação desfeita, os dados ficariam no banco e quebrariam os testes seguintes. */
+    @AfterEach
+    void deixarOBancoComoEncontrou() {
+        limparTabelas();
+    }
+
+    private void limparTabelas() {
+        jdbc.execute("TRUNCATE reserva, manutencao, recurso, usuario RESTART IDENTITY CASCADE");
     }
 
     @RepeatedTest(value = 5, name = "RN03-01/03: sala, execução {currentRepetition} de {totalRepetitions}")
