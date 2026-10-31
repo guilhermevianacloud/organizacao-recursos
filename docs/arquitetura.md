@@ -240,8 +240,8 @@ Táticas pelo catálogo de Len Bass (seção 8 trata deste projeto). Roteiro por
 ## 12. Matriz requisito → decisão → componente → evidência
 | Requisito | Decisão / ADR | Componente | Evidência de verificação |
 |---|---|---|---|
-| RF-06 / RN-03 | ADR-002 | constraint no banco + ServicoDeReservas | teste de concorrência (Fase 3) — *pendente* |
-| RF-05 / RN-02 | ADR-002, ADR-004 | Regras de intervalo + constraint | testes de limite (Fase 3) — *pendente* |
+| RF-06 / RN-03 | ADR-002 (constraint + trava por recurso) | migração V3 + ServicoDeReservas + RecursoRepository | `DuplaReservaConcorrenciaIT`, `ProtecaoNoBancoIT` — [run 41210306850](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41210306850) |
+| RF-05 / RN-02 | ADR-002, ADR-004 | Intervalo + constraint | `IntervaloTest`, `ServicoDeReservasIT` — [run 41210306850](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41210306850) |
 | RF-01 / RN-10 | ADR-003 | filtro JWT + matriz de autorização | teste parametrizado (Fase 4) — *pendente* |
 | RF-10 / RN-09 | auditoria na mesma transação | ServicoDeAuditoria | integração com rollback (Fase 5) — *pendente* |
 | RF-11 / RN-13 | ADR-005 | Porta Notificador + adaptador HTTP | WireMock INT-01..06 (Fase 5) — *pendente* |
