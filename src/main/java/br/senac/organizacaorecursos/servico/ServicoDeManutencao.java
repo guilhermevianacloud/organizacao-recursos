@@ -36,4 +36,9 @@ public class ServicoDeManutencao {
         }
         return manutencoes.save(new Manutencao(recurso, intervalo, motivo));
     }
+
+    @Transactional(readOnly = true)
+    public java.util.List<Manutencao> listar() {
+        return manutencoes.findAll(org.springframework.data.domain.Sort.by("inicio"));
+    }
 }
