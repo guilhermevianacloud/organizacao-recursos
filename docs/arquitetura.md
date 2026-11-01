@@ -260,3 +260,4 @@ Táticas pelo catálogo de Len Bass (seção 8 trata deste projeto). Roteiro por
 - [ADR-004 — Intervalos semiabertos](adr/ADR-004-intervalos-semiabertos.md)
 - [ADR-005 — Notificação por porta e adaptador HTTP](adr/ADR-005-notificacao-porta-adaptador.md)
 - [ADR-006 — Interface web estática servida pelo Spring](adr/ADR-006-interface-web.md)
+- [ADR-007 — Proteção CSRF desligada na API stateless](adr/ADR-007-csrf-desligado.md)
