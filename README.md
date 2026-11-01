@@ -37,5 +37,16 @@ O Spring Boot sobe sozinho o PostgreSQL descrito em `compose.yaml` e aplica as m
 | [docs/plano-de-teste.md](docs/plano-de-teste.md) | Estratégia e plano de testes |
 | [docs/adr/](docs/adr/) | Registros de decisão arquitetural |
 
+## Integração contínua
+O workflow [`qualidade`](.github/workflows/ci.yml) roda `./mvnw -B verify` a cada pull request e a cada push na `main`. Os relatórios de teste ficam como artifact de cada execução, inclusive quando ela falha.
+
+Evidência de que o CI barra falhas (Aula 06), registrada no PR #1:
+
+| Execução | Commit | Resultado | O que aconteceu |
+|---|---|---|---|
+| [41207827313](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41207827313) | `8ea556d` | verde | Primeira execução do pipeline |
+| [41207912465](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41207912465) | `5b93d2e` | **vermelho** | Quebra intencional: o teste passou a esperar PostgreSQL 16 e falhou por asserção |
+| [41207988750](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41207988750) | `9373d64` | verde | Quebra revertida com `git revert`; suíte de volta ao verde |
+
 ## Uso de IA
 O código deste repositório é escrito com apoio de agente de IA (Claude), seguindo os prompts das aulas práticas da disciplina. Toda mudança passa por pull request, CI e revisão do grupo.
