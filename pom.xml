@@ -92,6 +92,13 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- End-to-end com navegador real (RF-13, D-03): Chromium sem janela via Playwright -->
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.64.0</version>
+            <scope>test</scope>
+        </dependency>
         <!-- BDD: cenários Dado/Quando/Então executáveis (Aula 09) -->
         <dependency>
             <groupId>io.cucumber</groupId>
