@@ -41,12 +41,12 @@ Evidência atual: [CI run 41322975920](https://github.com/guilhermevianacloud/or
 | RNF-01, RNF-02 — desempenho | p95 ≤ 300 ms, 50 usuários | JMeter: `perf/reservas.jmx`, `perf/resultados/rodada-01.jtl`, `docs/performance/resultado-01.md` | rodada 01 (2026-11-01) | **não atende** — p95 332 ms (consulta) e 506 ms (criação); DEF-003 aberto |
 | RNF-03 — integridade | 1 aceito em 20, 5 de 5 | `servico/DuplaReservaConcorrenciaIT` | run 41322975920 | verde |
 | RNF-04 — autorização | 100% da matriz | `api/MatrizDeAutorizacaoIT` | run 41322975920 | verde |
-| RNF-05 — senha e token | BCrypt; 60 min; 0 segredos | `api/ApiDeReservasIT` (login); SonarCloud | run 41322975920 | parcial (SonarCloud na Fase 6) |
+| RNF-05 — senha e token | BCrypt; 60 min; 0 segredos | `api/ApiDeReservasIT` (login); SonarCloud | run 41322975920; [run 41346988995](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41346988995) | verde: testes; SonarCloud sem segredo apontado (S4502 justificado no ADR-007) |
 | RNF-06 — erro neutro | 0 vazamentos | `api/ApiDeReservasIT` (`semDetalheInterno`) | run 41322975920 | verde |
 | RNF-07 — falha externa | timeout 2 s; reserva mantida | `notificacao/NotificadorHttpIT.int04_…`; `notificacao/NotificacaoAposCommitIT` | run 41322975920 | verde |
 | RNF-08 — auditoria | 0 órfãos | `servico/AuditoriaIT.rn09_03_rollbackNaoDeixaAuditoriaOrfa` | run 41322975920 | verde |
 | RNF-09 — interface | 360–1920 px | `e2e/InterfaceE2EIT.telasCabemEmLarguraDeCelularSemRolagemLateral` (360 px) | [run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479) | verde |
-| RNF-10 — cobertura e análise | 80/70; 0 críticos | JaCoCo no `verify` (linhas 98,0%, branches 95,0%; `docs/testes/lacunas-de-cobertura.md`); SonarCloud | [run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479) | parcial — JaCoCo verde; SonarCloud aguarda o `SONAR_TOKEN` |
+| RNF-10 — cobertura e análise | 80/70; 0 críticos | JaCoCo no `verify` (linhas 98,0%, branches 95,0%; `docs/testes/lacunas-de-cobertura.md`); SonarCloud | [run 41346988995](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41346988995) | parcial: JaCoCo verde; Quality Gate do SonarCloud aprovado (PR #10); 1 apontamento (S4502) justificado e aguardando revisão no site (DEF-004) |
 | RNF-12 — instalabilidade | 1 comando | `OrganizacaoRecursosApplicationIT` + CI + teste de fumaça | run 41322975920 | verde |
 | RNF-13 — testabilidade | 5 execuções sem intermitência | `servico/DuplaReservaConcorrenciaIT` (`@RepeatedTest(5)`) | run 41322975920 | verde |
 | RNF-14 — privacidade | 0 dados reais; 0 tokens em log | dados `.invalid`; `notificacao/NotificadorHttpIT.int06_…` | run 41322975920 | verde |
