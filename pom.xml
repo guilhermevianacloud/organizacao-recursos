@@ -19,6 +19,11 @@
 
     <properties>
         <java.version>21</java.version>
+        <!-- SonarCloud (Aula 07): organização e projeto criados pelo dono do repositório no sonarcloud.io -->
+        <sonar.organization>guilhermevianacloud</sonar.organization>
+        <sonar.projectKey>guilhermevianacloud_organizacao-recursos</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
@@ -87,6 +92,13 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- End-to-end com navegador real (RF-13, D-03): Chromium sem janela via Playwright -->
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.64.0</version>
+            <scope>test</scope>
+        </dependency>
         <!-- BDD: cenários Dado/Quando/Então executáveis (Aula 09) -->
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -152,6 +164,51 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+              Cobertura (Aula 07): o agente mede os testes de unidade (Surefire) e de integração (Failsafe);
+              no verify gera HTML + XML (o XML é lido pelo SonarCloud) e reprova o build abaixo de
+              80% de linhas e 70% de branches. Nenhuma classe é excluída para subir o número.
+            -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.15</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report-and-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.70</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

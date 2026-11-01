@@ -27,7 +27,7 @@ Evidência: [CI run 41322975920](https://github.com/guilhermevianacloud/organiza
 | RF-10 Histórico auditável | feito | `servico/AuditoriaIT` | sem responsabilização |
 | RF-11 Notificação | feito | `notificacao/NotificadorHttpIT`, `notificacao/NotificacaoAposCommitIT` | requisito obrigatório ausente |
 | RF-12 Relatório de utilização | feito | `api/RelatorioDeUtilizacaoIT` | requisito obrigatório ausente |
-| RF-13 Interface responsiva e mensagens compreensíveis | parcial | mensagens: `api/ApiDeReservasIT`; interface: teste de fumaça — falta o end-to-end (Fase 6) | avaliação de usabilidade |
+| RF-13 Interface responsiva e mensagens compreensíveis | feito | mensagens: `api/ApiDeReservasIT`; interface: `e2e/InterfaceE2EIT` (fluxos e 360 px) | avaliação de usabilidade |
 | RF-14 Documentação da API ou dos fluxos | feito (revisão) | OpenAPI em `/swagger-ui.html`; README | avaliador não entende o uso |
 
 ## Regras críticas
@@ -45,7 +45,7 @@ Evidência: [CI run 41322975920](https://github.com/guilhermevianacloud/organiza
 
 ## Pendências até a entrega (semana 46)
 Executadas por Guilherme Viana Lopes e Claude (agente de IA), em ordem:
-1. Fase 6 — JaCoCo 80/70 no `verify`, SonarCloud no PR (precisa da conta e do `SONAR_TOKEN` do Guilherme), teste end-to-end da interface (fecha RF-13).
+1. Fase 6 — feito: JaCoCo 80/70 (98,0% / 95,0%) e end-to-end ([run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479)). Falta só o SonarCloud: conta, projeto e `SONAR_TOKEN` do Guilherme.
 2. Fase 7 — JMeter (RNF-01, RNF-02) e mutação manual das regras críticas.
 3. Fase 8 — relatório de qualidade e preparação da prova oral.
 4. Fase 9 — clone limpo, tag `v1.0.0-rc1`, pacote de evidências e envio.
