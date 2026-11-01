@@ -3,6 +3,8 @@ package br.senac.organizacaorecursos.api;
 import br.senac.organizacaorecursos.api.Dtos.AlteracaoPedido;
 import br.senac.organizacaorecursos.api.Dtos.AuditoriaResposta;
 import br.senac.organizacaorecursos.dominio.AuditoriaReserva;
+import br.senac.organizacaorecursos.dominio.ConflitoDeHorarioException;
+import br.senac.organizacaorecursos.servico.RegistroDeConflitos;
 import br.senac.organizacaorecursos.dominio.Usuario;
 import br.senac.organizacaorecursos.persistencia.UsuarioRepository;
 import java.util.Map;
@@ -37,10 +39,12 @@ public class ReservaController {
 
     private final ServicoDeReservas servico;
     private final UsuarioRepository usuarios;
+    private final RegistroDeConflitos conflitos;
 
-    public ReservaController(ServicoDeReservas servico, UsuarioRepository usuarios) {
+    public ReservaController(ServicoDeReservas servico, UsuarioRepository usuarios, RegistroDeConflitos conflitos) {
         this.servico = servico;
         this.usuarios = usuarios;
+        this.conflitos = conflitos;
     }
 
     /** RES-13: histórico só para Responsável e Administrador (RN-09). Só leitura: não há rota para alterar ou apagar. */
@@ -76,16 +80,26 @@ public class ReservaController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('SOLICITANTE')")
     public ReservaResposta solicitar(@AuthenticationPrincipal Jwt token, @Valid @RequestBody ReservaPedido p) {
-        return ReservaResposta.de(servico.solicitar(p.recursoId(), UsuarioAutenticado.id(token),
-                new Intervalo(p.inicio(), p.termino()), p.motivo()));
+        Intervalo pedido = new Intervalo(p.inicio(), p.termino());
+        try {
+            return ReservaResposta.de(servico.solicitar(p.recursoId(), UsuarioAutenticado.id(token), pedido, p.motivo()));
+        } catch (ConflitoDeHorarioException e) {
+            conflitos.registrar(p.recursoId(), pedido);
+            throw e;
+        }
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('SOLICITANTE')")
     public ReservaResposta alterar(@AuthenticationPrincipal Jwt token, @PathVariable Long id,
                                    @Valid @RequestBody AlteracaoPedido p) {
-        return ReservaResposta.de(servico.alterar(id, UsuarioAutenticado.id(token),
-                new Intervalo(p.inicio(), p.termino())));
+        Intervalo pedido = new Intervalo(p.inicio(), p.termino());
+        try {
+            return ReservaResposta.de(servico.alterar(id, UsuarioAutenticado.id(token), pedido));
+        } catch (ConflitoDeHorarioException e) {
+            conflitos.registrar(servico.recursoDa(id), pedido);
+            throw e;
+        }
     }
 
     @PostMapping("/{id}/cancelamento")
