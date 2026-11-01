@@ -39,10 +39,13 @@ public class ConfiguracaoDeSeguranca {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfiguracaoDeSeguranca.class);
     private static final int TAMANHO_MINIMO_DA_CHAVE = 32;
+    private static final SecureRandom ALEATORIO = new SecureRandom();
 
     @Bean
     SecurityFilterChain cadeiaDeSeguranca(HttpSecurity http, RespostasDeSeguranca respostas) throws Exception {
         http
+                // Sem cookie de sessão: o token vai no cabeçalho Authorization, que o navegador não envia sozinho.
+                // Sem esse envio automático não há CSRF a proteger (ADR-007).
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(regras -> regras
@@ -76,7 +79,7 @@ public class ConfiguracaoDeSeguranca {
         String segredo = propriedades.segredo();
         if (segredo == null || segredo.isBlank()) {
             bytes = new byte[TAMANHO_MINIMO_DA_CHAVE];
-            new SecureRandom().nextBytes(bytes);
+            ALEATORIO.nextBytes(bytes);
             LOG.info("JWT_SEGREDO não definido: chave aleatória gerada para esta execução.");
         } else {
             bytes = segredo.getBytes(StandardCharsets.UTF_8);
