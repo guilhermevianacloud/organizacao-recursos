@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServicoDeReservas {
 
     /** Estados que ocupam o recurso (RN-02): só eles entram na verificação de sobreposição. */
-    static final Set<EstadoReserva> ESTADOS_QUE_OCUPAM = Arrays.stream(EstadoReserva.values())
+    public static final Set<EstadoReserva> ESTADOS_QUE_OCUPAM = Arrays.stream(EstadoReserva.values())
             .filter(EstadoReserva::ocupaRecurso)
             .collect(Collectors.toCollection(() -> EnumSet.noneOf(EstadoReserva.class)));
 
@@ -156,6 +156,12 @@ public class ServicoDeReservas {
     @Transactional(readOnly = true)
     public List<Reserva> aguardandoAprovacao() {
         return reservas.findByEstadoOrderByInicioAsc(EstadoReserva.SOLICITADA);
+    }
+
+    /** Recurso de uma reserva (usado para registrar o conflito evitado numa alteração recusada). */
+    @Transactional(readOnly = true)
+    public Long recursoDa(Long reservaId) {
+        return obter(reservaId).getRecurso().getId();
     }
 
     /** RN-07 + RN-09: muda o estado e grava a auditoria na mesma transação. */

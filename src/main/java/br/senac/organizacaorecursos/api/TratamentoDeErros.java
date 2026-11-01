@@ -3,6 +3,7 @@ package br.senac.organizacaorecursos.api;
 import br.senac.organizacaorecursos.dominio.AcessoNegadoException;
 import br.senac.organizacaorecursos.dominio.CredenciaisInvalidasException;
 import br.senac.organizacaorecursos.dominio.IntervaloInvalidoException;
+import br.senac.organizacaorecursos.dominio.PesquisaInvalidaException;
 import br.senac.organizacaorecursos.dominio.RecursoNaoEncontradoException;
 import br.senac.organizacaorecursos.dominio.RegraDeNegocioException;
 import br.senac.organizacaorecursos.dominio.ReservaNaoEncontradaException;
@@ -68,7 +69,7 @@ public class TratamentoDeErros extends ResponseEntityExceptionHandler {
     }
 
     private static HttpStatus statusDe(RegraDeNegocioException e) {
-        if (e instanceof IntervaloInvalidoException) {
+        if (e instanceof IntervaloInvalidoException || e instanceof PesquisaInvalidaException) {
             return HttpStatus.BAD_REQUEST;
         }
         if (e instanceof RecursoNaoEncontradoException || e instanceof ReservaNaoEncontradaException) {
