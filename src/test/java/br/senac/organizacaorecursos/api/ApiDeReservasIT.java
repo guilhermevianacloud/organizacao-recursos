@@ -3,6 +3,7 @@ package br.senac.organizacaorecursos.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,6 +45,8 @@ class ApiDeReservasIT {
     private ServicoDeToken tokens;
     @Autowired
     private PasswordEncoder codificador;
+    @Autowired
+    private org.springframework.jdbc.core.JdbcTemplate jdbc;
 
     private Usuario solicitante;
     private String tokenSolicitante;
@@ -85,6 +88,31 @@ class ApiDeReservasIT {
                 .andExpect(jsonPath("$.codigo").value("CONFLITO_DE_HORARIO"))
                 .andReturn().getResponse().getContentAsString();
         semDetalheInterno(corpo);
+    }
+
+    @Test
+    void alterarParaHorarioOcupadoResponde409ERegistraConflitoEvitado() throws Exception {
+        solicitar("08:00", "10:00").andExpect(status().isCreated());
+        String corpo = solicitar("10:00", "11:00").andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        String id = corpo.replaceAll(".*\"id\":(\\d+).*", "$1");
+        Integer antes = jdbc.queryForObject("select count(*) from tentativa_recusada where recurso_id = ?", Integer.class, sala);
+
+        mvc.perform(put("/api/reservas/" + id).header("Authorization", tokenSolicitante)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"inicio\":\"2026-11-09T09:00:00Z\",\"termino\":\"2026-11-09T10:30:00Z\"}"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.codigo").value("CONFLITO_DE_HORARIO"));
+
+        Integer depois = jdbc.queryForObject("select count(*) from tentativa_recusada where recurso_id = ?", Integer.class, sala);
+        assertThat(depois).isEqualTo(antes + 1);
+    }
+
+    @Test
+    void recursoInexistenteResponde404() throws Exception {
+        mvc.perform(get("/api/recursos/999999").header("Authorization", tokenSolicitante))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value("RECURSO_NAO_ENCONTRADO"));
     }
 
     @Test

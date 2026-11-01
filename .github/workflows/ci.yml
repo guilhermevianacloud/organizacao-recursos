@@ -1,5 +1,5 @@
-# Integração contínua (Aula 06): o mesmo ./mvnw -B verify usado localmente,
-# em ambiente limpo, a cada pull request e a cada push na main.
+# Integração contínua (Aulas 06 e 07): o mesmo ./mvnw -B verify usado localmente, em ambiente limpo,
+# a cada pull request e a cada push na main. O verify roda unidade, integração, BDD e o gate do JaCoCo (80/70).
 name: qualidade
 
 on:
@@ -19,9 +19,15 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      # Cadastrado pelo dono do repositório em Settings > Secrets (Aula 07). Nunca escrito em arquivo ou log.
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
+      # Histórico completo: o SonarCloud precisa dele para calcular o "novo código".
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-java@v5
         with:
@@ -29,9 +35,14 @@ jobs:
           java-version: '21'
           cache: maven
 
-      # verify (e não test): roda unitários, integração e os gates de qualidade.
+      # verify (e não test): roda unitários, integração, cenários BDD e os gates de qualidade.
       - name: Build e testes
         run: ./mvnw -B verify
+
+      # Análise estática no SonarCloud, lendo o XML do JaCoCo. Só roda quando o secret existe.
+      - name: Análise do SonarCloud
+        if: env.SONAR_TOKEN != ''
+        run: ./mvnw -B org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
 
       # Relatórios guardados como evidência, inclusive quando o build falha.
       - name: Publicar relatórios de teste
@@ -42,5 +53,14 @@ jobs:
           path: |
             target/surefire-reports/
             target/failsafe-reports/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Publicar relatório de cobertura (JaCoCo)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-de-cobertura
+          path: target/site/jacoco/
           if-no-files-found: warn
           retention-days: 7
