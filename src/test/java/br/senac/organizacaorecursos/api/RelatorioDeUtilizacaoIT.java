@@ -120,6 +120,20 @@ class RelatorioDeUtilizacaoIT {
                 .andExpect(jsonPath("$.conflitosEvitados").value(3));
     }
 
+    /*
+     * Borda inicial (lacuna apontada pelo JaCoCo): reserva de 2031-05-09 22:00 até 2031-05-10 02:00.
+     * Período 2031-05-10 00:00 → 2031-05-11 00:00: só 00:00–02:00 está dentro → 2,0 h (D-14).
+     */
+    @Test
+    void reservaQueComecaAntesDoPeriodoContaSoAsHorasDentro() throws Exception {
+        criar(salaA, "2031-05-09T22:00:00Z", "2031-05-10T02:00:00Z").andExpect(status().isCreated());
+
+        relatorio("2031-05-10T00:00:00Z", "2031-05-11T00:00:00Z")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.recursos.length()").value(1))
+                .andExpect(jsonPath("$.recursos[0].horas").value(2.0));
+    }
+
     /* Período sem nenhuma reserva nem recusa (2031-04-01): listas vazias e 0 conflitos. */
     @Test
     void rn11_04_periodoVazio() throws Exception {

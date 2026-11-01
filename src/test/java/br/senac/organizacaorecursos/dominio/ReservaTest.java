@@ -77,6 +77,49 @@ class ReservaTest {
         assertThat(reserva.podeSerApagada()).isTrue();
     }
 
+    private static final Intervalo DEZ_AS_ONZE =
+            new Intervalo(Instant.parse("2026-11-09T10:00:00Z"), Instant.parse("2026-11-09T11:00:00Z"));
+
+    @Test
+    void alterarHorarioDeReservaAprovadaDeRecursoNaoRestritoMudaOIntervalo() {
+        Reserva reserva = Reserva.solicitar(sala101, SOLICITANTE, OITO_AS_DEZ);
+
+        reserva.alterarHorario(DEZ_AS_ONZE);
+
+        assertThat(reserva.intervalo()).isEqualTo(DEZ_AS_ONZE);
+    }
+
+    @Test
+    void alterarHorarioDeRestritoAindaSolicitadoEhPermitido() {
+        Reserva reserva = Reserva.solicitar(laboratorioRestrito, SOLICITANTE, OITO_AS_DEZ);
+
+        reserva.alterarHorario(DEZ_AS_ONZE);
+
+        assertThat(reserva.intervalo()).isEqualTo(DEZ_AS_ONZE);
+    }
+
+    /** A aprovação valeu para o horário original: restrito já aprovado não muda de horário. */
+    @Test
+    void alterarHorarioDeRestritoJaAprovadoEhRecusado() {
+        Reserva reserva = Reserva.solicitar(laboratorioRestrito, SOLICITANTE, OITO_AS_DEZ);
+        reserva.transitarPara(EstadoReserva.APROVADA);
+
+        assertThatThrownBy(() -> reserva.alterarHorario(DEZ_AS_ONZE))
+                .isInstanceOf(RegraDeNegocioException.class)
+                .extracting("codigo").isEqualTo("ALTERACAO_NAO_PERMITIDA");
+        assertThat(reserva.intervalo()).isEqualTo(OITO_AS_DEZ);
+    }
+
+    @ParameterizedTest(name = "reserva em {0} não muda de horário")
+    @EnumSource(value = EstadoReserva.class, names = {"EM_USO", "CONCLUIDA", "NAO_COMPARECEU"})
+    void alterarHorarioDeReservaIniciadaEhRecusado(EstadoReserva estadoIniciado) {
+        Reserva reserva = Reserva.solicitar(sala101, SOLICITANTE, OITO_AS_DEZ);
+        levarAte(reserva, estadoIniciado);
+
+        assertThatThrownBy(() -> reserva.alterarHorario(DEZ_AS_ONZE))
+                .isInstanceOf(RegraDeNegocioException.class);
+    }
+
     private static void levarAte(Reserva reserva, EstadoReserva alvo) {
         switch (alvo) {
             case EM_USO -> reserva.transitarPara(EstadoReserva.EM_USO);
