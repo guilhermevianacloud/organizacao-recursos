@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0-rc2 — versão candidata para a entrega, com análise estática
+
+### Qualidade
+- SonarCloud integrado ao CI (`SONAR_TOKEN`), lendo a cobertura do JaCoCo. Quality Gate aprovado.
+- DEF-004: 12 apontamentos da primeira análise; 11 corrigidos (`SecureRandom` reaproveitado, promessas tratadas na
+  interface, regex dos testes trocada por `JsonPath`) e 1 justificado (CSRF desligado em API stateless, ADR-007, proposta).
+
+### Limitações conhecidas
+- Revisão do apontamento S4502 no SonarCloud depende do dono do repositório.
+- Desempenho medido só em máquina local (`docs/performance/resultado-01.md`); DEF-003 aberto.
+
 ## v1.0.0-rc1 — versão candidata para a entrega (Qualidade de Software 2026.2, semana 46)
 
 ### Funcionalidades (14 requisitos obrigatórios)

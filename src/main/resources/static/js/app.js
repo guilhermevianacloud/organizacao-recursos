@@ -74,6 +74,11 @@
       + (codigo ? ' <span class="codigo">(' + esc(codigo) + ')</span>' : '') + '</div>';
   }
 
+  // Para telas disparadas sem await (eventos): o erro aparece na tela em vez de virar rejeição sem tratamento.
+  function emSegundoPlano(promessa) {
+    promessa.catch((e) => { conteudo.innerHTML = aviso('erro', e.message, e.codigo); });
+  }
+
   function etiqueta(estado) {
     return '<span class="estado estado-' + esc(estado) + '">' + esc(NOMES_ESTADO[estado] || estado) + '</span>';
   }
@@ -116,7 +121,7 @@
       + (s.id === 'aprovacoes' ? '<span class="contador oculto" id="contador-pendentes"></span>' : '') + '</a>').join('');
     document.title = secao.titulo + ' · Organização de Recursos';
     secao.abrir().catch((e) => { conteudo.innerHTML = aviso('erro', e.message, e.codigo); });
-    if (PERFIL === 'RESPONSAVEL') atualizarContadorDePendentes();
+    if (PERFIL === 'RESPONSAVEL') emSegundoPlano(atualizarContadorDePendentes());
   }
 
   async function atualizarContadorDePendentes() {
@@ -139,7 +144,7 @@
       + '<section class="painel" aria-label="Linha do tempo"><div id="grade" class="linha-do-tempo"><p class="mudo">Carregando…</p></div>'
       + '<div class="legenda">' + ['APROVADA', 'SOLICITADA', 'EM_USO', 'CONCLUIDA'].map(etiqueta).join('')
       + '<span class="estado bloco manutencao" style="position:static">Manutenção</span></div></section>';
-    document.getElementById('dia').addEventListener('change', (e) => { diaDaAgenda = e.target.value; telaAgenda(); });
+    document.getElementById('dia').addEventListener('change', (e) => { diaDaAgenda = e.target.value; emSegundoPlano(telaAgenda()); });
 
     const [recursos, reservasHoje, reservasAmanha, manutencoes] = await Promise.all([
       api('GET', '/api/recursos'),
@@ -185,7 +190,7 @@
     const grade = document.getElementById('grade');
     grade.innerHTML = recursos.length ? html : '<p class="vazio">Nenhum recurso cadastrado.</p>';
     grade.querySelectorAll('[data-reserva]').forEach((b) => b.addEventListener('click', () => {
-      abrirDetalhe(reservas.find((r) => r.id === Number(b.dataset.reserva)));
+      emSegundoPlano(abrirDetalhe(reservas.find((r) => r.id === Number(b.dataset.reserva))));
     }));
   }
 
@@ -309,7 +314,7 @@
       if (!confirm('Cancelar esta reserva?')) return;
       try {
         await api('POST', '/api/reservas/' + b.dataset.cancelar + '/cancelamento');
-        telaMinhas();
+        await telaMinhas();
       } catch (e) {
         document.getElementById('resultado').innerHTML = aviso('erro', e.message, e.codigo);
       }
@@ -368,8 +373,8 @@
         alvo.innerHTML = aviso('erro', e.message, e.codigo);
       }
     };
-    document.getElementById('periodo').addEventListener('submit', (e) => { e.preventDefault(); gerar(); });
-    gerar();
+    document.getElementById('periodo').addEventListener('submit', (e) => { e.preventDefault(); emSegundoPlano(gerar()); });
+    emSegundoPlano(gerar());
   }
 
   // ---------- Recursos (Administrador) ----------
@@ -401,7 +406,7 @@
           competencias: document.getElementById('n-competencias').value.trim() || null,
           restrito: document.getElementById('n-restrito').checked,
         });
-        telaRecursos();
+        await telaRecursos();
       } catch (erro) {
         document.getElementById('resultado').innerHTML = aviso('erro', erro.message, erro.codigo);
       }
@@ -435,7 +440,7 @@
           termino: paraIso(dia, document.getElementById('m-fim').value),
           motivo: document.getElementById('m-motivo').value.trim() || null,
         });
-        telaManutencao();
+        await telaManutencao();
       } catch (erro) {
         document.getElementById('resultado').innerHTML = aviso('erro', erro.message, erro.codigo);
       }

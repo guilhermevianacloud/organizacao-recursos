@@ -43,9 +43,9 @@ Evidência: [CI run 41322975920](https://github.com/guilhermevianacloud/organiza
 | Auditoria (RN-09) | feito | `AuditoriaIT` |
 | Autorização (RN-10) | feito | `MatrizDeAutorizacaoIT` |
 
-## Pendências até a entrega (semana 46)
+## Fases até a entrega (semana 46)
 Executadas por Guilherme Viana Lopes e Claude (agente de IA), em ordem:
-1. Fase 6 — feito: JaCoCo 80/70 (98,0% / 95,0%) e end-to-end ([run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479)). Falta só o SonarCloud: conta, projeto e `SONAR_TOKEN` do Guilherme.
-2. Fase 7 — JMeter (RNF-01, RNF-02) e mutação manual das regras críticas.
-3. Fase 8 — relatório de qualidade e preparação da prova oral.
-4. Fase 9 — clone limpo, tag `v1.0.0-rc1`, pacote de evidências e envio.
+1. Fase 6 — feito: JaCoCo 80/70 (98,0% / 95,0%) e end-to-end ([run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479)). SonarCloud configurado em 2026-11-01; os apontamentos da 1ª análise estão no DEF-004.
+2. Fase 7 — feito: JMeter (`docs/performance/resultado-01.md`, DEF-003) e mutação manual (10 de 10).
+3. Fase 8 — feito: `docs/relatorio-qualidade.md` e `docs/prova-oral/`.
+4. Fase 9 — feito: clone limpo (`docs/entrega/checklist.md`) e pacote de evidências (`docs/evidencias/README.md`). Envio no formulário: pelo grupo.
