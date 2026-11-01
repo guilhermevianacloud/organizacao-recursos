@@ -1,0 +1,46 @@
+# Integração contínua (Aula 06): o mesmo ./mvnw -B verify usado localmente,
+# em ambiente limpo, a cada pull request e a cada push na main.
+name: qualidade
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Permissão mínima: o workflow só precisa ler o código.
+permissions:
+  contents: read
+
+# Cancela execuções antigas da mesma branch quando chega um commit novo.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # verify (e não test): roda unitários, integração e os gates de qualidade.
+      - name: Build e testes
+        run: ./mvnw -B verify
+
+      # Relatórios guardados como evidência, inclusive quando o build falha.
+      - name: Publicar relatórios de teste
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios-de-teste
+          path: |
+            target/surefire-reports/
+            target/failsafe-reports/
+          if-no-files-found: warn
+          retention-days: 7
