@@ -4,4 +4,7 @@ Um arquivo por defeito (`DEF-001-titulo-curto.md`), com: identificador, descriç
 
 O mesmo formato serve para as issues do GitHub (modelo em `.github/ISSUE_TEMPLATE/defeito.md`).
 
-Nenhum defeito registrado até 2026-10-31.
+| Defeito | Situação | Severidade / prioridade |
+|---|---|---|
+| [DEF-001 — dupla reserva sob concorrência](DEF-001-dupla-reserva-sob-concorrencia.md) | corrigido | Crítica / P0 |
+| [DEF-002 — deadlock na disputa pelo mesmo recurso](DEF-002-deadlock-na-disputa-pelo-mesmo-recurso.md) | corrigido | Alta / P1 |
