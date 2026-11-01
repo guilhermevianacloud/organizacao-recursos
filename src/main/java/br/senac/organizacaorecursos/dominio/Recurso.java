@@ -46,6 +46,17 @@ public class Recurso {
         this.restrito = restrito;
     }
 
+    /** Atualiza os dados cadastrais (RF-02, só Administrador). */
+    public void atualizar(TipoRecurso tipo, String nome, Integer capacidade, String localizacao,
+                          String competencias, boolean restrito) {
+        this.tipo = tipo;
+        this.nome = nome;
+        this.capacidade = capacidade;
+        this.localizacao = localizacao;
+        this.competencias = competencias;
+        this.restrito = restrito;
+    }
+
     public Long getId() {
         return id;
     }
