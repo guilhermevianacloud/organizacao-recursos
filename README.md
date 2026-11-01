@@ -29,6 +29,31 @@ O `verify` compila, roda todos os testes contra um PostgreSQL real (Testcontaine
 ```
 O Spring Boot sobe sozinho o PostgreSQL descrito em `compose.yaml` e aplica as migrações do Flyway.
 
+Depois abra **http://localhost:8080** no navegador.
+
+### Usuários de demonstração
+Criados automaticamente quando o banco está vazio (dados fictícios, domínio `.invalid`). Senha de demonstração: `demo123`
+(troque com a variável `DEMO_SENHA`; desligue com `app.demo.habilitado=false`).
+
+| Perfil | E-mail | O que pode fazer |
+|---|---|---|
+| Solicitante | `solicitante@demo.invalid` | pesquisar recursos livres, reservar, alterar e cancelar as próprias reservas |
+| Responsável | `responsavel@demo.invalid` | aprovar ou rejeitar restritos, registrar retirada, devolução e não comparecimento, ver histórico e relatório |
+| Administrador | `admin@demo.invalid` | cadastrar recursos, bloquear para manutenção, ver histórico e relatório |
+
+### Variáveis de ambiente (opcionais)
+| Variável | Para quê | Sem ela |
+|---|---|---|
+| `JWT_SEGREDO` | chave de assinatura dos tokens (mínimo 32 caracteres) | chave aleatória a cada início (login precisa ser refeito ao reiniciar) |
+| `DEMO_SENHA` | senha dos usuários de demonstração | `demo123` |
+| `NOTIFICACAO_URL`, `NOTIFICACAO_CHAVE` | provedor HTTP de notificação | notificação simulada (registrada no log) |
+
+## API
+Documentação interativa (OpenAPI): **http://localhost:8080/swagger-ui.html**. Toda rota de `/api` exige o token
+obtido em `POST /api/auth/login`, enviado como `Authorization: Bearer <token>`. Quem pode chamar cada rota está em
+[docs/seguranca/matriz-autorizacao.md](docs/seguranca/matriz-autorizacao.md). Erros seguem o formato ProblemDetail,
+em português, com um `codigo` estável (ex.: `CONFLITO_DE_HORARIO`).
+
 ## Documentação
 | Documento | Conteúdo |
 |---|---|
@@ -37,6 +62,10 @@ O Spring Boot sobe sozinho o PostgreSQL descrito em `compose.yaml` e aplica as m
 | [docs/plano-de-teste.md](docs/plano-de-teste.md) | Estratégia e plano de testes (ISO/IEC/IEEE 29119-3) |
 | [docs/testes/plano-tdd.md](docs/testes/plano-tdd.md) | Inventário de casos de teste por regra de negócio |
 | [docs/rtm.md](docs/rtm.md) | Matriz de rastreabilidade requisito → risco → teste → evidência |
+| [docs/status-requisitos.md](docs/status-requisitos.md) | Situação de cada requisito e limitador de nota, com o teste que prova |
+| [docs/seguranca/matriz-autorizacao.md](docs/seguranca/matriz-autorizacao.md) | Perfil × operação; lida pelo teste de autorização |
+| [docs/testes/evidencia-tdd.md](docs/testes/evidencia-tdd.md) | Commits vermelho e verde de cada ciclo de TDD |
+| [docs/testes/bdd-aprovacao-bloqueio.md](docs/testes/bdd-aprovacao-bloqueio.md) | Cenários BDD e tabela de fronteiras |
 | [docs/adr/](docs/adr/) | Registros de decisão arquitetural |
 | [docs/defeitos/](docs/defeitos/) | Registro de defeitos |
 | [docs/taticas-arquiteturais-len-bass.md](docs/taticas-arquiteturais-len-bass.md) | Catálogo de táticas (material de apoio da Aula 04) |

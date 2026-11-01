@@ -1,6 +1,14 @@
 package br.senac.organizacaorecursos.api;
 
 import br.senac.organizacaorecursos.api.Dtos.AlteracaoPedido;
+import br.senac.organizacaorecursos.api.Dtos.AuditoriaResposta;
+import br.senac.organizacaorecursos.dominio.AuditoriaReserva;
+import br.senac.organizacaorecursos.dominio.ConflitoDeHorarioException;
+import br.senac.organizacaorecursos.servico.RegistroDeConflitos;
+import br.senac.organizacaorecursos.dominio.Usuario;
+import br.senac.organizacaorecursos.persistencia.UsuarioRepository;
+import java.util.Map;
+import java.util.stream.Collectors;
 import br.senac.organizacaorecursos.api.Dtos.ReservaPedido;
 import br.senac.organizacaorecursos.api.Dtos.ReservaResposta;
 import br.senac.organizacaorecursos.dominio.Intervalo;
@@ -30,9 +38,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservaController {
 
     private final ServicoDeReservas servico;
+    private final UsuarioRepository usuarios;
+    private final RegistroDeConflitos conflitos;
 
-    public ReservaController(ServicoDeReservas servico) {
+    public ReservaController(ServicoDeReservas servico, UsuarioRepository usuarios, RegistroDeConflitos conflitos) {
         this.servico = servico;
+        this.usuarios = usuarios;
+        this.conflitos = conflitos;
+    }
+
+    /** RES-13: histórico só para Responsável e Administrador (RN-09). Só leitura: não há rota para alterar ou apagar. */
+    @GetMapping("/{id}/historico")
+    @PreAuthorize("hasAnyRole('RESPONSAVEL','ADMINISTRADOR')")
+    public List<AuditoriaResposta> historico(@PathVariable Long id) {
+        List<AuditoriaReserva> trilha = servico.historico(id);
+        Map<Long, String> nomes = usuarios.findAllById(trilha.stream().map(AuditoriaReserva::getUsuarioId)
+                        .collect(Collectors.toSet())).stream()
+                .collect(Collectors.toMap(Usuario::getId, Usuario::getNome));
+        return trilha.stream().map(r -> new AuditoriaResposta(r.getInstante(), r.getUsuarioId(),
+                nomes.get(r.getUsuarioId()), r.getEstadoAnterior(), r.getEstadoNovo(), r.getMotivo())).toList();
     }
 
     @GetMapping
@@ -56,16 +80,26 @@ public class ReservaController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('SOLICITANTE')")
     public ReservaResposta solicitar(@AuthenticationPrincipal Jwt token, @Valid @RequestBody ReservaPedido p) {
-        return ReservaResposta.de(servico.solicitar(p.recursoId(), UsuarioAutenticado.id(token),
-                new Intervalo(p.inicio(), p.termino()), p.motivo()));
+        Intervalo pedido = new Intervalo(p.inicio(), p.termino());
+        try {
+            return ReservaResposta.de(servico.solicitar(p.recursoId(), UsuarioAutenticado.id(token), pedido, p.motivo()));
+        } catch (ConflitoDeHorarioException e) {
+            conflitos.registrar(p.recursoId(), pedido);
+            throw e;
+        }
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('SOLICITANTE')")
     public ReservaResposta alterar(@AuthenticationPrincipal Jwt token, @PathVariable Long id,
                                    @Valid @RequestBody AlteracaoPedido p) {
-        return ReservaResposta.de(servico.alterar(id, UsuarioAutenticado.id(token),
-                new Intervalo(p.inicio(), p.termino())));
+        Intervalo pedido = new Intervalo(p.inicio(), p.termino());
+        try {
+            return ReservaResposta.de(servico.alterar(id, UsuarioAutenticado.id(token), pedido));
+        } catch (ConflitoDeHorarioException e) {
+            conflitos.registrar(servico.recursoDa(id), pedido);
+            throw e;
+        }
     }
 
     @PostMapping("/{id}/cancelamento")
