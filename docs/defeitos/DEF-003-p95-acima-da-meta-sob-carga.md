@@ -3,7 +3,7 @@
 | Campo | Valor |
 |---|---|
 | Identificador | DEF-003 |
-| Situação | **aberto** — analisado, correção ainda não feita (risco aceito na entrega, ver abaixo) |
+| Situação | **aberto** — analisado, correção ainda não feita; aceite do risco aguardando decisão do grupo |
 | Requisito afetado | RNF-01 e RNF-02 (metas propostas pelo grupo em `docs/performance/rnf.md`) |
 | Encontrado por | Rodada 01 do JMeter (`docs/performance/resultado-01.md`) |
 | Data | 2026-11-01 |
@@ -48,7 +48,7 @@ Corrigir depois da entrega, ou antes se sobrar tempo.
 Ver "Próximo experimento" em `docs/performance/resultado-01.md`: medir a espera do pool, repetir com o gerador em
 outra máquina, depois ajustar uma variável por vez.
 
-## Risco aceito
-Aceito para a entrega `v1.0.0-rc1` por Guilherme Viana Lopes (responsável), com justificativa: impacto só em tempo de
-resposta no pior caso, meta proposta pelo próprio grupo, regras críticas intactas. A aceitação será registrada em
-`docs/decisao-qualidade.md`.
+## Risco aceito?
+**Proposta, aguardando decisão do grupo:** aceitar o risco na entrega `v1.0.0-rc1`, com a justificativa de que o
+impacto é só no tempo de resposta no pior caso, a meta foi proposta pelo próprio grupo e as regras críticas estão
+intactas. Quem aceitar (nome e motivo) fica registrado em `docs/decisao-qualidade.md`; até lá, o defeito segue aberto.

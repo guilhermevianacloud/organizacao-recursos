@@ -8,4 +8,4 @@ O mesmo formato serve para as issues do GitHub (modelo em `.github/ISSUE_TEMPLAT
 |---|---|---|
 | [DEF-001 — dupla reserva sob concorrência](DEF-001-dupla-reserva-sob-concorrencia.md) | corrigido | Crítica / P0 |
 | [DEF-002 — deadlock na disputa pelo mesmo recurso](DEF-002-deadlock-na-disputa-pelo-mesmo-recurso.md) | corrigido | Alta / P1 |
-| [DEF-003 — p95 acima da meta proposta sob carga](DEF-003-p95-acima-da-meta-sob-carga.md) | aberto (risco aceito na entrega) | Média / P2 |
+| [DEF-003 — p95 acima da meta proposta sob carga](DEF-003-p95-acima-da-meta-sob-carga.md) | aberto (aceite do risco aguardando decisão) | Média / P2 |
