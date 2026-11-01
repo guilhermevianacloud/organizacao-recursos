@@ -52,6 +52,13 @@ class NotificadorHttpIT {
     }
 
     @Test
+    void int01b_respostaSemIdentificadorNaoContaComoEnviada() {
+        stubFor(post("/notificacoes").willReturn(okJson("{}")));
+
+        assertThat(notificador.notificar(AVISO)).isEqualTo(Resultado.FALHOU);
+    }
+
+    @Test
     void int02_naoEncontradoViraFalhaControlada() {
         stubFor(post("/notificacoes").willReturn(aResponse().withStatus(404)));
 
