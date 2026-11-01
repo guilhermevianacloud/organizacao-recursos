@@ -15,6 +15,7 @@ import br.senac.organizacaorecursos.dominio.Usuario;
 import br.senac.organizacaorecursos.persistencia.RecursoRepository;
 import br.senac.organizacaorecursos.persistencia.UsuarioRepository;
 import br.senac.organizacaorecursos.seguranca.ServicoDeToken;
+import com.jayway.jsonpath.JsonPath;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +96,7 @@ class ApiDeReservasIT {
         solicitar("08:00", "10:00").andExpect(status().isCreated());
         String corpo = solicitar("10:00", "11:00").andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
-        String id = corpo.replaceAll(".*\"id\":(\\d+).*", "$1");
+        String id = JsonPath.read(corpo, "$.id").toString();
         Integer antes = jdbc.queryForObject("select count(*) from tentativa_recusada where recurso_id = ?", Integer.class, sala);
 
         mvc.perform(put("/api/reservas/" + id).header("Authorization", tokenSolicitante)
@@ -176,7 +177,7 @@ class ApiDeReservasIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.perfil").value("SOLICITANTE"))
                 .andReturn().getResponse().getContentAsString();
-        String token = corpo.replaceAll(".*\"token\":\"([^\"]+)\".*", "$1");
+        String token = JsonPath.read(corpo, "$.token");
 
         mvc.perform(get("/api/reservas/minhas").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
