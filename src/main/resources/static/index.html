@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar · Organização de Recursos</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<main class="tela-login">
+  <section class="cartao-login" aria-labelledby="titulo">
+    <div class="marca">
+      <span class="marca-icone" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+      </span>
+      Organização de Recursos
+    </div>
+    <div>
+      <h1 id="titulo">Entrar</h1>
+      <p class="mudo">Reserve salas, materiais e professores sem conflito de horário.</p>
+    </div>
+    <form id="formulario" class="formulario" novalidate>
+      <label class="rotulo">E-mail
+        <input class="campo" id="email" name="email" type="email" autocomplete="username" required>
+      </label>
+      <label class="rotulo">Senha
+        <input class="campo" id="senha" name="senha" type="password" autocomplete="current-password" required>
+      </label>
+      <div id="mensagem" class="aviso erro oculto" role="alert"></div>
+      <button class="botao" type="submit">Entrar</button>
+    </form>
+    <div class="demo">
+      <p class="mudo" style="margin:0;font-size:13px">Demonstração: preencher com um usuário fictício</p>
+      <div class="demo-botoes">
+        <button class="botao secundario pequeno" type="button" data-email="solicitante@demo.invalid">Solicitante</button>
+        <button class="botao secundario pequeno" type="button" data-email="responsavel@demo.invalid">Responsável</button>
+        <button class="botao secundario pequeno" type="button" data-email="admin@demo.invalid">Administrador</button>
+      </div>
+      <p class="mudo" style="margin:0;font-size:12px">Senha de demonstração: <span class="mono">demo123</span> (definida em DEMO_SENHA)</p>
+    </div>
+  </section>
+</main>
+<script src="/js/login.js"></script>
+</body>
+</html>

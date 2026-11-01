@@ -3,8 +3,12 @@ package br.senac.organizacaorecursos.api;
 import br.senac.organizacaorecursos.api.Dtos.RecursoPedido;
 import br.senac.organizacaorecursos.api.Dtos.RecursoResposta;
 import br.senac.organizacaorecursos.servico.ServicoDeRecursos;
+import br.senac.organizacaorecursos.dominio.TipoRecurso;
 import jakarta.validation.Valid;
+import java.time.Instant;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +31,17 @@ public class RecursoController {
         this.servico = servico;
     }
 
+    /** RF-03: todos os filtros são opcionais; disponibilidade pede início e fim. */
     @GetMapping
-    public List<RecursoResposta> listar() {
-        return servico.listar().stream().map(RecursoResposta::de).toList();
+    public List<RecursoResposta> pesquisar(
+            @RequestParam(required = false) TipoRecurso tipo,
+            @RequestParam(required = false) Integer capacidadeMinima,
+            @RequestParam(required = false) String localizacao,
+            @RequestParam(required = false) String competencia,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant disponivelInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant disponivelFim) {
+        return servico.pesquisar(tipo, capacidadeMinima, localizacao, competencia, disponivelInicio, disponivelFim)
+                .stream().map(RecursoResposta::de).toList();
     }
 
     @GetMapping("/{id}")
