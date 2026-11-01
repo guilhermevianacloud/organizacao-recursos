@@ -15,6 +15,10 @@ Integrantes: Guilherme Viana Lopes · Rafael Souza · Gustavo Santana.
 - **JDK 21**
 - **Docker** em execução (a aplicação e os testes usam PostgreSQL em container)
 
+> **Windows:** clone numa pasta de caminho curto (ex.: `C:\projetos\`) ou habilite caminhos longos antes de clonar:
+> `git config --global core.longpaths true`. Em pastas muito profundas, o limite de 260 caracteres do Windows
+> impede o Git de criar alguns arquivos ("Filename too long") — encontrado no teste de clone limpo.
+
 ## Como rodar os testes
 ```bash
 ./mvnw -B verify

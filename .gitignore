@@ -40,3 +40,4 @@ application-local.properties
 ### Relatórios gerados (o HTML do JMeter não é versionado — Aula 10) ###
 perf/relatorio-*/
 *.log
+perf/resultados/fumaca*

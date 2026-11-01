@@ -13,15 +13,15 @@ Evidência atual: [CI run 41322975920](https://github.com/guilhermevianacloud/or
 ## Requisitos críticos
 | Requisito / regra | Risco | Teste (caminho e nome) | Nível | Evidência | Status |
 |---|---|---|---|---|---|
-| RF-06 / RN-03 — dupla reserva | RP-01 · DEF-001, DEF-002 | `servico/DuplaReservaConcorrenciaIT`; `servico/ProtecaoNoBancoIT`; `api/ApiDeReservasIT.rn02_conflitoDeHorarioResponde409ComCodigo` | concorrência + integração + API | run 41322975920 | verde |
-| RF-05 / RN-02 — sobreposição (sala, material, professor) | RP-03 | `dominio/IntervaloTest` (`Sobreposicao`); `servico/ServicoDeReservasIT` (`Sobreposicao`) | unidade + integração | run 41322975920 | verde |
-| RN-01 — término após início | RP-03 | `dominio/IntervaloTest` (`TerminoPosteriorAoInicio`); `api/ApiDeReservasIT.rn01_terminoAntesDoInicioResponde400Compreensivel`; `servico/ProtecaoNoBancoIT.bancoRecusaTerminoAntesDoInicio` | unidade + API + banco | run 41322975920 | verde |
-| RF-08 / RN-04 — manutenção | RP-03 | `servico/ServicoDeReservasIT` (`EmManutencao`); `aprovacao-bloqueio.feature` (esquema de manutenção) | integração + BDD | run 41322975920 | verde |
-| RF-07 / RN-05, RN-06 — aprovação de restrito | RP-02 | `aprovacao-bloqueio.feature` (3 cenários); `api/MatrizDeAutorizacaoIT` (RES-08, RES-09); `dominio/ReservaTest` | BDD + API + unidade | run 41322975920 | verde |
-| RN-07 — máquina de estados | — | `dominio/EstadoReservaTest` (49 pares); `dominio/ReservaTest`; `aprovacao-bloqueio.feature` (esquema de transições) | unidade + BDD | run 41322975920 | verde |
-| RN-08 — reserva iniciada não é apagada | — | `dominio/ReservaTest.rn08_reservaIniciadaNaoPodeSerApagada`; API sem rota de exclusão de reserva; cancelar mantém a linha (`servico/AuditoriaIT.cancelamentoRegistraTransicaoEMotivo`) | unidade + integração | run 41322975920 | verde |
-| RF-10 / RN-09 — auditoria | RP-04 | `servico/AuditoriaIT` (6 testes, inclusive rollback); `api/MatrizDeAutorizacaoIT` (RES-13) | integração + API | run 41322975920 | verde |
-| RF-01 / RN-10 — autorização e posse (IDOR) | RP-02 | `api/MatrizDeAutorizacaoIT` (22 operações × 4 perfis = 88 células, lidas de `docs/seguranca/matriz-autorizacao.md`); `api/ApiDeReservasIT` (login, token adulterado) | API parametrizada | run 41322975920 | verde |
+| RF-06 / RN-03 — dupla reserva | RP-01 · DEF-001, DEF-002 | `servico/DuplaReservaConcorrenciaIT`; `servico/ProtecaoNoBancoIT`; `api/ApiDeReservasIT.rn02_conflitoDeHorarioResponde409ComCodigo` | concorrência + integração + API | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RF-05 / RN-02 — sobreposição (sala, material, professor) | RP-03 | `dominio/IntervaloTest` (`Sobreposicao`); `servico/ServicoDeReservasIT` (`Sobreposicao`) | unidade + integração | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RN-01 — término após início | RP-03 | `dominio/IntervaloTest` (`TerminoPosteriorAoInicio`); `api/ApiDeReservasIT.rn01_terminoAntesDoInicioResponde400Compreensivel`; `servico/ProtecaoNoBancoIT.bancoRecusaTerminoAntesDoInicio` | unidade + API + banco | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RF-08 / RN-04 — manutenção | RP-03 | `servico/ServicoDeReservasIT` (`EmManutencao`); `aprovacao-bloqueio.feature` (esquema de manutenção) | integração + BDD | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RF-07 / RN-05, RN-06 — aprovação de restrito | RP-02 | `aprovacao-bloqueio.feature` (3 cenários); `api/MatrizDeAutorizacaoIT` (RES-08, RES-09); `dominio/ReservaTest` | BDD + API + unidade | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RN-07 — máquina de estados | — | `dominio/EstadoReservaTest` (49 pares); `dominio/ReservaTest`; `aprovacao-bloqueio.feature` (esquema de transições) | unidade + BDD | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RN-08 — reserva iniciada não é apagada | — | `dominio/ReservaTest.rn08_reservaIniciadaNaoPodeSerApagada`; API sem rota de exclusão de reserva; cancelar mantém a linha (`servico/AuditoriaIT.cancelamentoRegistraTransicaoEMotivo`) | unidade + integração | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RF-10 / RN-09 — auditoria | RP-04 | `servico/AuditoriaIT` (6 testes, inclusive rollback); `api/MatrizDeAutorizacaoIT` (RES-13) | integração + API | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
+| RF-01 / RN-10 — autorização e posse (IDOR) | RP-02 | `api/MatrizDeAutorizacaoIT` (22 operações × 4 perfis = 88 células, lidas de `docs/seguranca/matriz-autorizacao.md`); `api/ApiDeReservasIT` (login, token adulterado) | API parametrizada | run 41322975920 · mutação: `docs/testes/mutacao-manual.md` | coberto |
 
 ## Demais requisitos
 | Requisito / regra | Risco | Teste | Nível | Evidência | Status |
@@ -38,7 +38,7 @@ Evidência atual: [CI run 41322975920](https://github.com/guilhermevianacloud/or
 ## Não funcionais
 | RNF | Medida | Teste / instrumento | Evidência | Status |
 |---|---|---|---|---|
-| RNF-01, RNF-02 — desempenho | p95 ≤ 300 ms, 50 usuários | JMeter (`perf/`) | — | pendente (Fase 7) |
+| RNF-01, RNF-02 — desempenho | p95 ≤ 300 ms, 50 usuários | JMeter: `perf/reservas.jmx`, `perf/resultados/rodada-01.jtl`, `docs/performance/resultado-01.md` | rodada 01 (2026-11-01) | **não atende** — p95 332 ms (consulta) e 506 ms (criação); DEF-003 aberto |
 | RNF-03 — integridade | 1 aceito em 20, 5 de 5 | `servico/DuplaReservaConcorrenciaIT` | run 41322975920 | verde |
 | RNF-04 — autorização | 100% da matriz | `api/MatrizDeAutorizacaoIT` | run 41322975920 | verde |
 | RNF-05 — senha e token | BCrypt; 60 min; 0 segredos | `api/ApiDeReservasIT` (login); SonarCloud | run 41322975920 | parcial (SonarCloud na Fase 6) |
@@ -52,4 +52,4 @@ Evidência atual: [CI run 41322975920](https://github.com/guilhermevianacloud/or
 | RNF-14 — privacidade | 0 dados reais; 0 tokens em log | dados `.invalid`; `notificacao/NotificadorHttpIT.int06_…` | run 41322975920 | verde |
 
 ## Percentual de requisitos críticos com evidência
-**9 de 9 (100%) verdes com evidência do CI.** Nenhum ainda "coberto": a mutação manual (Fase 7) vai confirmar que cada teste detecta a quebra da regra.
+**9 de 9 (100%) cobertos:** teste verde no CI e mutação manual detectada para cada regra crítica (`docs/testes/mutacao-manual.md`, 10 mutações, 10 detectadas).
