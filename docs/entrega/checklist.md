@@ -24,7 +24,7 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 | Plano e relatório de testes | sim | sim | `docs/plano-de-teste.md`; `docs/relatorio-qualidade.md`; artifacts do CI |
 | Pipeline de CI | sim | sim | `.github/workflows/ci.yml` |
 | Relatório do JaCoCo | sim | sim | artifact `relatorio-de-cobertura`; `docs/testes/lacunas-de-cobertura.md` |
-| Relatório do SonarCloud | **não** | — | aguardando conta, projeto e `SONAR_TOKEN` |
+| Relatório do SonarCloud | sim | sim | <https://sonarcloud.io/project/overview?id=guilhermevianacloud_organizacao-recursos>; passo no CI; DEF-004 |
 | Plano e resultado do teste de carga | sim | sim | `perf/reservas.jmx`; `docs/performance/resultado-01.md` |
 | Registro de defeitos | sim | sim | `docs/defeitos/` |
 | Relatório final de qualidade | sim | sim | `docs/relatorio-qualidade.md` |
@@ -32,7 +32,9 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 ## Bloqueadores, em ordem
 1. ~~A `main` só tem o primeiro commit.~~ **Resolvido em 2026-11-01:** PRs #1 a #8 integrados por Guilherme com merge
    commit; a `main` (`ba66400`) é idêntica à branch da última fase e o CI passou nela (execução 41341089727).
-2. ~~Tag `v1.0.0-rc1`.~~ **Resolvido em 2026-11-01:** tag anotada no commit `ba66400`.
+2. ~~Tag `v1.0.0-rc1`.~~ **Resolvido em 2026-11-01:** tag anotada no commit `ba66400`. Substituída como versão
+   avaliada pela `v1.0.0-rc2`, que inclui as correções do SonarCloud (DEF-004); o commit dela fica em `docs/evidencias/README.md`.
 3. **Decisão de qualidade:** responsáveis pelos riscos aceitos e a declaração de cada integrante ainda em branco (`docs/decisao-qualidade.md`).
-4. **SonarCloud** (não bloqueia a execução, mas deixa "0 bugs ou vulnerabilidades críticas" como não medido).
+4. ~~SonarCloud.~~ **Configurado em 2026-11-01:** Quality Gate aprovado no PR #10. Falta o Guilherme revisar o S4502 no
+   site, se concordar com o ADR-007.
 5. **Revisão por pares:** PRs sem aprovação de outro integrante; se Rafael ou Gustavo revisarem, a evidência fica mais forte.

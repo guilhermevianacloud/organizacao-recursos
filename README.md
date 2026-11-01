@@ -77,6 +77,8 @@ em português, com um `codigo` estável (ex.: `CONFLITO_DE_HORARIO`).
 ## Integração contínua
 O workflow [`qualidade`](.github/workflows/ci.yml) roda `./mvnw -B verify` a cada pull request e a cada push na `main`. Os relatórios de teste ficam como artifact de cada execução, inclusive quando ela falha.
 
+Análise estática: [SonarCloud](https://sonarcloud.io/project/overview?id=guilhermevianacloud_organizacao-recursos), no mesmo workflow, lendo a cobertura do JaCoCo. O passo só roda quando o secret `SONAR_TOKEN` existe (forks e clones sem o secret não falham por isso).
+
 Evidência de que o CI barra falhas (Aula 06), registrada no PR #1:
 
 | Execução | Commit | Resultado | O que aconteceu |
