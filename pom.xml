@@ -87,6 +87,13 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- WireMock: provedor de notificação simulado por HTTP, sem rede externa (ADR-005, Aula 08) -->
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>3.13.2</version>
+            <scope>test</scope>
+        </dependency>
         <!-- Testcontainers: PostgreSQL real nos testes, sem H2 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
