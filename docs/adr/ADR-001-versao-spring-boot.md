@@ -17,7 +17,7 @@ Status: aceita (2026-10-31, Guilherme Viana Lopes)
 (a) **Spring Boot 3.5.16**, montado sem o Initializr (que não gera mais 3.x); o Maven Wrapper foi copiado do Initializr.
 
 ## Consequências
-- + Atende a especificação ("3.x") e o que foi ensinado.
+- \+ Atende a especificação ("3.x") e o que foi ensinado.
 - − A linha 3.5 não recebe mais correções open source; eventuais vulnerabilidades novas não terão patch público.
 
 ## Riscos
