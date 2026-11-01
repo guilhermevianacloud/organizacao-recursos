@@ -148,25 +148,23 @@ A tabela completa (todos os pares) vira um `@ParameterizedTest`.
 ## 3. Matriz regra → caso → teste → status
 Preenchida na Fase 3 em diante: cada caso recebe o caminho e o nome do teste, e o status passa de **a escrever** para **vermelho** (fase red) e **verde** (fase green).
 
-| Regra | Casos | Teste | Status |
-|---|---|---|---|
-Caminhos relativos a `src/test/java/br/senac/organizacaorecursos/`. Atualizado em 2026-10-31 (Fase 3).
+Caminhos relativos a `src/test/java/br/senac/organizacaorecursos/`. Atualizado em 2026-11-01 (Fase 5).
 
 | Regra | Casos | Teste | Status |
 |---|---|---|---|
-| RN-01 | RN01-01..05 | `dominio/IntervaloTest` (classe `TerminoPosteriorAoInicio`) | verde |
-| RN-02 | RN02-01..07 | `dominio/IntervaloTest` (classe `Sobreposicao`, parametrizado) | verde |
-| RN-02 | RN02-01, 02, 06, 08, 09, 10, 11 | `servico/ServicoDeReservasIT` (classe `Sobreposicao`, PostgreSQL real) | verde |
-| RN-03 | RN03-01..04 | `servico/DuplaReservaConcorrenciaIT`; constraint isolada em `servico/ProtecaoNoBancoIT` | verde (nível de serviço; 409 pela API na Fase 4) |
-| RN-04 | RN04-01..07 | `servico/ServicoDeReservasIT` (classe `EmManutencao`) | verde |
-| RN-05 | RN05-05 | `dominio/ReservaTest.rn05_05_recursoNaoRestritoNasceAprovado` | parcial — RN05-01..04 na Fase 4/5 |
-| RN-06 | RN06-01..02 | — | a escrever (Fase 4/5) |
-| RN-07 | RN07-01..13 | `dominio/EstadoReservaTest` (49 pares) + `dominio/ReservaTest` | verde |
-| RN-08 | RN08-01..03 | `dominio/EstadoReservaTest`, `dominio/ReservaTest.rn08_reservaIniciadaNaoPodeSerApagada` | parcial — RN08-04 (API sem exclusão física) na Fase 4 |
-| RN-09 | RN09-01..06 | — | a escrever (Fase 5) |
-| RN-10 | RN10-01..04 | — | a escrever (Fase 4) |
-| RN-11 | RN11-01..07 | — | a escrever (Fase 5) |
-| RN-12 | RN12-01..04 | — | a escrever (Fase 4) |
-| RN-13 | RN13-01..06 | — | a escrever (Fase 5) |
+| RN-01 | RN01-01..05 | `dominio/IntervaloTest` (`TerminoPosteriorAoInicio`); `api/ApiDeReservasIT.rn01_…` | verde |
+| RN-02 | RN02-01..07 | `dominio/IntervaloTest` (`Sobreposicao`, parametrizado) | verde |
+| RN-02 | RN02-01, 02, 06, 08, 09, 10, 11 | `servico/ServicoDeReservasIT` (`Sobreposicao`, PostgreSQL real) | verde |
+| RN-03 | RN03-01..04 | `servico/DuplaReservaConcorrenciaIT`; `servico/ProtecaoNoBancoIT`; 409 pela API em `api/ApiDeReservasIT.rn02_…` | verde |
+| RN-04 | RN04-01..07 | `servico/ServicoDeReservasIT` (`EmManutencao`); `aprovacao-bloqueio.feature` | verde |
+| RN-05 | RN05-01..05 | `aprovacao-bloqueio.feature`; `api/MatrizDeAutorizacaoIT` (RES-08, RES-09); `dominio/ReservaTest.rn05_05_…` | verde |
+| RN-06 | RN06-01..02 | `aprovacao-bloqueio.feature` (“Solicitante não aprova a própria reserva”) | verde |
+| RN-07 | RN07-01..13 | `dominio/EstadoReservaTest` (49 pares); `dominio/ReservaTest`; feature (transições) | verde |
+| RN-08 | RN08-01..04 | `dominio/EstadoReservaTest`, `dominio/ReservaTest.rn08_…`; sem rota de exclusão; `servico/AuditoriaIT.cancelamento…` | verde |
+| RN-09 | RN09-01..06 | `servico/AuditoriaIT`; `api/MatrizDeAutorizacaoIT` (RES-13) | verde |
+| RN-10 | RN10-01..04 | `api/MatrizDeAutorizacaoIT` (RES-04..07); `api/ApiDeReservasIT.rn10_04_…` | verde |
+| RN-11 | RN11-01..07 | `api/RelatorioDeUtilizacaoIT`; `api/MatrizDeAutorizacaoIT` (REL-01) | verde |
+| RN-12 | RN12-01..04 | `api/ApiDeReservasIT` (rn12_01..03, `semDetalheInterno`) | verde |
+| RN-13 | RN13-01..06 | `notificacao/NotificadorHttpIT` (INT-01..06); `notificacao/NotificacaoAposCommitIT` | verde |
 
-**Regras sem teste:** RN-06, RN-09, RN-10, RN-11, RN-12, RN-13 (previstas para as Fases 4 e 5).
+**Regras sem teste:** nenhuma. Próximo passo: mutação manual (Fase 7) para confirmar que cada teste detecta a quebra.

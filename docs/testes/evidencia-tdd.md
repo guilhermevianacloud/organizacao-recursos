@@ -21,3 +21,28 @@ Cada ciclo tem um commit **vermelho** (`test(red)`: testes escritos, código só
 | Execução | Commit | Resultado |
 |---|---|---|
 | [41210306850](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41210306850) | `70dcfff` | verde — unidade 85, integração 28, 0 falhas |
+
+## Fase 4 — segurança e API
+
+| Ciclo / cenário | Commit red | Saída no red | Commit green | Saída no green |
+|---|---|---|---|---|
+| RF-01, RN-10, RN-12 — matriz de autorização (76 células na época) e contrato da API (`MatrizDeAutorizacaoIT`, `ApiDeReservasIT`) | `05ba5df` | `Tests run: 86, Failures: 67, Errors: 0` — passaram só as células "anônimo → 401" e o token adulterado, porque a segurança já barrava quem não tinha login | `63f6c6a` | integração 114/114 |
+
+## Fase 5 — requisitos restantes
+
+| Ciclo / cenário | Commit red | Saída no red | Commit green | Saída no green |
+|---|---|---|---|---|
+| RN-09 auditoria (`AuditoriaIT`) + histórico na matriz | `b3cf2ef` | `Tests run: 90, Failures: 8, Errors: 0` | `828f45e` | integração 128/128 |
+| RF-03 pesquisa (`PesquisaDeRecursosIT`) + RF-12 relatório (`RelatorioDeUtilizacaoIT`) | `dd60458` | `Tests run: 102, Failures: 17, Errors: 0` | `72d7586` | integração 146/146 |
+| RF-11 notificação (`NotificadorHttpIT`, `NotificacaoAposCommitIT`) | `a72965c` | `Tests run: 8, Failures: 7, Errors: 0` | `419fdee` | integração 154/154 |
+
+### Observações
+- **Testes que passaram no red por vacuidade:** `rn09_03_rollbackNaoDeixaAuditoriaOrfa` (sem auditoria nenhuma, não há órfã) e `transacaoDesfeitaNaoNotifica` (nada notificava). Continuam no conjunto porque passam a ter valor quando a gravação e o envio existem; a mutação manual (Fase 7) confirma que detectam quebra.
+- **BDD (Cucumber):** os 13 cenários foram escritos depois das regras implementadas por TDD e passaram na primeira execução (`dc350a0`) — declarado em `docs/testes/bdd-aprovacao-bloqueio.md`.
+- **Interface:** sem teste automatizado nesta fase (teste de fumaça manual registrado no ADR-006); o end-to-end entra na Fase 6.
+
+## Evidência no CI (Fases 4 e 5)
+| Execução | Branch | Resultado |
+|---|---|---|
+| [41211764664](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41211764664) | `fase-4/seguranca-api` | verde — unidade 85, integração 114 |
+| [41322975920](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41322975920) | `fase-5/requisitos-restantes` | verde — unidade 85, integração 167 (154 + 13 cenários) |
