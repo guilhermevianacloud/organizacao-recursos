@@ -32,7 +32,7 @@ Evidência atual: [CI run 41322975920](https://github.com/guilhermevianacloud/or
 | RF-09 — retirada e devolução | — | `api/MatrizDeAutorizacaoIT` (RES-10..12); `aprovacao-bloqueio.feature` | API + BDD | run 41322975920 | verde |
 | RF-11 / RN-13 — notificação | RP-06 | `notificacao/NotificadorHttpIT` (INT-01..06); `notificacao/NotificacaoAposCommitIT` | WireMock + integração | run 41322975920 | verde |
 | RF-12 / RN-11 — relatório de utilização | — | `api/RelatorioDeUtilizacaoIT` (valores calculados à mão) | API caixa-preta | run 41322975920 | verde |
-| RF-13 / RN-12 — interface e mensagens | RP-05 | `api/ApiDeReservasIT` (400 compreensível, sem detalhe interno); interface: teste de fumaça (ADR-006); end-to-end na Fase 6 | API (+ E2E pendente) | run 41322975920 | parcial |
+| RF-13 / RN-12 — interface e mensagens | RP-05 | `api/ApiDeReservasIT` (400 compreensível, sem detalhe interno); `e2e/InterfaceE2EIT` (Playwright: fluxo Solicitante → Responsável, login inválido, sem login) | API + end-to-end | [run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479) | verde |
 | RF-14 — documentação da API | — | OpenAPI em `/swagger-ui.html` (teste de fumaça); README | revisão | — | verde (sem teste automatizado) |
 
 ## Não funcionais
@@ -45,8 +45,8 @@ Evidência atual: [CI run 41322975920](https://github.com/guilhermevianacloud/or
 | RNF-06 — erro neutro | 0 vazamentos | `api/ApiDeReservasIT` (`semDetalheInterno`) | run 41322975920 | verde |
 | RNF-07 — falha externa | timeout 2 s; reserva mantida | `notificacao/NotificadorHttpIT.int04_…`; `notificacao/NotificacaoAposCommitIT` | run 41322975920 | verde |
 | RNF-08 — auditoria | 0 órfãos | `servico/AuditoriaIT.rn09_03_rollbackNaoDeixaAuditoriaOrfa` | run 41322975920 | verde |
-| RNF-09 — interface | 360–1920 px | end-to-end (Fase 6) | — | pendente |
-| RNF-10 — cobertura e análise | 80/70; 0 críticos | JaCoCo + SonarCloud | — | pendente (Fase 6) |
+| RNF-09 — interface | 360–1920 px | `e2e/InterfaceE2EIT.telasCabemEmLarguraDeCelularSemRolagemLateral` (360 px) | [run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479) | verde |
+| RNF-10 — cobertura e análise | 80/70; 0 críticos | JaCoCo no `verify` (linhas 98,0%, branches 95,0%; `docs/testes/lacunas-de-cobertura.md`); SonarCloud | [run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479) | parcial — JaCoCo verde; SonarCloud aguarda o `SONAR_TOKEN` |
 | RNF-12 — instalabilidade | 1 comando | `OrganizacaoRecursosApplicationIT` + CI + teste de fumaça | run 41322975920 | verde |
 | RNF-13 — testabilidade | 5 execuções sem intermitência | `servico/DuplaReservaConcorrenciaIT` (`@RepeatedTest(5)`) | run 41322975920 | verde |
 | RNF-14 — privacidade | 0 dados reais; 0 tokens em log | dados `.invalid`; `notificacao/NotificadorHttpIT.int06_…` | run 41322975920 | verde |
