@@ -2,15 +2,15 @@
 
 Aula 14 (Prompt 2). Índice do que prova a qualidade da versão avaliada.
 
-> **Situação: aguardando a tag.** A tag anotada `v1.0.0-rc1` é criada no commit avaliado **depois** que os pull requests
-> forem integrados na `main` e o CI estiver verde lá. Os campos *pendente* são preenchidos com o commit da tag e a
-> execução do CI desse commit; nenhum link aqui aponta para outro commit.
+> **Situação: tag criada em 2026-11-01.** A tag anotada `v1.0.0-rc1` aponta para o commit `ba66400` da `main`, criado
+> pela integração dos pull requests #1 a #8, com CI verde nesse mesmo commit. Os links abaixo apontam para esse commit e
+> para essa execução. Commits posteriores, como o que atualiza este índice, não fazem parte da versão avaliada.
 
 | Evidência | Onde | Situação |
 |---|---|---|
-| Commit avaliado (tag `v1.0.0-rc1`) | *pendente* | aguardando integração na `main` |
-| Execução do CI no commit da tag | *pendente* (Actions) | aguardando a tag |
-| Relatório do JaCoCo (artifact `relatorio-de-cobertura` dessa execução) | *pendente* | aguardando a tag |
+| Commit avaliado (tag `v1.0.0-rc1`) | [`ba66400`](https://github.com/guilhermevianacloud/organizacao-recursos/tree/v1.0.0-rc1) | pronto |
+| Execução do CI no commit da tag | [execução 41341089727](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41341089727) (workflow `qualidade`, job `test`) | pronto (sucesso) |
+| Relatório do JaCoCo (artifact `relatorio-de-cobertura` dessa execução) | [artifacts da execução 41341089727](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41341089727#artifacts) | pronto |
 | Quality Gate do SonarCloud | *pendente* | aguardando a configuração do `SONAR_TOKEN` |
 | Resultado de carga | [`docs/performance/resultado-01.md`](../performance/resultado-01.md) + [`perf/resultados/rodada-01.jtl`](../../perf/resultados/rodada-01.jtl) | pronto |
 | Matriz de rastreabilidade | [`docs/rtm.md`](../rtm.md) | pronto (9 de 9 críticos cobertos) |

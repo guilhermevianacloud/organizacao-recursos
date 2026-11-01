@@ -16,7 +16,7 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 ## Entregáveis da especificação
 | Item | Existe | Atualizado | Caminho |
 |---|---|---|---|
-| Repositório com revisão por pares | sim | parcial — PRs abertos com descrição; aprovação de outro integrante pendente | GitHub, PRs #1–#8 |
+| Repositório com revisão por pares | sim | parcial — PRs com descrição, integrados na `main`; sem aprovação registrada de outro integrante | GitHub, PRs #1–#8 |
 | Aplicação executável | sim | sim | `README.md` (como subir) |
 | README e documentação da API | sim | sim | `README.md`; `/swagger-ui.html` |
 | RTM | sim | sim | `docs/rtm.md` (e `RTM.md` na raiz) |
@@ -30,10 +30,9 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 | Relatório final de qualidade | sim | sim | `docs/relatorio-qualidade.md` |
 
 ## Bloqueadores, em ordem
-1. **A `main` só tem o primeiro commit.** O professor clona a `main` e segue o README: sem os merges dos PRs #1 a #8
-   (nessa ordem, com merge commit), ele não encontra o sistema — cai no limitador "aplicação que não executa".
-   **Responsável: Guilherme (merge no GitHub).**
-2. **Tag `v1.0.0-rc1`** só pode ser criada depois do item 1, no commit da `main` com CI verde.
+1. ~~A `main` só tem o primeiro commit.~~ **Resolvido em 2026-11-01:** PRs #1 a #8 integrados por Guilherme com merge
+   commit; a `main` (`ba66400`) é idêntica à branch da última fase e o CI passou nela (execução 41341089727).
+2. ~~Tag `v1.0.0-rc1`.~~ **Resolvido em 2026-11-01:** tag anotada no commit `ba66400`.
 3. **Decisão de qualidade:** responsáveis pelos riscos aceitos e a declaração de cada integrante ainda em branco (`docs/decisao-qualidade.md`).
 4. **SonarCloud** (não bloqueia a execução, mas deixa "0 bugs ou vulnerabilidades críticas" como não medido).
 5. **Revisão por pares:** PRs sem aprovação de outro integrante; se Rafael ou Gustavo revisarem, a evidência fica mais forte.
