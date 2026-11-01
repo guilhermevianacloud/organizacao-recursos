@@ -3,7 +3,9 @@ package br.senac.organizacaorecursos.servico;
 import br.senac.organizacaorecursos.dominio.AcessoNegadoException;
 import br.senac.organizacaorecursos.dominio.AuditoriaReserva;
 import br.senac.organizacaorecursos.persistencia.AuditoriaReservaRepository;
+import br.senac.organizacaorecursos.notificacao.ReservaMudouDeEstado;
 import java.time.Clock;
+import org.springframework.context.ApplicationEventPublisher;
 import br.senac.organizacaorecursos.dominio.ConflitoDeHorarioException;
 import br.senac.organizacaorecursos.dominio.EstadoReserva;
 import br.senac.organizacaorecursos.dominio.Intervalo;
@@ -43,14 +45,17 @@ public class ServicoDeReservas {
     private final ManutencaoRepository manutencoes;
     private final AuditoriaReservaRepository auditoria;
     private final Clock relogio;
+    private final ApplicationEventPublisher eventos;
 
     public ServicoDeReservas(RecursoRepository recursos, ReservaRepository reservas,
-                             ManutencaoRepository manutencoes, AuditoriaReservaRepository auditoria, Clock relogio) {
+                             ManutencaoRepository manutencoes, AuditoriaReservaRepository auditoria, Clock relogio,
+                             ApplicationEventPublisher eventos) {
         this.recursos = recursos;
         this.reservas = reservas;
         this.manutencoes = manutencoes;
         this.auditoria = auditoria;
         this.relogio = relogio;
+        this.eventos = eventos;
     }
 
     @Transactional
@@ -75,6 +80,7 @@ public class ServicoDeReservas {
             auditar(reserva, solicitanteId, EstadoReserva.SOLICITADA, EstadoReserva.APROVADA,
                     "Aprovação automática: recurso não restrito");
         }
+        avisar(reserva);
         return reserva;
     }
 
@@ -91,6 +97,7 @@ public class ServicoDeReservas {
         auditar(alterada, usuarioId, alterada.getEstado(), alterada.getEstado(),
                 "Horário alterado de " + anterior.inicio() + "–" + anterior.termino()
                         + " para " + novo.inicio() + "–" + novo.termino());
+        avisar(alterada);
         return alterada;
     }
 
@@ -170,7 +177,14 @@ public class ServicoDeReservas {
         reserva.transitarPara(novo);
         Reserva salva = reservas.saveAndFlush(reserva);
         auditar(salva, usuarioId, anterior, novo, motivo);
+        avisar(salva);
         return salva;
+    }
+
+    /** RF-11: o evento só vira notificação depois do commit (ConfiguracaoDeNotificacao). */
+    private void avisar(Reserva reserva) {
+        eventos.publishEvent(new ReservaMudouDeEstado(reserva.getId(), reserva.getRecurso().getNome(),
+                reserva.getEstado().name(), reserva.getSolicitanteId()));
     }
 
     private void auditar(Reserva reserva, Long usuarioId, EstadoReserva anterior, EstadoReserva novo, String motivo) {
