@@ -17,21 +17,35 @@ RF-05, RF-06, RN-02, RN-03 · cenário CEN-01 · driver DR-01.
 - (c) **Exclusion constraint** no PostgreSQL: o banco recusa gravar duas linhas do mesmo recurso com intervalos (`tstzrange`) que se cruzam.
 
 ## Decisão
-(c) Exclusion constraint com índice GiST, combinando igualdade do recurso (extensão `btree_gist`) e sobreposição do intervalo `tstzrange(inicio, termino, '[)')`, **somente para estados que ocupam o recurso** (SOLICITADA, APROVADA, EM_USO). A violação é traduzida em **HTTP 409 Conflict** com ProblemDetail e registrada como conflito evitado.
-A aplicação também verifica antes de gravar, só para dar uma mensagem melhor; quem decide é o banco.
+**(c) + (b), em duas camadas** (revisada em 2026-10-31 após o DEF-002):
+1. **Exclusion constraint** com índice GiST, combinando igualdade do recurso (extensão `btree_gist`) e sobreposição do intervalo `tstzrange(inicio, termino, '[)')`, **somente para estados que ocupam o recurso** (SOLICITADA, APROVADA, EM_USO). É a **garantia**: vale para qualquer caminho de escrita, inclusive SQL direto.
+2. **Lock pessimista na linha do recurso** (`SELECT … FOR UPDATE`) antes de verificar e gravar. É a **organização da fila**: pedidos pelo mesmo recurso são atendidos um por vez, a verificação da aplicação enxerga a reserva de quem chegou antes e devolve conflito limpo.
+
+O conflito é traduzido em `ConflitoDeHorarioException` (HTTP 409 com ProblemDetail na API).
+
+### Por que as duas camadas
+| Configuração testada | Resultado observado (`DuplaReservaConcorrenciaIT`) |
+|---|---|
+| Só verificação na aplicação | 10, 7, 6, 4 e 6 reservas aceitas para a mesma sala (DEF-001) |
+| Constraint, sem lock | nenhuma duplicata, mas deadlock intermitente → erro inesperado, que seria 500 (DEF-002) |
+| **Constraint + lock** | 1 aceita e 19 conflitos em todas as execuções (3 rodadas completas × 5 repetições) |
 
 ## Consequências
-- \+ Vale para qualquer número de instâncias e para qualquer caminho de escrita, inclusive SQL direto.
+- \+ A regra vale para qualquer número de instâncias e para qualquer caminho de escrita.
 - \+ Um único mecanismo protege sala, material e professor (recurso único com tipo).
+- \+ Sob disputa, todo pedido termina em aceito ou 409, sem erro 500.
 - − Prende o projeto ao PostgreSQL (não roda em H2, o que já é exigência de teste).
-- − O índice GiST tem custo de escrita e o bloqueio reduz a vazão sob disputa (ponto de trade-off integridade × throughput).
+- − Pedidos pelo **mesmo** recurso esperam a vez (ponto de trade-off integridade × throughput); recursos diferentes seguem em paralelo.
+- − O índice GiST tem custo de escrita.
 
 ## Riscos
-- R-01: se a condição de estados estiver errada, reservas canceladas continuariam bloqueando o recurso.
+- R-01: se a condição de estados estiver errada, reservas canceladas continuariam bloqueando o recurso (coberto por `ProtecaoNoBancoIT`).
+- Todo caminho de escrita de reserva precisa usar a busca com trava; um caminho novo sem ela ainda fica protegido pela constraint, mas pode voltar a ter deadlock.
 
-## Evidência necessária
-- Teste de integração (Testcontainers): 20 pedidos simultâneos → 1 aceito, 19 × 409, 1 linha no banco; repetido 5 vezes; vermelho sem a constraint e verde com ela (Aula 10).
-- Mutação manual: remover a constraint e ver o teste falhar (Aula 12).
+## Evidência
+- `DuplaReservaConcorrenciaIT`: 20 pedidos simultâneos → 1 aceito, 19 conflitos, 1 linha no banco; 5 repetições + agenda do professor; vermelho sem proteção (commit `test(red): RN-03`) e verde com ela.
+- `ProtecaoNoBancoIT`: a constraint recusa sobreposição gravada direto com SQL, aceita reserva encostada e ignora cancelada.
+- Mutação manual (Aula 12): remover a constraint e a trava deve derrubar o teste de concorrência.
 
 ## Condição de revisão
-Se o teste de carga mostrar p95 acima do RNF-02 por causa da constraint, avaliar lock pessimista em novo ADR.
+Se o teste de carga mostrar p95 acima do RNF-02 por causa da fila por recurso, avaliar alternativas (por exemplo, retentativa em deadlock sem trava) em novo ADR.
