@@ -36,6 +36,13 @@ Manutenção da sala: 13:00 → 17:00. Tabela de exemplos com as fronteiras do p
 | SOLICITADA | retirada | 409 |
 | CANCELADA | aprovação | 409 |
 | CONCLUIDA | retirada | 409 |
+| SOLICITADA | rejeição | 200 |
+| APROVADA | não comparecimento | 200 |
+| EM_USO | não comparecimento | 409 |
+| REJEITADA | aprovação | 409 |
+| NAO_COMPARECEU | retirada | 409 |
+
+CANCELADA como caminho permitido é ação do Solicitante, não do Responsável: está na matriz de autorização (cancelamento da própria reserva) e em `AuditoriaIT.cancelamentoRegistraTransicaoEMotivo`.
 
 ## Perguntas em aberto
 - Q-02: manutenção cadastrada sobre reservas existentes — comportamento provisório: o cadastro é recusado.

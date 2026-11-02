@@ -16,7 +16,7 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 ## Entregáveis da especificação
 | Item | Existe | Atualizado | Caminho |
 |---|---|---|---|
-| Repositório com revisão por pares | sim | parcial — PRs com descrição, integrados na `main`; sem aprovação registrada de outro integrante | GitHub, PRs #1–#8 |
+| Repositório com revisão por pares | sim | parcial — PRs com descrição, integrados na `main`; sem aprovação registrada de outro integrante | GitHub, PRs #1–#19 |
 | Aplicação executável | sim | sim | `README.md` (como subir) |
 | README e documentação da API | sim | sim | `README.md`; `/swagger-ui.html` |
 | RTM | sim | sim | `docs/rtm.md` (e `RTM.md` na raiz) |
@@ -33,7 +33,8 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 1. ~~A `main` só tem o primeiro commit.~~ **Resolvido em 2026-11-01:** PRs #1 a #8 integrados por Guilherme com merge
    commit; a `main` (`ba66400`) é idêntica à branch da última fase e o CI passou nela (execução 41341089727).
 2. ~~Tag `v1.0.0-rc1`.~~ **Resolvido em 2026-11-01:** tag anotada no commit `ba66400`. Substituída como versão
-   avaliada pela `v1.0.0-rc2`, que inclui as correções do SonarCloud (DEF-004); o commit dela fica em `docs/evidencias/README.md`.
+   avaliada pela `v1.0.0-rc2` (correções do SonarCloud, DEF-004) e depois pela `v1.0.0-rc3` (DEF-005, DEF-006 e a revisão
+   independente dos documentos). O commit da versão avaliada fica em `docs/evidencias/README.md`.
 3. **Decisão de qualidade:** responsáveis pelos riscos aceitos e a declaração de cada integrante ainda em branco (`docs/decisao-qualidade.md`).
 4. ~~SonarCloud.~~ **Configurado em 2026-11-01:** Quality Gate aprovado no PR #10. Falta o Guilherme revisar o S4502 no
    site, se concordar com o ADR-007.

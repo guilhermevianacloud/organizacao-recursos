@@ -8,6 +8,10 @@ Status: aceita (2026-11-01; decidida pelo Claude dentro das recomendações acei
 - A API já usa JWT (ADR-003); testes, JMeter e interface devem autenticar do mesmo jeito.
 - O grupo pediu um visual cuidado.
 
+## Requisitos e cenários
+- RF-13 (interface responsiva e mensagens compreensíveis), RNF-09 (360 a 1920 px) e RNF-12 (um comando sobe tudo).
+- Limitador "aplicação que não executa" (DR-04).
+
 ## Alternativas
 - (a) Thymeleaf + CSS — páginas geradas no servidor; exigiria um segundo modelo de login (sessão com cookie e CSRF) ao lado do JWT.
 - (b) React compilado pelo Maven — mais peças (Node no build, mais tempo de CI, mais código para estudar).
@@ -30,7 +34,7 @@ Status: aceita (2026-11-01; decidida pelo Claude dentro das recomendações acei
 
 ## Evidência
 - Teste de fumaça (2026-11-01): páginas, CSS, JS e Swagger com 200; login de demonstração e API respondendo.
-- Teste end-to-end com navegador real na Fase 6 (D-03: Playwright).
+- Teste end-to-end com navegador real (D-03: Playwright): `e2e/InterfaceE2EIT`, no `verify` do CI desde a Fase 6; inclui os regressivos dos DEF-005 e DEF-006.
 
 ## Condição de revisão
 Se a interface crescer além do que um arquivo de JavaScript sustenta com clareza, migrar para um framework em novo ADR.

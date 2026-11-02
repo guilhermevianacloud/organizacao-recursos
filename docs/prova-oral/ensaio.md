@@ -10,7 +10,7 @@ sem ler; os campos abaixo só são preenchidos com as notas e lacunas reais do e
 | 2 | Arquitetura (C4, recurso único, proteção no banco) | `docs/arquitetura.md`; ADR-002 |
 | 3 | Demonstração (login, reservar, conflito 409, aprovação, relatório) | `http://localhost:8080` com os usuários de demonstração |
 | 4 | Testes e CI (TDD vermelho → verde, matriz, BDD, E2E, gate do JaCoCo) | `docs/testes/evidencia-tdd.md`; Actions |
-| 5 | RTM e relatório (9 de 9 cobertos, mutação 10 de 10, defeitos) | `docs/rtm.md`; `docs/relatorio-qualidade.md` |
+| 5 | RTM e relatório (9 de 9 cobertos, mutação 11 de 11, defeitos) | `docs/rtm.md`; `docs/relatorio-qualidade.md` |
 | 6 | Limitações (DEF-003, SonarCloud, ambiente local) | `docs/performance/resultado-01.md` |
 
 ## Pontuação por pessoa

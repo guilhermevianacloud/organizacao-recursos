@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.0.0-rc3 — correções da interface e da revisão independente dos documentos
+
+### Defeitos
+- DEF-005 (relatado pelo Guilherme): data ou hora vazia derrubava a agenda e o relatório; agora a agenda mantém o dia e as outras telas mostram "Informe uma data e um horário válidos.".
+- DEF-006 (achado pelos testes): resposta atrasada da agenda apagava a tela aberta depois.
+
+### Qualidade
+- Testes novos: OpenAPI pública (RF-14), token vencido (ADR-003), transições REJEITADA e NAO_COMPARECEU no BDD, 4 testes de interface dos DEF-005/006. Total: 98 de unidade + 187 de integração.
+- Mutação M11 (RN-06): 11 de 11 detectadas.
+- CI: relatórios guardados por 90 dias (eram 7) e `SONAR_TOKEN` só no passo da análise.
+- Ciclo ATAM 01, arquitetura como construída e rastreio dos defeitos com issues no GitHub (PR #15).
+- Documentos corrigidos a partir da revisão independente: números (cobertura 583/595, vazão 270,2/s), afirmações acima da evidência, textos desatualizados, campos que faltavam nos ADRs e nos defeitos.
+
 ## v1.0.0-rc2 — versão candidata para a entrega, com análise estática
 
 ### Qualidade

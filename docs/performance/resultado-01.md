@@ -17,7 +17,7 @@ Relatório HTML do JMeter gerado em `perf/relatorio-01/` (não versionado).
 ## Carga aplicada
 50 usuários (threads), ramp-up 10 s, 70 s no total; login uma vez por usuário; 70% consulta de disponibilidade e
 30% criação de reserva da **Sala 101, 2026-12-01 08:00–10:00 (UTC)** — o mesmo recurso e horário para todos.
-Janela medida: 70,0 s · **18.899 pedidos** · ~268,6 pedidos/s no total.
+Janela medida: 69,95 s (do primeiro ao último registro do `.jtl`) · **18.899 pedidos** · ~270,2 pedidos/s no total.
 
 ## Resultados (calculados do `.jtl`)
 | Operação | Pedidos | p50 | p95 | p99 | Máx. | Vazão | Códigos | Erro real |
@@ -59,6 +59,7 @@ se a espera por conexão dominar, testar pool de 20; se a fila da trava dominar,
 (condição de revisão já prevista lá). Uma mudança por rodada, cada uma com o próprio `resultado-NN.md`.
 
 ## Limites desta conclusão
+- `perf/usuarios.csv` tem um único usuário de demonstração: as 50 threads usam a mesma conta. Isso não muda a disputa pela sala (o alvo do teste), mas não exercita 50 sessões diferentes.
 - Máquina local de desenvolvimento, com o gerador de carga junto: **não permite afirmar nada sobre produção**.
 - Uma única rodada; sem repetição para medir variação entre rodadas.
 - Cenário de pior caso deliberado (todos disputando o mesmo recurso, sem pausa entre pedidos); uso real distribui as reservas por vários recursos.

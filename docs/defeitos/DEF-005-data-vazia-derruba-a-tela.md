@@ -63,5 +63,10 @@ Sempre que um campo de data ou de hora fica vazio, nas quatro telas. Nenhum dado
 `e2e/InterfaceE2EIT`: os três testes `def005_*` ficam vermelhos sem a correção e verdes com ela; `./mvnw -B verify` verde.
 
 ## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
-Os commits `test(regressao): DEF-005` e `fix(DEF-005)`, a issue e o PR estão no histórico do Git e na própria issue.
-Registrar o identificador do commit dentro do mesmo commit é impossível.
+| Item | Valor |
+|---|---|
+| Issue | [#17](https://github.com/guilhermevianacloud/organizacao-recursos/issues/17) |
+| Commits do teste de regressão | `c075433` e `e9c5227` |
+| Commit da correção | `5f41e00` fix(DEF-005, DEF-006) |
+| Pull request | [#19](https://github.com/guilhermevianacloud/organizacao-recursos/pull/19) |
+| Teste de regressão | `e2e/InterfaceE2EIT.def005_*` (3 testes) |
