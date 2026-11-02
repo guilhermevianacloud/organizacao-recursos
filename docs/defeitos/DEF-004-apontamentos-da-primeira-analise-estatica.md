@@ -49,3 +49,11 @@ Os outros 10 são de severidade média: 8× `javascript:S9383` (promessas sem tr
 
 ## Critério de verificação
 PR #10: CI verde (98 + 175) e análise do SonarCloud pelo CI com **Quality Gate aprovado**, 0 issues novas, cobertura 98,0% / 95,0% e 0% de duplicação. Os números da `main` depois do merge ficam em `docs/evidencias/README.md`.
+
+## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
+| Item | Valor |
+|---|---|
+| Issue | [#14](https://github.com/guilhermevianacloud/organizacao-recursos/issues/14) (aberta até a revisão do S4502) |
+| Commits da correção | `94522bb` (código) e `be8d143` (documentação) |
+| Pull request | [#10](https://github.com/guilhermevianacloud/organizacao-recursos/pull/10) |
+| Verificação | Quality Gate aprovado no PR #10 e na `main` (`16adf58`); [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) |

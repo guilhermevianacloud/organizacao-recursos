@@ -44,3 +44,12 @@ Cada pedido termina aceito ou recusado com conflito (409). Nenhum erro inesperad
 
 ## Critério de verificação
 `./mvnw -B verify` três vezes seguidas: 85 de unidade e 28 de integração, 0 falhas e 0 erros nas três (15 disputas de 20 pedidos pela sala + professor).
+
+## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
+| Item | Valor |
+|---|---|
+| Issue | [#12](https://github.com/guilhermevianacloud/organizacao-recursos/issues/12) (fechada) |
+| Commit da correção | `70dcfff` (trava `FOR UPDATE` por recurso); isolamento do teste em `37544b6` |
+| Pull request | [#3](https://github.com/guilhermevianacloud/organizacao-recursos/pull/3) |
+| Teste de regressão | `servico/DuplaReservaConcorrenciaIT` (sem exceções inesperadas, 5 repetições) |
+| Verde reproduzível | [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) (`main`, `16adf58`) |

@@ -49,6 +49,14 @@ Ver "Próximo experimento" em `docs/performance/resultado-01.md`: medir a espera
 outra máquina, depois ajustar uma variável por vez.
 
 ## Risco aceito?
-**Proposta, aguardando decisão do grupo:** aceitar o risco na entrega `v1.0.0-rc1`, com a justificativa de que o
+**Proposta, aguardando decisão do grupo:** aceitar o risco na entrega `v1.0.0-rc2`, com a justificativa de que o
 impacto é só no tempo de resposta no pior caso, a meta foi proposta pelo próprio grupo e as regras críticas estão
 intactas. Quem aceitar (nome e motivo) fica registrado em `docs/decisao-qualidade.md`; até lá, o defeito segue aberto.
+
+## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
+| Item | Valor |
+|---|---|
+| Issue | [#13](https://github.com/guilhermevianacloud/organizacao-recursos/issues/13) (aberta) |
+| Meta escrita antes da medição | `644787f` docs: requisito de desempenho antes da primeira rodada de carga |
+| Medição | `70a45a2` (plano JMeter e rodada 01), [PR #7](https://github.com/guilhermevianacloud/organizacao-recursos/pull/7) |
+| Correção | nenhuma ainda |
