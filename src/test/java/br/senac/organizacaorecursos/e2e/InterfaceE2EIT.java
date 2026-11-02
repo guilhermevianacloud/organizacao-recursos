@@ -27,6 +27,8 @@ import org.springframework.context.annotation.Import;
 @Import(TestcontainersConfiguration.class)
 class InterfaceE2EIT {
 
+    private static final String MENSAGEM_DATA_INVALIDA = "Informe uma data e um horário válidos.";
+
     private static Playwright playwright;
     private static Browser navegador;
 
@@ -116,6 +118,47 @@ class InterfaceE2EIT {
         pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Recursos")).click();
         assertThat(pagina.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Cadastrados"))).isVisible();
         assertThat(semRolagemLateral()).as("recursos").isTrue();
+    }
+
+    /** DEF-005: apagar o dia da agenda não pode derrubar a tela; o campo volta ao dia que estava sendo exibido. */
+    @Test
+    void def005_apagarODiaDaAgendaMantemATela() {
+        entrarComo("Solicitante");
+        Locator dia = pagina.getByLabel("Dia");
+        String exibido = dia.inputValue();
+
+        dia.fill("");
+
+        assertThat(pagina.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Agenda do dia"))).isVisible();
+        assertThat(pagina.getByLabel("Dia")).hasValue(exibido);
+        assertThat(pagina.getByText("Invalid time value")).hasCount(0);
+    }
+
+    /** DEF-005: buscar livres sem dia mostra mensagem em português, em vez de não fazer nada. */
+    @Test
+    void def005_buscarSemDiaMostraMensagemCompreensivel() {
+        entrarComo("Solicitante");
+        pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Nova reserva")).click();
+        pagina.getByLabel("Dia").fill("");
+        pagina.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ver recursos livres")).click();
+
+        assertThat(pagina.getByRole(AriaRole.ALERT)).hasText(MENSAGEM_DATA_INVALIDA);
+    }
+
+    /** DEF-005: relatório e manutenção sem data mostram a mensagem e mantêm a tela. */
+    @Test
+    void def005_relatorioEManutencaoSemDataMostramMensagemCompreensivel() {
+        entrarComo("Administrador");
+        pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Relatório")).click();
+        pagina.getByLabel("De").fill("");
+        pagina.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gerar")).click();
+        assertThat(pagina.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Relatório de utilização"))).isVisible();
+        assertThat(pagina.getByRole(AriaRole.ALERT)).hasText(MENSAGEM_DATA_INVALIDA);
+
+        pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Manutenção")).click();
+        pagina.getByLabel("Dia").fill("");
+        pagina.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Bloquear")).click();
+        assertThat(pagina.getByRole(AriaRole.ALERT)).hasText(MENSAGEM_DATA_INVALIDA);
     }
 
     private void entrarComo(String perfil) {
