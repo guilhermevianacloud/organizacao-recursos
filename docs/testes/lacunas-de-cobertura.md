@@ -15,6 +15,7 @@ Relatório: `target/site/jacoco/index.html` (gerado no `./mvnw -B verify` e publ
 |---|---|---|
 | Antes da análise (Fase 5 completa) | 95,1% (565/594) | 83,0% (117/141) |
 | Depois dos testes das lacunas de risco | 98,0% (582/594) | 95,0% (134/141) |
+| Versão avaliada (depois do DEF-004, que acrescentou uma linha) | 98,0% (583/595) | 95,0% (134/141) |
 
 ## Lacunas de risco (ganharam teste)
 | Classe e trecho | Por que é risco | Teste criado |

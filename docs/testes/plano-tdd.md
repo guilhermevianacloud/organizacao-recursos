@@ -2,7 +2,7 @@
 
 Aula 05 (Prompt 1). Fonte das regras: [`docs/prd.md`](../prd.md) (seção 8) e [`docs/arquitetura.md`](../arquitetura.md). Nenhuma regra foi inventada: cada uma cita sua origem.
 Categorias de caso: **F** caminho feliz · **L** valor-limite · **I** entrada inválida · **C** conflito · **P** estado proibido.
-Convenção de horários: dia fixo 2026-11-09, fuso UTC nos testes (`Clock.fixed`).
+Convenção de horários: dia fixo 2026-11-09 e fuso UTC nos testes, com instantes escritos no próprio teste; `Clock.fixed` onde o serviço lê "agora" (`ServicoDeReservasTest`).
 
 ## 1. Inventário de casos
 
@@ -143,12 +143,12 @@ A tabela completa (todos os pares) vira um `@ParameterizedTest`.
 - Q-02 (PRD): manutenção sobre reservas existentes — comportamento provisório: recusar o cadastro (RN04-07).
 - Q-03: prazo para cancelar reserva aprovada — sem prazo por enquanto.
 - Q-04: quando marcar NAO_COMPARECEU — manual, pelo Responsável.
-- Artefatos procurados e ainda inexistentes: código de domínio e testes (começam na Fase 3).
+- Artefatos procurados e inexistentes em 2026-10-31: código de domínio e testes (começaram na Fase 3).
 
 ## 3. Matriz regra → caso → teste → status
 Preenchida na Fase 3 em diante: cada caso recebe o caminho e o nome do teste, e o status passa de **a escrever** para **vermelho** (fase red) e **verde** (fase green).
 
-Caminhos relativos a `src/test/java/br/senac/organizacaorecursos/`. Atualizado em 2026-11-01 (Fase 5).
+Caminhos relativos a `src/test/java/br/senac/organizacaorecursos/`. Atualizado em 2026-11-02.
 
 | Regra | Casos | Teste | Status |
 |---|---|---|---|
@@ -167,4 +167,4 @@ Caminhos relativos a `src/test/java/br/senac/organizacaorecursos/`. Atualizado e
 | RN-12 | RN12-01..04 | `api/ApiDeReservasIT` (rn12_01..03, `semDetalheInterno`) | verde |
 | RN-13 | RN13-01..06 | `notificacao/NotificadorHttpIT` (INT-01..06); `notificacao/NotificacaoAposCommitIT` | verde |
 
-**Regras sem teste:** nenhuma. Próximo passo: mutação manual (Fase 7) para confirmar que cada teste detecta a quebra.
+**Regras sem teste:** nenhuma. A mutação manual (`docs/testes/mutacao-manual.md`, 11 de 11 detectadas) confirmou que cada regra crítica tem teste que detecta a quebra.

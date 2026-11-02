@@ -15,6 +15,9 @@ mesmo recurso foi 506 ms; a meta proposta é 300 ms. Integridade e "nunca 500" f
 ## Ambiente / versão
 Commit `644787f`; aplicação local com PostgreSQL em container; JMeter 5.6.3 na mesma máquina (i7-11390H, 15,7 GB).
 
+## Pré-condições
+Banco recém-criado com os dados de demonstração; JMeter 5.6.3 instalado; nenhuma outra carga na máquina.
+
 ## Passos para reproduzir
 1. `./mvnw spring-boot:run` (banco recém-criado).
 2. `jmeter -n -t perf/reservas.jmx -l perf/resultados/rodada-01.jtl -e -o perf/relatorio-01`.
@@ -49,7 +52,7 @@ Ver "Próximo experimento" em `docs/performance/resultado-01.md`: medir a espera
 outra máquina, depois ajustar uma variável por vez.
 
 ## Risco aceito?
-**Proposta, aguardando decisão do grupo:** aceitar o risco na entrega `v1.0.0-rc2`, com a justificativa de que o
+**Proposta, aguardando decisão do grupo:** aceitar o risco na entrega `v1.0.0-rc3`, com a justificativa de que o
 impacto é só no tempo de resposta no pior caso, a meta foi proposta pelo próprio grupo e as regras críticas estão
 intactas. Quem aceitar (nome e motivo) fica registrado em `docs/decisao-qualidade.md`; até lá, o defeito segue aberto.
 

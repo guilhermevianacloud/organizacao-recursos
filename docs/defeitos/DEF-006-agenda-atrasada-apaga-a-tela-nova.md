@@ -33,6 +33,8 @@ Falha intermitente no teste `def005_relatorioEManutencaoSemDataMostramMensagemCo
 ## Frequência, alcance e impacto
 Depende do tempo de resposta. É raro com o servidor local e mais provável numa rede lenta. A tela fica perdida até o usuário clicar no menu de novo. Nenhum dado é afetado.
 
+Alcance conferido no código: só a agenda escrevia num elemento que podia ter sumido, e por isso só ela gerava erro. As telas que buscam dados antes de desenhar (Nova reserva, Minhas reservas, Aprovações, Recursos, Manutenção) trocam o conteúdo inteiro: numa troca muito rápida de menu, a tela anterior pode reaparecer por cima da nova, **sem erro**. Isso não foi corrigido nesta versão e fica registrado como limitação.
+
 ## Severidade (com justificativa)
 **Baixa.** É intermitente, não afeta dados e a recuperação é um clique.
 
@@ -53,4 +55,10 @@ A agenda guarda a referência da própria grade antes de esperar as respostas. D
 `def006_trocarDeTelaAntesDaAgendaCarregarMantemATelaNova` vermelho sem a correção e verde com ela; `./mvnw -B verify` verde.
 
 ## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
-Os commits `test(regressao): DEF-006` e `fix(DEF-006)`, a issue e o PR estão no histórico do Git e na própria issue.
+| Item | Valor |
+|---|---|
+| Issue | [#18](https://github.com/guilhermevianacloud/organizacao-recursos/issues/18) |
+| Commit do teste de regressão | `e9c5227` |
+| Commit da correção | `5f41e00` fix(DEF-005, DEF-006) |
+| Pull request | [#19](https://github.com/guilhermevianacloud/organizacao-recursos/pull/19) |
+| Teste de regressão | `e2e/InterfaceE2EIT.def006_trocarDeTelaAntesDaAgendaCarregarMantemATelaNova` |

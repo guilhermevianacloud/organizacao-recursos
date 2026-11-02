@@ -73,6 +73,15 @@ em português, com um `codigo` estável (ex.: `CONFLITO_DE_HORARIO`).
 | [docs/testes/bdd-aprovacao-bloqueio.md](docs/testes/bdd-aprovacao-bloqueio.md) | Cenários BDD e tabela de fronteiras |
 | [docs/adr/](docs/adr/) | Registros de decisão arquitetural |
 | [docs/defeitos/](docs/defeitos/) | Registro de defeitos (cada um com issue no GitHub, commits e teste de regressão) |
+| [docs/testes/lacunas-de-cobertura.md](docs/testes/lacunas-de-cobertura.md) | Linhas e ramos não cobertos, classificados como risco ou cosmética |
+| [docs/testes/mutacao-manual.md](docs/testes/mutacao-manual.md) | Cada regra crítica quebrada de propósito e o teste que detectou |
+| [docs/performance/](docs/performance/) | Requisito de desempenho (escrito antes) e resultado da carga com JMeter |
+| [docs/relatorio-qualidade.md](docs/relatorio-qualidade.md) | Relatório final de qualidade: metas, defeitos, riscos e recomendação |
+| [docs/decisao-qualidade.md](docs/decisao-qualidade.md) | Decisão de liberação e riscos aceitos |
+| [docs/entrega/checklist.md](docs/entrega/checklist.md) | Checklist da entrega em clone limpo |
+| [docs/evidencias/README.md](docs/evidencias/README.md) | Índice de evidências da versão avaliada |
+| [docs/prova-oral/](docs/prova-oral/) | Perguntas da banca e roteiro de ensaio |
+| [CHANGELOG.md](CHANGELOG.md) | O que entrou em cada versão candidata |
 | [docs/taticas-arquiteturais-len-bass.md](docs/taticas-arquiteturais-len-bass.md) | Catálogo de táticas (material de apoio da Aula 04) |
 
 ## Integração contínua
