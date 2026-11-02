@@ -63,6 +63,7 @@ em português, com um `codigo` estável (ex.: `CONFLITO_DE_HORARIO`).
 |---|---|
 | [docs/prd.md](docs/prd.md) | Produto, personas, 14 requisitos funcionais, 14 não funcionais, regras e estados |
 | [docs/arquitetura.md](docs/arquitetura.md) | C4, modelo de dados, fluxos críticos, utility tree, cenários e análise ATAM |
+| [docs/avaliacao-arquitetural/ciclo-01.md](docs/avaliacao-arquitetural/ciclo-01.md) | Ciclo ATAM sobre o código pronto: cenários medidos, táticas com arquivo e linha, divergências e ações |
 | [docs/plano-de-teste.md](docs/plano-de-teste.md) | Estratégia e plano de testes (ISO/IEC/IEEE 29119-3) |
 | [docs/testes/plano-tdd.md](docs/testes/plano-tdd.md) | Inventário de casos de teste por regra de negócio |
 | [docs/rtm.md](docs/rtm.md) | Matriz de rastreabilidade requisito → risco → teste → evidência |
@@ -71,7 +72,7 @@ em português, com um `codigo` estável (ex.: `CONFLITO_DE_HORARIO`).
 | [docs/testes/evidencia-tdd.md](docs/testes/evidencia-tdd.md) | Commits vermelho e verde de cada ciclo de TDD |
 | [docs/testes/bdd-aprovacao-bloqueio.md](docs/testes/bdd-aprovacao-bloqueio.md) | Cenários BDD e tabela de fronteiras |
 | [docs/adr/](docs/adr/) | Registros de decisão arquitetural |
-| [docs/defeitos/](docs/defeitos/) | Registro de defeitos |
+| [docs/defeitos/](docs/defeitos/) | Registro de defeitos (cada um com issue no GitHub, commits e teste de regressão) |
 | [docs/taticas-arquiteturais-len-bass.md](docs/taticas-arquiteturais-len-bass.md) | Catálogo de táticas (material de apoio da Aula 04) |
 
 ## Integração contínua

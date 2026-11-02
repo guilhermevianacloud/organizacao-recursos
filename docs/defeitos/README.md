@@ -2,7 +2,7 @@
 
 Um arquivo por defeito (`DEF-001-titulo-curto.md`), com: identificador, descrição, severidade e prioridade (com justificativa), requisito afetado na RTM, passos para reproduzir, evidência, análise de causa raiz (5 porquês) e os commits da correção (`test(regressao): <id>` e `fix(<id>): ...`).
 
-O mesmo formato serve para as issues do GitHub (modelo em `.github/ISSUE_TEMPLATE/defeito.md`).
+O mesmo formato serve para as issues do GitHub (modelo em `.github/ISSUE_TEMPLATE/defeito.md`). Cada defeito tem uma issue (#11 a #14) e, no fim do arquivo, a seção "Rastreio", com commit, PR, teste de regressão e execução verde.
 
 | Defeito | Situação | Severidade / prioridade |
 |---|---|---|

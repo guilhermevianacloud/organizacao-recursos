@@ -60,3 +60,15 @@ Sempre que pedidos pelo mesmo recurso chegam ao mesmo tempo (pico, semana de mat
 
 ## Critério de verificação
 `DuplaReservaConcorrenciaIT` verde nas 5 repetições e no caso do professor; mutação manual (remover a constraint) faz o teste voltar a falhar.
+
+## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
+| Item | Valor |
+|---|---|
+| Issue | [#11](https://github.com/guilhermevianacloud/organizacao-recursos/issues/11) (fechada) |
+| Commit vermelho | `2f6b515` test(red): RN-03 — 20 pedidos simultâneos pelo mesmo recurso |
+| Commit da correção | `70dcfff` feat(green): RN-03 — constraint no banco e trava por recurso (DEF-001, DEF-002) |
+| Pull request | [#3](https://github.com/guilhermevianacloud/organizacao-recursos/pull/3) |
+| Teste de regressão | `servico/DuplaReservaConcorrenciaIT`, `servico/ProtecaoNoBancoIT` |
+| Verde reproduzível | [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) (`main`, `16adf58`) |
+
+A correção usou a convenção de TDD da Aula 09 (`test(red)` / `feat(green)`), anterior à convenção `fix(<id>)` da Aula 15.

@@ -2,7 +2,7 @@
 
 > Fontes: [`docs/prd.md`](prd.md) (requisitos e regras), [Especificação do Projeto](https://afonsolelis.github.io/aulas_senac/pages/qualidade2/especificacao-projeto.html), catálogo de táticas em [`docs/taticas-arquiteturais-len-bass.md`](taticas-arquiteturais-len-bass.md) (material da Aula 04).
 > Convenção: **Fato** (está nas fontes) · **Suposição** (S-xx, precisa ser confirmada) · **Decisão** (D-xx/ADR). Métricas sem medição ainda são marcadas **validação pendente**.
-> Estado em 2026-10-31: arquitetura **proposta**. A seção 12 será preenchida com evidências conforme o código for escrito (Aulas 06 e 07: ciclo ATAM em `docs/avaliacao-arquitetural/`).
+> Estado em 2026-11-01: arquitetura **como construída** (`main` em `16adf58`). A versão proposta em 2026-10-31 foi comparada com o código no [ciclo ATAM 01](avaliacao-arquitetural/ciclo-01.md); as divergências encontradas lá (seção 6) foram corrigidas aqui. O histórico do Git guarda a versão proposta.
 
 ## 1. Stack
 | Item | Escolha | Origem |
@@ -13,7 +13,8 @@
 | Migrações | Flyway | D-16 |
 | Segurança | Spring Security + JWT | RF-01 + [ADR-003](adr/ADR-003-autenticacao-jwt.md) |
 | Build | Maven Wrapper | Aula 03 |
-| Interface | **pendente** (Q-01) | — |
+| Interface | HTML + CSS + JavaScript servidos pelo próprio Spring | [ADR-006](adr/ADR-006-interface-web.md) |
+| Testes | JUnit 5, Mockito (só unidade), Testcontainers, WireMock, Cucumber, Playwright, JaCoCo, SonarCloud, JMeter | Especificação + `docs/plano-de-teste.md` |
 
 ## 2. Drivers de negócio
 | ID | Driver | Origem |
@@ -51,47 +52,56 @@ flowchart LR
     app -->|"JDBC; exclusion constraint impede sobreposição"| db
     app -->|"HTTP com timeout"| notif
 ```
-- Um único contêiner de aplicação (D-02 pendente pode acrescentar um contêiner de front-end se a interface for separada).
+- Um único contêiner de aplicação: a interface web é servida pela própria aplicação (ADR-006).
 - O banco é o **ponto único de verdade** para conflito de horário: todas as instâncias da aplicação passam por ele (ADR-002).
 
 ## 5. Componentes da aplicação (C4 — nível 3)
 ```mermaid
 flowchart TB
-    subgraph web["Camada web"]
-        ctrl["Controllers REST<br/>(validação de entrada, ProblemDetail)"]
-        sec["Filtro de segurança JWT<br/>(Spring Security)"]
+    subgraph web["api / seguranca"]
+        sec["Spring Security + JWT<br/>(ConfiguracaoDeSeguranca, ServicoDeToken)"]
+        ctrl["Controllers REST<br/>(Autenticacao, Recurso, Reserva, Manutencao, Relatorio)<br/>validação de entrada, @PreAuthorize"]
+        erros["TratamentoDeErros<br/>(ProblemDetail com código)"]
     end
-    subgraph dominio["Domínio"]
-        res["ServicoDeReservas<br/>(criar, alterar, cancelar)"]
-        apr["ServicoDeAprovacao<br/>(aprovar, rejeitar, retirada, devolução)"]
-        estados["MaquinaDeEstados<br/>(transições permitidas)"]
-        regras["Regras de intervalo<br/>(sobreposição, manutenção) + Clock"]
-        aud["ServicoDeAuditoria"]
+    subgraph servico["servico"]
+        res["ServicoDeReservas<br/>(solicitar, alterar, cancelar, aprovar, rejeitar,<br/>retirada, devolução, não comparecimento, histórico)"]
+        rec["ServicoDeRecursos<br/>(cadastro, pesquisa)"]
+        man["ServicoDeManutencao"]
         rel["ServicoDeRelatorios"]
+        conf["RegistroDeConflitos<br/>(transação própria)"]
     end
-    subgraph infra["Infraestrutura"]
-        repo["Repositórios JPA"]
-        porta["Porta Notificador<br/>(interface)"]
-        adapt["Adaptador HTTP do notificador"]
+    subgraph dominio["dominio"]
+        intervalo["Intervalo<br/>(semiaberto, sobreposição)"]
+        estados["EstadoReserva<br/>(transições permitidas)"]
+        reserva["Reserva, Recurso, Manutencao,<br/>AuditoriaReserva (imutável)"]
+    end
+    subgraph infra["persistencia / notificacao"]
+        repo["Repositórios JPA<br/>(trava por recurso)"]
+        porta["Notificador<br/>(porta)"]
+        adapt["NotificadorHttp / NotificadorSimulado"]
     end
     sec --> ctrl
-    ctrl --> res & apr & rel
-    res --> regras & estados & aud & repo & porta
-    apr --> estados & aud & repo & porta
+    ctrl --> res & rec & man & rel
+    ctrl -->|"409: registra a recusa"| conf
+    ctrl -.-> erros
+    res --> intervalo & estados & reserva & repo
+    res -->|"evento depois do commit"| porta
+    man --> intervalo & repo
+    rec --> repo
     rel --> repo
     porta --> adapt
 ```
-- **Por que separar regras de intervalo e máquina de estados:** são as regras críticas mais testadas; isoladas, viram testes de unidade rápidos e com valores-limite.
+- **Por que separar intervalo e estados no domínio:** são as regras críticas mais testadas; isoladas, viram testes de unidade rápidos e com valores-limite (`IntervaloTest`, `EstadoReservaTest`).
+- **Por que um só serviço de reservas:** aprovação, retirada e devolução são transições da mesma reserva e precisam da mesma auditoria na mesma transação. A proposta inicial tinha serviços separados de aprovação e auditoria (ciclo 01, divergência 2).
 - **Por que a porta do notificador:** só o adaptador conhece URL, token e formato do provedor; o domínio fala com uma interface. É o padrão do Foot Fanatics na Aula 08 (tática *Tailor Interface + Abstract Data Sources*).
 
-## 6. Modelo de dados (preliminar)
+## 6. Modelo de dados (migrações V2 a V4)
 ```mermaid
 erDiagram
     USUARIO ||--o{ RESERVA : solicita
     RECURSO ||--o{ RESERVA : "é reservado em"
     RECURSO ||--o{ MANUTENCAO : "fica em"
     RESERVA ||--o{ AUDITORIA_RESERVA : "gera"
-    RESERVA ||--o{ MOVIMENTACAO_MATERIAL : "registra"
     USUARIO {
         bigint id
         text nome
@@ -135,18 +145,19 @@ erDiagram
         text estado_novo
         text motivo
     }
-    MOVIMENTACAO_MATERIAL {
+    TENTATIVA_RECUSADA {
         bigint id
-        bigint reserva_id
-        text tipo "RETIRADA | DEVOLUCAO"
+        bigint recurso_id
+        timestamptz inicio
+        timestamptz termino
         timestamptz instante
-        bigint responsavel_id
     }
 ```
-- **Recurso único com `tipo`** (D-07): sala, material e professor são "recursos reserváveis". Assim **uma única exclusion constraint** protege os três tipos contra sobreposição (ADR-002).
+- **Recurso único com `tipo`** (D-07): sala, material e professor são "recursos reserváveis". Assim **uma única exclusion constraint** (`reserva_sem_sobreposicao`, V3) protege os três tipos contra sobreposição, e só para os estados que ocupam: SOLICITADA, APROVADA e EM_USO (ADR-002).
 - **Professor como recurso:** a agenda do professor entra na mesma regra de sobreposição (RF-05 "inclusive na agenda do professor").
-- **Conflitos evitados (RF-12):** registrados em tabela própria de tentativas recusadas — detalhe definido na Fase 5.
-- Campos e tipos podem mudar ao implementar; mudanças entram por migração Flyway.
+- **Retirada e devolução (RF-09)** são transições da reserva (APROVADA → EM_USO → CONCLUIDA), registradas na auditoria. Não há tabela separada de movimentação, que existia na proposta inicial.
+- **Conflitos evitados (RF-12):** `tentativa_recusada` (V4), sem chave estrangeira, gravada em transação própria (`RegistroDeConflitos`) para sobreviver ao rollback do pedido recusado.
+- Os textos ficam em `VARCHAR` com `CHECK` para perfil, tipo e estado; mudanças entram por migração Flyway.
 
 ## 7. Fluxos críticos (sequência)
 ### 7.1 Criar reserva com disputa pelo mesmo recurso
@@ -156,17 +167,19 @@ sequenceDiagram
     participant B as Solicitante B
     participant API as Aplicação
     participant DB as PostgreSQL
-    A->>API: POST /reservas (sala 101, 08:00–10:00)
-    B->>API: POST /reservas (sala 101, 09:00–11:00)
-    API->>API: valida entrada (RN-01) e manutenção (RN-04)
-    API->>DB: INSERT reserva A + auditoria (mesma transação)
-    API->>DB: INSERT reserva B + auditoria (mesma transação)
-    DB-->>API: A gravada
-    DB-->>API: B recusada: exclusion constraint (intervalos se cruzam)
+    A->>API: POST /api/reservas (sala 101, 08:00–10:00)
+    B->>API: POST /api/reservas (sala 101, 09:00–11:00)
+    API->>API: valida entrada (RN-01)
+    API->>DB: SELECT recurso FOR UPDATE (pedido A trava a sala 101)
+    API->>DB: SELECT recurso FOR UPDATE (pedido B espera)
+    API->>DB: A: confere manutenção (RN-04) e sobreposição; INSERT reserva + auditoria; COMMIT
+    DB-->>API: trava liberada; B prossegue
+    API->>DB: B: confere sobreposição → conflito; ROLLBACK
+    API->>DB: B: controller registra a tentativa recusada (transação própria)
     API-->>A: 201 Created
-    API-->>B: 409 Conflict (ProblemDetail, conflito registrado)
+    API-->>B: 409 Conflict (ProblemDetail com código)
 ```
-A checagem prévia na aplicação melhora a mensagem, mas **quem decide é o banco**: as duas verificações podem ver "livre" ao mesmo tempo; só a constraint é atômica.
+Duas camadas (ADR-002, atualizado pelo DEF-002): a **trava por recurso** faz os pedidos do mesmo recurso esperarem a vez, o que evita deadlock e dá uma mensagem clara; a **exclusion constraint** é a garantia final para qualquer caminho de escrita, inclusive SQL direto (`ProtecaoNoBancoIT`). Custo medido: fila no pico (DEF-003).
 
 ### 7.2 Aprovar recurso restrito
 ```mermaid
@@ -176,23 +189,23 @@ sequenceDiagram
     participant API as Aplicação
     participant DB as PostgreSQL
     participant N as Provedor de notificação
-    S->>API: POST /reservas (laboratório restrito)
+    S->>API: POST /api/reservas (laboratório restrito)
     API->>DB: reserva SOLICITADA + auditoria
     API-->>S: 201 (SOLICITADA)
-    R->>API: POST /reservas/{id}/aprovacao
+    R->>API: POST /api/reservas/{id}/aprovacao
     API->>API: perfil = Responsável? (RN-05) · não é o próprio solicitante? (RN-06) · transição permitida? (RN-07)
     API->>DB: estado APROVADA + auditoria (mesma transação)
     API-->>R: 200
-    API->>N: notifica (timeout 2 s)
+    API->>N: depois do commit: notifica (timeout 2 s)
     N--xAPI: falha ou demora
-    Note over API,N: A aprovação já foi gravada; a falha do provedor não a desfaz (RN-13)
+    Note over API,N: A aprovação já foi gravada; a falha do provedor não a desfaz (RN-13, ADR-005)
 ```
 
 ## 8. Autenticação e sessão
-- Login (`POST /auth/login`) devolve um **JWT** assinado com o perfil do usuário ([ADR-003](adr/ADR-003-autenticacao-jwt.md)).
-- Cada requisição envia `Authorization: Bearer <token>`; o filtro do Spring Security valida a assinatura e a expiração.
-- Autorização em duas camadas: **por perfil** (rota × perfil, matriz em `docs/seguranca/`) e **por posse** (RN-10: o dono da reserva).
-- Senhas com hash **BCrypt**; a chave de assinatura do JWT vem de variável de ambiente, nunca do código.
+- Login (`POST /api/auth/login`) devolve um **JWT** (HS256, 60 min) assinado com o perfil do usuário ([ADR-003](adr/ADR-003-autenticacao-jwt.md)).
+- Cada requisição envia `Authorization: Bearer <token>`; o filtro do Spring Security valida a assinatura e a expiração. Sem sessão no servidor e sem cookie, por isso o CSRF fica desligado ([ADR-007](adr/ADR-007-csrf-desligado.md), proposta).
+- Autorização em duas camadas: **por perfil** (`@PreAuthorize`, matriz em [`docs/seguranca/matriz-autorizacao.md`](seguranca/matriz-autorizacao.md)) e **por posse** (RN-10: o dono da reserva; quem pediu não aprova).
+- Senhas com hash **BCrypt**; a chave de assinatura do JWT vem da variável `JWT_SEGREDO`, nunca do código (sem ela, uma chave aleatória por execução).
 
 ## 9. Atributos de qualidade e utility tree
 Prioridade: (Importância, Dificuldade) em A/M/B. Analisar primeiro os (A, A).
@@ -212,16 +225,19 @@ Prioridade: (Importância, Dificuldade) em A/M/B. Analisar primeiro os (A, A).
 | CEN-01 | 20 solicitantes | pedem a mesma sala no mesmo horário ao mesmo tempo | operação normal, pico | serviço de reservas + banco | exatamente um pedido aceito, os outros recusados com 409 | 1 aceito, 19 × 409, 1 linha no banco, em 5 de 5 execuções |
 | CEN-02 | Solicitante autenticado | tenta cancelar a reserva de outro pelo id | operação normal | API de reservas | acesso negado sem revelar a reserva alheia | 100% das tentativas recusadas (403); 0 alterações |
 | CEN-03 | Responsável | aprova uma reserva e a gravação falha no meio | falha de banco durante a transação | serviço de aprovação + auditoria | nada é gravado: nem a mudança, nem a auditoria | 0 registros de auditoria órfãos |
-| CEN-04 | 50 usuários | consultam disponibilidade simultaneamente | pico, máquina local | API de pesquisa | resposta dentro do limite | p95 ≤ 300 ms, erro < 1% (**validação pendente**) |
-| CEN-05 | Provedor de notificação | responde 500 ou passa do timeout | operação normal | adaptador de notificação | reserva confirmada; falha registrada | reserva gravada em 100% dos casos; resposta ≤ 2 s + tempo da reserva (**validação pendente**) |
+| CEN-04 | 50 usuários | consultam disponibilidade simultaneamente | pico, máquina local | API de pesquisa | resposta dentro do limite | p95 ≤ 300 ms, erro < 1% (proposta do grupo; **medido: 332 ms, não atende**, DEF-003) |
+| CEN-05 | Provedor de notificação | responde 500 ou passa do timeout | operação normal | adaptador de notificação | reserva confirmada; falha registrada | reserva gravada em 100% dos casos; espera pelo provedor ≤ 2 s (**medido: atende**, `NotificadorHttpIT`) |
+
+Resultado de cada cenário e a evidência: [ciclo ATAM 01](avaliacao-arquitetural/ciclo-01.md), seção 2.
 | CEN-06 | Solicitante | pede reserva que termina exatamente no início da manutenção | operação normal | regra de manutenção | reserva aceita (intervalo semiaberto) | 3 casos de fronteira (−1 s, 0, +1 s) com resultado esperado |
 
-## 11. Análise ATAM preliminar
+## 11. Análise ATAM
 Táticas pelo catálogo de Len Bass (seção 8 trata deste projeto). Roteiro por decisão: tática · cenário · métrica · custo · teste · risco se faltar.
+Esta é a análise feita **antes** do código (2026-10-31). O [ciclo 01](avaliacao-arquitetural/ciclo-01.md) refez a análise com o código e as medições: táticas com arquivo e linha, trade-off integridade × latência confirmado, riscos novos R-04 a R-07.
 
 | Decisão | Tática | Cenário | Custo / trade-off | Teste que evidencia |
 |---|---|---|---|---|
-| Exclusion constraint + transação (ADR-002) | Transactions + Schedule Resources | CEN-01 | o bloqueio no índice reduz a vazão no pico (**ponto de trade-off**: integridade × throughput) | concorrência 20 → 1 com Testcontainers |
+| Exclusion constraint + trava por recurso (ADR-002) | Transactions + Schedule Resources | CEN-01 | os pedidos do mesmo recurso esperam a vez (**ponto de trade-off**: integridade × latência, medido no DEF-003) | concorrência 20 → 1 com Testcontainers |
 | Matriz perfil × operação + posse (ADR-003) | Authenticate + Authorize Actors | CEN-02 | modelo granular aumenta atrito e complexidade da matriz | teste parametrizado lendo a matriz |
 | Auditoria na mesma transação | Audit + Timestamp + Transactions | CEN-03 | volume de dados e dado pessoal (**trade-off: auditoria × LGPD**) | integração com rollback forçado |
 | Cancelar muda estado, não apaga | Cancel + Undo | RN-08 | histórico ocupa armazenamento | transições proibidas parametrizadas |
@@ -240,18 +256,26 @@ Táticas pelo catálogo de Len Bass (seção 8 trata deste projeto). Roteiro por
 ## 12. Matriz requisito → decisão → componente → evidência
 | Requisito | Decisão / ADR | Componente | Evidência de verificação |
 |---|---|---|---|
-| RF-06 / RN-03 | ADR-002 (constraint + trava por recurso) | migração V3 + ServicoDeReservas + RecursoRepository | `DuplaReservaConcorrenciaIT`, `ProtecaoNoBancoIT` — [run 41210306850](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41210306850) |
-| RF-05 / RN-02 | ADR-002, ADR-004 | Intervalo + constraint | `IntervaloTest`, `ServicoDeReservasIT` — [run 41210306850](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41210306850) |
-| RF-01 / RN-10 | ADR-003 | filtro JWT + matriz de autorização | teste parametrizado (Fase 4) — *pendente* |
-| RF-10 / RN-09 | auditoria na mesma transação | ServicoDeAuditoria | integração com rollback (Fase 5) — *pendente* |
-| RF-11 / RN-13 | ADR-005 | Porta Notificador + adaptador HTTP | WireMock INT-01..06 (Fase 5) — *pendente* |
-| RNF-12 | ADR-001, `compose.yaml` | build e README | run do CI + clone limpo — [run 41207988750](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41207988750) |
+Evidência de todas as linhas: [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) (commit `16adf58`). A rastreabilidade completa, com risco e status, está em [`docs/rtm.md`](rtm.md).
+
+| Requisito | Decisão / ADR | Componente | Evidência de verificação |
+|---|---|---|---|
+| RF-06 / RN-03 | ADR-002 (constraint + trava por recurso) | migração V3 + `ServicoDeReservas` + `RecursoRepository` | `DuplaReservaConcorrenciaIT`, `ProtecaoNoBancoIT` |
+| RF-05 / RN-02 | ADR-002, ADR-004 | `Intervalo` + constraint | `IntervaloTest`, `ServicoDeReservasIT` |
+| RF-01 / RN-10 | ADR-003, ADR-007 | Spring Security + controllers + posse no serviço | `MatrizDeAutorizacaoIT` (88 células), `ApiDeReservasIT` |
+| RF-10 / RN-09 | auditoria na mesma transação | `ServicoDeReservas` + `AuditoriaReserva` (imutável) | `AuditoriaIT` (inclusive rollback) |
+| RF-11 / RN-13 | ADR-005 | porta `Notificador` + `NotificadorHttp` | `NotificadorHttpIT` (INT-01..06), `NotificacaoAposCommitIT` |
+| RF-12 | `tentativa_recusada` em transação própria | `ServicoDeRelatorios` + `RegistroDeConflitos` | `RelatorioDeUtilizacaoIT` |
+| RF-13 | ADR-006 | interface estática + `TratamentoDeErros` | `InterfaceE2EIT`, `ApiDeReservasIT` |
+| RNF-01/02 | sem cache (seção 11) | API de pesquisa e de reservas | `perf/reservas.jmx`, `docs/performance/resultado-01.md` — **não atende** (DEF-003) |
+| RNF-12 | ADR-001, `compose.yaml` | build e README | CI + clone limpo (`docs/entrega/checklist.md`) |
 
 ## 13. Suposições, perguntas e riscos aceitos
 - **S-01:** um único contêiner de aplicação basta para o volume de uma instituição de ensino (sem medição ainda).
 - **S-02:** o provedor de notificação aceita uma chamada HTTP JSON simples; não há provedor real (RF-11 permite simulação).
 - **Q-05 (PRD):** a restrição do cron diário de treino de ML, presente nos prompts da Aula 04, é do case Foot Fanatics; **não foi incorporada**. Confirmar com o professor.
-- **Riscos aceitos:** nenhum até o momento.
+- **Riscos aceitos (com responsável):** Spring Boot 3.5 fora do suporte gratuito (ADR-001, Guilherme Viana Lopes); token não revogável antes de expirar (ADR-003).
+- **Riscos com aceite ainda proposto, aguardando o grupo:** DEF-003 (desempenho abaixo da meta proposta) e CSRF desligado (ADR-007). Ver `docs/decisao-qualidade.md`.
 
 ## 14. Decisões (ADR)
 - [ADR-001 — Versão do Spring Boot](adr/ADR-001-versao-spring-boot.md)
