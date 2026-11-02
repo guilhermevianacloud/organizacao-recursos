@@ -14,8 +14,11 @@ import br.senac.organizacaorecursos.dominio.TipoRecurso;
 import br.senac.organizacaorecursos.dominio.Usuario;
 import br.senac.organizacaorecursos.persistencia.RecursoRepository;
 import br.senac.organizacaorecursos.persistencia.UsuarioRepository;
+import br.senac.organizacaorecursos.seguranca.PropriedadesDeSeguranca;
 import br.senac.organizacaorecursos.seguranca.ServicoDeToken;
 import com.jayway.jsonpath.JsonPath;
+import java.time.Clock;
+import java.time.Duration;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +50,10 @@ class ApiDeReservasIT {
     private ServicoDeToken tokens;
     @Autowired
     private PasswordEncoder codificador;
+    @Autowired
+    private JwtEncoder codificadorDeToken;
+    @Autowired
+    private PropriedadesDeSeguranca propriedades;
     @Autowired
     private org.springframework.jdbc.core.JdbcTemplate jdbc;
 
@@ -188,6 +196,18 @@ class ApiDeReservasIT {
         String adulterado = tokenSolicitante.substring(0, tokenSolicitante.length() - 3) + "abc";
 
         mvc.perform(get("/api/reservas/minhas").header("Authorization", adulterado))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.codigo").value("NAO_AUTENTICADO"));
+    }
+
+    /** ADR-003: o token vale 60 min; emitido há 2 h, já venceu (a tolerância do validador é de 60 s). */
+    @Test
+    void tokenVencidoResponde401() throws Exception {
+        Clock duasHorasAtras = Clock.offset(Clock.systemUTC(), Duration.ofHours(-2));
+        String vencido = "Bearer " + new ServicoDeToken(codificadorDeToken, duasHorasAtras, propriedades)
+                .emitir(solicitante).valor();
+
+        mvc.perform(get("/api/reservas/minhas").header("Authorization", vencido))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.codigo").value("NAO_AUTENTICADO"));
     }
