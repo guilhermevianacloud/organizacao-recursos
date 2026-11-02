@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      # Cadastrado pelo dono do repositório em Settings > Secrets (Aula 07). Nunca escrito em arquivo ou log.
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # Só um sim/não: o token em si fica restrito ao passo da análise (Aula 07, menor exposição).
+      TEM_SONAR: ${{ secrets.SONAR_TOKEN != '' }}
     steps:
       # Histórico completo: o SonarCloud precisa dele para calcular o "novo código".
       - uses: actions/checkout@v6
@@ -41,10 +41,14 @@ jobs:
 
       # Análise estática no SonarCloud, lendo o XML do JaCoCo. Só roda quando o secret existe.
       - name: Análise do SonarCloud
-        if: env.SONAR_TOKEN != ''
+        if: env.TEM_SONAR == 'true'
+        env:
+          # Cadastrado pelo dono do repositório em Settings > Secrets. Nunca escrito em arquivo ou log.
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./mvnw -B org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
 
-      # Relatórios guardados como evidência, inclusive quando o build falha.
+      # Relatórios guardados como evidência, inclusive quando o build falha. 90 dias: precisam durar
+      # até a entrega, a prova oral e a revisão (Aula 14); 7 dias venciam antes da entrega.
       - name: Publicar relatórios de teste
         if: always()
         uses: actions/upload-artifact@v4
@@ -54,7 +58,7 @@ jobs:
             target/surefire-reports/
             target/failsafe-reports/
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 90
 
       - name: Publicar relatório de cobertura (JaCoCo)
         if: always()
@@ -63,4 +67,4 @@ jobs:
           name: relatorio-de-cobertura
           path: target/site/jacoco/
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 90
