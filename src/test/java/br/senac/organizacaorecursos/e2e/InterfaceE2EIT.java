@@ -9,7 +9,10 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Route;
 import com.microsoft.playwright.options.AriaRole;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -139,6 +142,7 @@ class InterfaceE2EIT {
     void def005_buscarSemDiaMostraMensagemCompreensivel() {
         entrarComo("Solicitante");
         pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Nova reserva")).click();
+        assertThat(pagina.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Nova reserva"))).isVisible();
         pagina.getByLabel("Dia").fill("");
         pagina.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ver recursos livres")).click();
 
@@ -150,18 +154,47 @@ class InterfaceE2EIT {
     void def005_relatorioEManutencaoSemDataMostramMensagemCompreensivel() {
         entrarComo("Administrador");
         pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Relatório")).click();
+        assertThat(pagina.getByText("Horas reservadas")).isVisible();
         pagina.getByLabel("De").fill("");
         pagina.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gerar")).click();
         assertThat(pagina.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Relatório de utilização"))).isVisible();
         assertThat(pagina.getByRole(AriaRole.ALERT)).hasText(MENSAGEM_DATA_INVALIDA);
 
         pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Manutenção")).click();
+        assertThat(pagina.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Bloquear recurso"))).isVisible();
         pagina.getByLabel("Dia").fill("");
         pagina.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Bloquear")).click();
         assertThat(pagina.getByRole(AriaRole.ALERT)).hasText(MENSAGEM_DATA_INVALIDA);
     }
 
+    /**
+     * DEF-006: trocar de tela enquanto a agenda ainda carrega não pode deixar a resposta atrasada da agenda apagar a
+     * tela nova. A resposta de manutenções fica retida até o Relatório estar aberto.
+     */
+    @Test
+    void def006_trocarDeTelaAntesDaAgendaCarregarMantemATelaNova() {
+        List<Route> retidas = new ArrayList<>();
+        pagina.route("**/api/manutencoes", retidas::add);
+        abrirSessao("Administrador");
+
+        pagina.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Relatório")).click();
+        assertThat(pagina.getByText("Horas reservadas")).isVisible();
+        pagina.waitForCondition(() -> !retidas.isEmpty());
+        retidas.forEach(Route::resume);
+        pagina.waitForLoadState();
+        pagina.waitForTimeout(500);
+
+        assertThat(pagina.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Relatório de utilização"))).isVisible();
+        assertThat(pagina.getByRole(AriaRole.ALERT)).hasCount(0);
+    }
+
     private void entrarComo(String perfil) {
+        abrirSessao(perfil);
+        // A agenda abre sozinha depois do login; os testes só seguem com ela carregada.
+        assertThat(pagina.getByText("Carregando…")).hasCount(0);
+    }
+
+    private void abrirSessao(String perfil) {
         pagina.navigate(url("/"));
         pagina.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName(perfil).setExact(true)).click();
         pagina.getByLabel("Senha").fill("demo123");
