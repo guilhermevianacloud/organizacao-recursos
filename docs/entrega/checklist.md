@@ -33,7 +33,8 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 1. ~~A `main` só tem o primeiro commit.~~ **Resolvido em 2026-11-01:** PRs #1 a #8 integrados por Guilherme com merge
    commit; a `main` (`ba66400`) é idêntica à branch da última fase e o CI passou nela (execução 41341089727).
 2. ~~Tag `v1.0.0-rc1`.~~ **Resolvido em 2026-11-01:** tag anotada no commit `ba66400`. Substituída como versão
-   avaliada pela `v1.0.0-rc2`, que inclui as correções do SonarCloud (DEF-004); o commit dela fica em `docs/evidencias/README.md`.
+   avaliada pela `v1.0.0-rc2`, criada em 2026-11-02 no commit `8be1deb` com CI verde (execução 41377043205), que inclui
+   as correções do SonarCloud (DEF-004), o ciclo ATAM 01 e a arquitetura atualizada.
 3. **Decisão de qualidade:** responsáveis pelos riscos aceitos e a declaração de cada integrante ainda em branco (`docs/decisao-qualidade.md`).
 4. ~~SonarCloud.~~ **Configurado em 2026-11-01:** Quality Gate aprovado no PR #10. Falta o Guilherme revisar o S4502 no
    site, se concordar com o ADR-007.
