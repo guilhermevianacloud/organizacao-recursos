@@ -21,6 +21,9 @@ RN-01, RN-02, RN-04 · CEN-06.
 - \+ Reservas encostadas são aceitas; o sistema reflete a grade real.
 - − Exige testes de fronteira explícitos para não regredir.
 
+## Riscos
+- Trocar o operador da comparação (`<` por `<=`) faz reservas encostadas conflitarem sem nenhum erro aparente → ponto de sensibilidade coberto por casos de fronteira e pela mutação M1.
+
 ## Evidência necessária
 - Trinca de limites (−1 s, 0, +1 s) para início e fim, em sobreposição e em manutenção (Aulas 07 e 09).
 - Mutação manual trocando `<` por `<=` deve derrubar pelo menos um teste (Aula 12).

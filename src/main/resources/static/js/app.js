@@ -88,8 +88,17 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
+  // DEF-005: campo de data ou hora vazio vira mensagem em português, em vez de "Invalid time value".
+  const MENSAGEM_DATA_INVALIDA = 'Informe uma data e um horário válidos.';
+
+  function instante(texto) {
+    const d = new Date(texto);
+    if (Number.isNaN(d.getTime())) throw new Error(MENSAGEM_DATA_INVALIDA);
+    return d;
+  }
+
   function paraIso(dia, hora) {
-    return new Date(dia + 'T' + hora).toISOString();
+    return instante(dia + 'T' + hora).toISOString();
   }
 
   function hora(iso) {
@@ -101,7 +110,7 @@
   }
 
   function diaSeguinte(dia) {
-    const d = new Date(dia + 'T12:00:00');
+    const d = instante(dia + 'T12:00:00');
     d.setDate(d.getDate() + 1);
     return d.toISOString().slice(0, 10);
   }
@@ -144,7 +153,13 @@
       + '<section class="painel" aria-label="Linha do tempo"><div id="grade" class="linha-do-tempo"><p class="mudo">Carregando…</p></div>'
       + '<div class="legenda">' + ['APROVADA', 'SOLICITADA', 'EM_USO', 'CONCLUIDA'].map(etiqueta).join('')
       + '<span class="estado bloco manutencao" style="position:static">Manutenção</span></div></section>';
-    document.getElementById('dia').addEventListener('change', (e) => { diaDaAgenda = e.target.value; emSegundoPlano(telaAgenda()); });
+    document.getElementById('dia').addEventListener('change', (e) => {
+      // DEF-005: dia apagado não troca a agenda; o campo volta ao dia exibido.
+      if (!e.target.value) { e.target.value = diaDaAgenda; return; }
+      diaDaAgenda = e.target.value;
+      emSegundoPlano(telaAgenda());
+    });
+    const grade = document.getElementById('grade');
 
     const [recursos, reservasHoje, reservasAmanha, manutencoes] = await Promise.all([
       api('GET', '/api/recursos'),
@@ -152,6 +167,8 @@
       api('GET', '/api/reservas?data=' + diaSeguinte(diaDaAgenda)),
       api('GET', '/api/manutencoes'),
     ]);
+    // DEF-006: se o usuário trocou de tela (ou de dia) enquanto carregava, esta resposta não desenha por cima.
+    if (!grade.isConnected) return;
     const inicioDia = new Date(diaDaAgenda + 'T' + String(HORA_INICIO).padStart(2, '0') + ':00').getTime();
     const fimDia = new Date(diaDaAgenda + 'T00:00').getTime() + HORA_FIM * 3600000;
     const duracao = fimDia - inicioDia;
@@ -187,7 +204,6 @@
       html += '</div>';
     });
     html += '</div>';
-    const grade = document.getElementById('grade');
     grade.innerHTML = recursos.length ? html : '<p class="vazio">Nenhum recurso cadastrado.</p>';
     grade.querySelectorAll('[data-reserva]').forEach((b) => b.addEventListener('click', () => {
       emSegundoPlano(abrirDetalhe(reservas.find((r) => r.id === Number(b.dataset.reserva))));
@@ -257,9 +273,18 @@
     if (!recursos.length) document.getElementById('livres').innerHTML = '<p class="vazio">Nenhum recurso cadastrado.</p>';
     document.getElementById('busca').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const resultado = document.getElementById('resultado');
+      resultado.innerHTML = '';
       const dia = document.getElementById('b-dia').value;
-      const inicio = paraIso(dia, document.getElementById('b-inicio').value);
-      const fim = paraIso(dia, document.getElementById('b-fim').value);
+      let inicio;
+      let fim;
+      try {
+        inicio = paraIso(dia, document.getElementById('b-inicio').value);
+        fim = paraIso(dia, document.getElementById('b-fim').value);
+      } catch (erro) {
+        resultado.innerHTML = aviso('erro', erro.message);
+        return;
+      }
       const filtros = new URLSearchParams({ disponivelInicio: inicio, disponivelFim: fim });
       const tipo = document.getElementById('b-tipo').value;
       const capacidade = document.getElementById('b-capacidade').value;
@@ -267,8 +292,6 @@
       if (tipo) filtros.set('tipo', tipo);
       if (capacidade) filtros.set('capacidadeMinima', capacidade);
       if (local) filtros.set('localizacao', local);
-      const resultado = document.getElementById('resultado');
-      resultado.innerHTML = '';
       try {
         const livres = await api('GET', '/api/recursos?' + filtros);
         const lista = document.getElementById('livres');
@@ -353,10 +376,10 @@
       + '<label class="rotulo">Até (inclusive)<input class="campo" type="date" id="r-fim" value="' + esc(diaDaAgenda) + '"></label>'
       + '<div style="align-self:end"><button class="botao" type="submit">Gerar</button></div></form></section><div id="relatorio"></div>';
     const gerar = async () => {
-      const inicio = new Date(document.getElementById('r-inicio').value + 'T00:00').toISOString();
-      const fim = new Date(diaSeguinte(document.getElementById('r-fim').value) + 'T00:00').toISOString();
       const alvo = document.getElementById('relatorio');
       try {
+        const inicio = instante(document.getElementById('r-inicio').value + 'T00:00').toISOString();
+        const fim = instante(diaSeguinte(document.getElementById('r-fim').value) + 'T00:00').toISOString();
         const r = await api('GET', '/api/relatorios/utilizacao?' + new URLSearchParams({ inicio, fim }));
         const total = r.recursos.reduce((s, u) => s + u.horas, 0);
         const maior = Math.max(1, ...r.recursos.map((u) => u.horas));

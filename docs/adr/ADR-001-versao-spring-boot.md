@@ -8,6 +8,10 @@ Status: aceita (2026-10-31, Guilherme Viana Lopes)
 - No Maven Central, a última versão 3.x publicada é a **3.5.16**.
 - Segundo spring.io, a linha 3.5.x teve suporte open source até **2026-06-30** (suporte comercial até 2032-06-30); a 4.1.x tem suporte open source até 2027-07-31.
 
+## Requisitos e cenários
+- Especificação: "Java 21 · Spring Boot 3.x".
+- RNF-12 (instalabilidade) e CEN-01 a CEN-06 dependem de uma versão estável e com documentação, que o professor e o grupo consigam rodar.
+
 ## Alternativas
 - (a) Spring Boot 3.5.16 — cumpre a especificação ao pé da letra; coincide com o material das aulas.
 - (b) Spring Boot 4.1.2 — atual e suportado, mas diverge do texto da especificação e muda APIs em relação ao que foi visto em aula.

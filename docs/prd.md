@@ -65,7 +65,7 @@ Os 14 requisitos obrigatórios da especificação **[Espec.]**, numerados pelo g
 | RF-09 | Registro de retirada e devolução de materiais e equipamentos | E4 | Responsável | Retirada leva a reserva a EM_USO; devolução a CONCLUÍDA; ambas auditadas | RN-07, RN-09 |
 | RF-10 | Histórico auditável de mudanças | E5 | Responsável, Administrador (consulta) | Toda mudança de estado gera registro imutável na mesma transação; Solicitante → 403 na consulta | RN-09 |
 | RF-11 | Notificação simulada ou integração com API externa | E5 | — | Mudanças de estado notificam via provedor HTTP externo; falha do provedor não desfaz a reserva | RN-13 |
-| RF-12 | Relatório de utilização por recurso, carga horária alocada e conflitos evitados | E5 | Responsável, Administrador | `GET /relatorios/utilizacao?inicio=&fim=`; canceladas não contam; valores conferidos à mão nos testes | RN-11 |
+| RF-12 | Relatório de utilização por recurso, carga horária alocada e conflitos evitados | E5 | Responsável, Administrador | `GET /api/relatorios/utilizacao?inicio=&fim=`; canceladas não contam; valores conferidos à mão nos testes | RN-11 |
 | RF-13 | Interface responsiva e mensagens de erro compreensíveis | todos | todos | Telas utilizáveis de 360 px a 1920 px; erro em português, sem detalhe interno | RN-12 |
 | RF-14 | Documentação de API ou dos fluxos públicos do sistema | todos | — | OpenAPI publicada e fluxos descritos no README | — |
 
@@ -145,12 +145,14 @@ Aceitas por Guilherme Viana Lopes em 2026-10-31. As decisões de arquitetura tê
 | D-14 | No relatório, reserva que cruza a borda do período conta só as horas dentro dele | RF-12 |
 | D-15 | RTM em `docs/rtm.md`, com `RTM.md` na raiz apontando para ela | RTM |
 | D-16 | Migrações com Flyway | `pom.xml` |
+| D-02 | Interface em HTML + CSS + JavaScript servidos pelo próprio Spring | ADR-006 |
+| D-03 | Teste end-to-end com Playwright | ADR-006, `e2e/InterfaceE2EIT` |
 | — | Spring Boot 3.5.16 | ADR-001 |
 
 ### 9.2 Perguntas em aberto
 | ID | Pergunta | Situação |
 |---|---|---|
-| Q-01 | Tecnologia da interface (Thymeleaf + Tailwind, React no Maven ou React separado) e a ferramenta de teste end-to-end (D-02, D-03) | aguardando decisão do grupo |
+| Q-01 | Tecnologia da interface e ferramenta de teste end-to-end (D-02, D-03) | **resolvida** em 2026-11-01: ADR-006 (decidida pelo Claude dentro das recomendações aceitas por Guilherme Viana Lopes) |
 | Q-02 | Manutenção cadastrada sobre reservas já existentes: bloquear o cadastro, cancelar as reservas ou só avisar? (D-10) | aguardando decisão; até lá, o cadastro é **recusado** se houver reserva ativa no período |
 | Q-03 | Prazo mínimo para o Solicitante cancelar uma reserva aprovada | sem prazo até decisão |
 | Q-04 | Tolerância para marcar NAO_COMPARECEU | marcação manual pelo Responsável |

@@ -69,6 +69,6 @@ Sempre que pedidos pelo mesmo recurso chegam ao mesmo tempo (pico, semana de mat
 | Commit da correção | `70dcfff` feat(green): RN-03 — constraint no banco e trava por recurso (DEF-001, DEF-002) |
 | Pull request | [#3](https://github.com/guilhermevianacloud/organizacao-recursos/pull/3) |
 | Teste de regressão | `servico/DuplaReservaConcorrenciaIT`, `servico/ProtecaoNoBancoIT` |
-| Verde reproduzível | [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) (`main`, `16adf58`) |
+| Verde reproduzível | [CI run 41475669466](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41475669466) (commit `9a4c097`); a execução da versão avaliada está em `docs/evidencias/README.md` |
 
 A correção usou a convenção de TDD da Aula 09 (`test(red)` / `feat(green)`), anterior à convenção `fix(<id>)` da Aula 15.

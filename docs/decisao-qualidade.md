@@ -1,4 +1,4 @@
-# Decisão de qualidade — v1.0.0-rc2
+# Decisão de qualidade — v1.0.0-rc3
 
 Aula 14 (Prompt 3). A decisão é proporcional à evidência: tudo foi medido em ambiente local e no CI, então esta
 decisão **não** afirma prontidão para produção.
@@ -7,7 +7,7 @@ decisão **não** afirma prontidão para produção.
 > cada integrante). Nada foi preenchido em nome de outra pessoa.
 
 ## Decisão
-**Liberar com ressalvas** a versão `v1.0.0-rc2` para avaliação acadêmica. *(a confirmar pelo grupo)*
+**Liberar com ressalvas** a versão `v1.0.0-rc3` para avaliação acadêmica. *(a confirmar pelo grupo)*
 
 ## Critérios e evidências
 | Critério | Evidência | Atendido? |
@@ -26,6 +26,7 @@ decisão **não** afirma prontidão para produção.
 |---|---|---|---|
 | DEF-003 — p95 acima da meta proposta | demora de até ~0,5 s em 5% das criações no pior caso | sem perda de dados nem erro; meta proposta pelo próprio grupo | *a confirmar* |
 | CSRF desligado (S4502, ADR-007) | exposição a CSRF se a credencial passar a ir em cookie | API stateless com token no cabeçalho; condição de revisão no ADR-007 | *a confirmar* |
+| Token JWT não revogável antes de expirar (ADR-003) | usuário desligado mantém acesso por até 60 min | validade curta; revogação imediata exigiria lista de bloqueio ou sessão (condição de revisão do ADR-003) | *a confirmar* |
 | Spring Boot 3.5 fora do suporte gratuito (ADR-001) | vulnerabilidade nova sem correção pública | especificação exige 3.x | Guilherme Viana Lopes (decisão registrada no ADR-001, 2026-10-31) |
 
 ## O que cada integrante fez
@@ -40,4 +41,4 @@ aulas práticas, como declarado no `README.md`. Cada integrante declara a própr
 
 ## Texto para o formulário de entrega
 Turma STADSCAS4NB (quinta). Integrantes: Guilherme Viana Lopes, Rafael Souza, Gustavo Santana.
-Repositório: https://github.com/guilhermevianacloud/organizacao-recursos — versão avaliada: tag `v1.0.0-rc2`.
+Repositório: https://github.com/guilhermevianacloud/organizacao-recursos — versão avaliada: tag `v1.0.0-rc3`.

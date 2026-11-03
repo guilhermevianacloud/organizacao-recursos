@@ -45,7 +45,7 @@ O conflito é traduzido em `ConflitoDeHorarioException` (HTTP 409 com ProblemDet
 ## Evidência
 - `DuplaReservaConcorrenciaIT`: 20 pedidos simultâneos → 1 aceito, 19 conflitos, 1 linha no banco; 5 repetições + agenda do professor; vermelho sem proteção (commit `test(red): RN-03`) e verde com ela.
 - `ProtecaoNoBancoIT`: a constraint recusa sobreposição gravada direto com SQL, aceita reserva encostada e ignora cancelada.
-- Mutação manual (Aula 12): remover a constraint e a trava deve derrubar o teste de concorrência.
+- Mutação manual (Aula 12), M2: sem a trava e sem a constraint, o teste de concorrência falhou com várias reservas aceitas (`docs/testes/mutacao-manual.md`).
 
 ## Condição de revisão
 Se o teste de carga mostrar p95 acima do RNF-02 por causa da fila por recurso, avaliar alternativas (por exemplo, retentativa em deadlock sem trava) em novo ADR.

@@ -40,9 +40,14 @@ Funcionalidade: Aprovação de recurso restrito, bloqueio por manutenção e tra
     Então a resposta é <status>
 
     Exemplos:
-      | estado     | acao        | status |
-      | APROVADA   | retirada    | 200    |
-      | EM_USO     | devolucao   | 200    |
-      | SOLICITADA | retirada    | 409    |
-      | CANCELADA  | aprovacao   | 409    |
-      | CONCLUIDA  | retirada    | 409    |
+      | estado         | acao               | status |
+      | APROVADA       | retirada           | 200    |
+      | EM_USO         | devolucao          | 200    |
+      | SOLICITADA     | retirada           | 409    |
+      | CANCELADA      | aprovacao          | 409    |
+      | CONCLUIDA      | retirada           | 409    |
+      | SOLICITADA     | rejeicao           | 200    |
+      | APROVADA       | nao-comparecimento | 200    |
+      | EM_USO         | nao-comparecimento | 409    |
+      | REJEITADA      | aprovacao          | 409    |
+      | NAO_COMPARECEU | retirada           | 409    |
