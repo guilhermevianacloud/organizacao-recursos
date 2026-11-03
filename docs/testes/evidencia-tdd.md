@@ -17,6 +17,11 @@ Cada ciclo tem um commit **vermelho** (`test(red)`: testes escritos, código só
 - **Defeito de teste encontrado e corrigido:** o teste de concorrência não limpava o banco ao terminar e quebrava o teste seguinte (`37544b6`).
 - **Refatoração:** nenhum commit `refactor` nesta fase — o código verde não apresentou duplicação que justificasse.
 
+## Desvios em relação ao prompt da Aula 09
+- O prompt pede **um teste por vez** no ciclo red → green. Nos ciclos acima, cada commit vermelho reúne vários testes da mesma regra (o ciclo 2 tem 85). Os testes foram escritos de uma vez a partir do inventário de `docs/testes/plano-tdd.md`, e o vermelho de cada um foi conferido na saída. A regra da Aula 09 não foi seguida à risca.
+- Não há commits `refactor`: o código verde não teve duplicação que justificasse (ver as observações de cada fase).
+- O ciclo dos defeitos, a partir do DEF-005, segue a convenção da Aula 15: `test(regressao)` → `fix(<id>)` (ver a tabela abaixo).
+
 ## Evidência no CI
 | Execução | Commit | Resultado |
 |---|---|---|
@@ -38,7 +43,7 @@ Cada ciclo tem um commit **vermelho** (`test(red)`: testes escritos, código só
 
 ### Observações
 - **Testes que passaram no red por vacuidade:** `rn09_03_rollbackNaoDeixaAuditoriaOrfa` (sem auditoria nenhuma, não há órfã) e `transacaoDesfeitaNaoNotifica` (nada notificava). Continuam no conjunto porque passam a ter valor quando a gravação e o envio existem; a mutação manual (Fase 7) confirma que detectam quebra.
-- **BDD (Cucumber):** os 13 cenários foram escritos depois das regras implementadas por TDD e passaram na primeira execução (`dc350a0`) — declarado em `docs/testes/bdd-aprovacao-bloqueio.md`.
+- **BDD (Cucumber):** os 13 cenários (18 desde 2026-11-02, com as transições REJEITADA e NAO_COMPARECEU) foram escritos depois das regras implementadas por TDD e passaram na primeira execução (`dc350a0`) — declarado em `docs/testes/bdd-aprovacao-bloqueio.md`.
 - **Interface:** sem teste automatizado nesta fase (teste de fumaça manual registrado no ADR-006); o end-to-end entra na Fase 6.
 
 ## Evidência no CI (Fases 4 e 5)
@@ -46,3 +51,12 @@ Cada ciclo tem um commit **vermelho** (`test(red)`: testes escritos, código só
 |---|---|---|
 | [41211764664](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41211764664) | `fase-4/seguranca-api` | verde — unidade 85, integração 114 |
 | [41322975920](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41322975920) | `fase-5/requisitos-restantes` | verde — unidade 85, integração 167 (154 + 13 cenários) |
+
+## Defeitos — `test(regressao)` → `fix(<id>)` (Aula 15)
+
+| Defeito | Commit do teste de regressão | Saída sem a correção | Commit da correção | Saída com a correção |
+|---|---|---|---|---|
+| DEF-005 data vazia derruba a tela | `c075433`, ajustado em `e9c5227` | `InterfaceE2EIT`: `Tests run: 7, Failures: 3` (os 4 antigos verdes) | `5f41e00` | `./mvnw -B verify`: unidade 98, integração 179, 0 falhas |
+| DEF-006 resposta atrasada da agenda | `e9c5227` | `InterfaceE2EIT`: `Tests run: 8, Failures: 4` (os 3 do DEF-005 e o do DEF-006) | `5f41e00` | idem |
+
+Observação honesta: no `c075433`, dois dos três testes do DEF-005 falhavam pelo motivo errado. Eles agiam antes de a tela nova carregar e acabavam pegando o defeito da agenda. O `e9c5227` acrescentou a espera e repetiu o vermelho sem a correção, agora pelo motivo certo.

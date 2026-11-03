@@ -215,25 +215,25 @@ Prioridade: (Importância, Dificuldade) em A/M/B. Analisar primeiro os (A, A).
 | Confiabilidade | Integridade sob concorrência | CEN-01 — dupla reserva | (A, A) |
 | Segurança | Autorização por perfil e posse | CEN-02 — acesso indevido | (A, M) |
 | Segurança | Responsabilização | CEN-03 — auditoria com rollback | (A, M) |
-| Eficiência de desempenho | Latência no pico | CEN-04 — consulta de disponibilidade | (M, M) |
+| Eficiência de desempenho | Latência no pico | CEN-04 — consulta de disponibilidade | (M, A) — era (M, M); revisado no ciclo 01, porque a medição mostrou que a proteção do CEN-01 pesa na latência |
 | Confiabilidade | Tolerância a falha externa | CEN-05 — provedor de notificação fora | (M, B) |
 | Manutenibilidade | Testabilidade do tempo | CEN-06 — regra de manutenção na fronteira | (M, B) |
 
 ## 10. Cenários de qualidade (seis partes)
 | ID | Fonte | Estímulo | Ambiente | Artefato | Resposta | Medida |
 |---|---|---|---|---|---|---|
-| CEN-01 | 20 solicitantes | pedem a mesma sala no mesmo horário ao mesmo tempo | operação normal, pico | serviço de reservas + banco | exatamente um pedido aceito, os outros recusados com 409 | 1 aceito, 19 × 409, 1 linha no banco, em 5 de 5 execuções |
-| CEN-02 | Solicitante autenticado | tenta cancelar a reserva de outro pelo id | operação normal | API de reservas | acesso negado sem revelar a reserva alheia | 100% das tentativas recusadas (403); 0 alterações |
-| CEN-03 | Responsável | aprova uma reserva e a gravação falha no meio | falha de banco durante a transação | serviço de aprovação + auditoria | nada é gravado: nem a mudança, nem a auditoria | 0 registros de auditoria órfãos |
+| CEN-01 | 20 solicitantes | pedem o mesmo recurso no mesmo horário ao mesmo tempo | operação normal, pico | serviço de reservas + banco | exatamente um pedido aceito; os outros recusados por conflito (409 na API) | 1 aceito, 19 recusados, 1 linha no banco; sala em 5 de 5 execuções e professor em 1 |
+| CEN-02 | Solicitante autenticado | tenta alterar ou cancelar a reserva de outro pelo id | operação normal | API de reservas | acesso negado sem revelar a reserva alheia | 100% das tentativas recusadas (403); 0 alterações |
+| CEN-03 | Responsável | aprova uma reserva e a gravação falha no meio | falha de banco durante a transação | serviço de reservas + auditoria | nada é gravado: nem a mudança, nem a auditoria | 0 registros de auditoria órfãos |
 | CEN-04 | 50 usuários | consultam disponibilidade simultaneamente | pico, máquina local | API de pesquisa | resposta dentro do limite | p95 ≤ 300 ms, erro < 1% (proposta do grupo; **medido: 332 ms, não atende**, DEF-003) |
-| CEN-05 | Provedor de notificação | responde 500 ou passa do timeout | operação normal | adaptador de notificação | reserva confirmada; falha registrada | reserva gravada em 100% dos casos; espera pelo provedor ≤ 2 s (**medido: atende**, `NotificadorHttpIT`) |
+| CEN-05 | Provedor de notificação | responde erro ou passa do timeout | operação normal | adaptador de notificação | reserva confirmada; falha registrada | reserva gravada em 100% dos casos; espera pelo provedor ≤ 2 s (**medido: atende**, `NotificadorHttpIT`) |
+| CEN-06 | Solicitante | pede reserva que termina exatamente no início da manutenção | operação normal | regra de manutenção | reserva aceita (intervalo semiaberto) | 3 casos de fronteira (−1 s, 0, +1 s) com resultado esperado |
 
 Resultado de cada cenário e a evidência: [ciclo ATAM 01](avaliacao-arquitetural/ciclo-01.md), seção 2.
-| CEN-06 | Solicitante | pede reserva que termina exatamente no início da manutenção | operação normal | regra de manutenção | reserva aceita (intervalo semiaberto) | 3 casos de fronteira (−1 s, 0, +1 s) com resultado esperado |
 
 ## 11. Análise ATAM
 Táticas pelo catálogo de Len Bass (seção 8 trata deste projeto). Roteiro por decisão: tática · cenário · métrica · custo · teste · risco se faltar.
-Esta é a análise feita **antes** do código (2026-10-31). O [ciclo 01](avaliacao-arquitetural/ciclo-01.md) refez a análise com o código e as medições: táticas com arquivo e linha, trade-off integridade × latência confirmado, riscos novos R-04 a R-07.
+Esta é a análise feita **antes** do código (2026-10-31), ajustada ao que foi construído. O [ciclo 01](avaliacao-arquitetural/ciclo-01.md) refez a análise com o código e as medições: táticas com arquivo e linha, trade-off integridade × latência confirmado, riscos novos R-04 a R-07.
 
 | Decisão | Tática | Cenário | Custo / trade-off | Teste que evidencia |
 |---|---|---|---|---|
@@ -242,42 +242,62 @@ Esta é a análise feita **antes** do código (2026-10-31). O [ciclo 01](avaliac
 | Auditoria na mesma transação | Audit + Timestamp + Transactions | CEN-03 | volume de dados e dado pessoal (**trade-off: auditoria × LGPD**) | integração com rollback forçado |
 | Cancelar muda estado, não apaga | Cancel + Undo | RN-08 | histórico ocupa armazenamento | transições proibidas parametrizadas |
 | Porta + adaptador do notificador (ADR-005) | Tailor Interface + Timeout + Degradation | CEN-05 | indireção extra; dublê pode ficar desatualizado | WireMock INT-01..INT-06 |
-| `Clock` injetado nas regras | Limit Nondeterminism (testabilidade) | CEN-06 | mais um parâmetro em cada serviço | trinca de limites com `Clock.fixed` |
+| `Clock` injetado onde o instante atual é lido (reservas, token, conflitos) | Limit Nondeterminism (testabilidade) | CEN-06 | mais um parâmetro nesses serviços | `ServicoDeReservasTest` com `Clock.fixed`; as trincas de limite usam instantes fixos escritos no próprio teste |
 
 **Descobertas**
-- **Ponto de sensibilidade:** o operador de comparação da sobreposição (`<` × `<=`) decide sozinho se reservas encostadas conflitam (ADR-004).
+- **Ponto de sensibilidade:** o operador de comparação da sobreposição (`<` × `<=`) decide sozinho se reservas encostadas conflitam (ADR-004; confirmado pela mutação M1).
 - **Ponto de trade-off:** um cache de disponibilidade melhoraria CEN-04, mas poderia mostrar livre uma sala já reservada. **Decisão: sem cache** até a medição de desempenho mostrar necessidade.
 - **Risco R-01:** se a constraint considerar reservas canceladas, recursos ficam bloqueados para sempre → a constraint vale só para estados que ocupam (SOLICITADA, APROVADA, EM_USO).
 - **Risco R-02:** autorização só por perfil, sem posse, permitiria IDOR → posse verificada no serviço (RN-10).
 - **Risco R-03:** notificação dentro da transação faria uma falha externa desfazer a reserva → notificar **depois** do commit (RN-13).
 - **Não-risco:** queda do provedor de notificação não afeta reservas, porque o envio acontece fora da transação e com timeout.
-- **Tema de risco:** todas as regras críticas dependem de tempo — por isso `Clock` injetado em todas.
+- **Tema de risco:** as regras críticas dependem de instante e intervalo. Os serviços que leem "agora" recebem o `Clock`; as regras de intervalo recebem os instantes prontos, então são testadas com valores fixos.
 
 ## 12. Matriz requisito → decisão → componente → evidência
-| Requisito | Decisão / ADR | Componente | Evidência de verificação |
-|---|---|---|---|
-Evidência de todas as linhas: [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) (commit `16adf58`). A rastreabilidade completa, com risco e status, está em [`docs/rtm.md`](rtm.md).
+Todos os requisitos funcionais e os não funcionais com decisão de arquitetura. A rastreabilidade completa, com risco, execução do CI e status, está em [`docs/rtm.md`](rtm.md); a execução do commit avaliado está em [`docs/evidencias/README.md`](evidencias/README.md).
 
 | Requisito | Decisão / ADR | Componente | Evidência de verificação |
 |---|---|---|---|
-| RF-06 / RN-03 | ADR-002 (constraint + trava por recurso) | migração V3 + `ServicoDeReservas` + `RecursoRepository` | `DuplaReservaConcorrenciaIT`, `ProtecaoNoBancoIT` |
+| RF-01 / RN-10 | ADR-003, ADR-007 | Spring Security + controllers + posse no serviço | `MatrizDeAutorizacaoIT` (88 células), `ApiDeReservasIT` (inclusive token vencido) |
+| RF-02 | recurso único com `tipo` (D-07) | `RecursoController` + `ServicoDeRecursos` | `MatrizDeAutorizacaoIT` (REC-01..04), `ApiDeReservasIT` |
+| RF-03 | pesquisa por filtros combináveis | `ServicoDeRecursos` | `PesquisaDeRecursosIT` |
+| RF-04 | posse da reserva (RN-10) | `ReservaController` + `ServicoDeReservas` | `MatrizDeAutorizacaoIT` (RES-03..07), `ServicoDeReservasIT` |
 | RF-05 / RN-02 | ADR-002, ADR-004 | `Intervalo` + constraint | `IntervaloTest`, `ServicoDeReservasIT` |
-| RF-01 / RN-10 | ADR-003, ADR-007 | Spring Security + controllers + posse no serviço | `MatrizDeAutorizacaoIT` (88 células), `ApiDeReservasIT` |
+| RF-06 / RN-03 | ADR-002 (constraint + trava por recurso) | migração V3 + `ServicoDeReservas` + `RecursoRepository` | `DuplaReservaConcorrenciaIT`, `ProtecaoNoBancoIT` |
+| RF-07 / RN-05, RN-06 | aprovação automática só de não restritos (D-08) | `ServicoDeReservas` + `@PreAuthorize` | `aprovacao-bloqueio.feature`, `MatrizDeAutorizacaoIT`, `ServicoDeReservasTest` |
+| RF-08 / RN-04 | manutenção conferida antes de gravar | `ServicoDeReservas` + `ServicoDeManutencao` | `ServicoDeReservasIT`, `aprovacao-bloqueio.feature` |
+| RF-09 | retirada e devolução como transições | `EstadoReserva` + `ServicoDeReservas` | `MatrizDeAutorizacaoIT` (RES-10..12), `aprovacao-bloqueio.feature` |
 | RF-10 / RN-09 | auditoria na mesma transação | `ServicoDeReservas` + `AuditoriaReserva` (imutável) | `AuditoriaIT` (inclusive rollback) |
 | RF-11 / RN-13 | ADR-005 | porta `Notificador` + `NotificadorHttp` | `NotificadorHttpIT` (INT-01..06), `NotificacaoAposCommitIT` |
 | RF-12 | `tentativa_recusada` em transação própria | `ServicoDeRelatorios` + `RegistroDeConflitos` | `RelatorioDeUtilizacaoIT` |
 | RF-13 | ADR-006 | interface estática + `TratamentoDeErros` | `InterfaceE2EIT`, `ApiDeReservasIT` |
+| RF-14 | OpenAPI gerada pelo springdoc | `/v3/api-docs`, `/swagger-ui.html` | `DocumentacaoDaApiIT` |
 | RNF-01/02 | sem cache (seção 11) | API de pesquisa e de reservas | `perf/reservas.jmx`, `docs/performance/resultado-01.md` — **não atende** (DEF-003) |
 | RNF-12 | ADR-001, `compose.yaml` | build e README | CI + clone limpo (`docs/entrega/checklist.md`) |
 
+### 12.1 O que a matriz mostra
+- **Requisitos sem cobertura:** nenhum. O RF-14 tinha só verificação manual até o `DocumentacaoDaApiIT`.
+- **Decisões sem requisito correspondente:** nenhuma. Toda decisão acima e todo ADR apontam um requisito, regra ou restrição da especificação.
+- **Riscos residuais:** seção 13 e [ciclo 01](avaliacao-arquitetural/ciclo-01.md), seção 5 (R-04 a R-07).
+- **Próximos experimentos:** desempenho sob disputa (DEF-003; plano em `docs/performance/resultado-01.md`).
+
 ## 13. Suposições, perguntas e riscos aceitos
-- **S-01:** um único contêiner de aplicação basta para o volume de uma instituição de ensino (sem medição ainda).
+- **S-01:** um único contêiner de aplicação basta para o volume de uma instituição de ensino (sem medição de volume real).
 - **S-02:** o provedor de notificação aceita uma chamada HTTP JSON simples; não há provedor real (RF-11 permite simulação).
 - **Q-05 (PRD):** a restrição do cron diário de treino de ML, presente nos prompts da Aula 04, é do case Foot Fanatics; **não foi incorporada**. Confirmar com o professor.
-- **Riscos aceitos (com responsável):** Spring Boot 3.5 fora do suporte gratuito (ADR-001, Guilherme Viana Lopes); token não revogável antes de expirar (ADR-003).
-- **Riscos com aceite ainda proposto, aguardando o grupo:** DEF-003 (desempenho abaixo da meta proposta) e CSRF desligado (ADR-007). Ver `docs/decisao-qualidade.md`.
+- **Risco aceito com responsável registrado:** Spring Boot 3.5 fora do suporte gratuito (ADR-001, Guilherme Viana Lopes).
+- **Riscos com aceite proposto, aguardando o grupo:** token não revogável antes de expirar (ADR-003), DEF-003 (desempenho abaixo da meta proposta) e CSRF desligado (ADR-007). Ver `docs/decisao-qualidade.md`.
 
-## 14. Decisões (ADR)
+## 14. Glossário e partes interessadas
+- **Partes interessadas e personas:** Solicitante, Responsável e Administrador, descritos com objetivo, contexto e frustração em [`docs/prd.md`](prd.md), seção de personas.
+- **Recurso:** sala, material ou professor que pode ser reservado.
+- **Recurso restrito:** recurso cuja reserva só vale depois da aprovação de um Responsável.
+- **Intervalo semiaberto `[início, término)`:** o término não pertence ao intervalo, então reservas encostadas não conflitam (ADR-004).
+- **Estados que ocupam:** SOLICITADA, APROVADA e EM_USO; só eles bloqueiam o horário.
+- **Tentativa recusada (conflito evitado):** pedido barrado por sobreposição, contado no relatório.
+- **Fato / Suposição / Decisão:** convenção do cabeçalho deste documento.
+
+## 15. Decisões (ADR)
 - [ADR-001 — Versão do Spring Boot](adr/ADR-001-versao-spring-boot.md)
 - [ADR-002 — Proteção contra dupla reserva no banco](adr/ADR-002-protecao-dupla-reserva.md)
 - [ADR-003 — Autenticação com JWT](adr/ADR-003-autenticacao-jwt.md)

@@ -91,11 +91,13 @@ public class PassosDeAprovacaoEBloqueio {
 
     @Dado("uma reserva no estado {string}")
     public void umaReservaNoEstado(String estado) {
-        boolean restrito = estado.equals("SOLICITADA");
+        boolean restrito = estado.equals("SOLICITADA") || estado.equals("REJEITADA");
         recurso = recursos.save(new Recurso(TipoRecurso.SALA, "Sala estados " + UUID.randomUUID(), restrito));
         Reserva reserva = Reserva.solicitar(recurso, solicitante.getId(), intervalo("08:00:00", "10:00:00"));
         switch (EstadoReserva.valueOf(estado)) {
             case CANCELADA -> reserva.transitarPara(EstadoReserva.CANCELADA);
+            case REJEITADA -> reserva.transitarPara(EstadoReserva.REJEITADA);
+            case NAO_COMPARECEU -> reserva.transitarPara(EstadoReserva.NAO_COMPARECEU);
             case EM_USO -> reserva.transitarPara(EstadoReserva.EM_USO);
             case CONCLUIDA -> {
                 reserva.transitarPara(EstadoReserva.EM_USO);

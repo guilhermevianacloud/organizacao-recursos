@@ -1,6 +1,6 @@
 #!/bin/sh
 # Mutação manual (Aula 12): aplica UMA quebra de regra, roda os testes ligados a ela e desfaz com git restore.
-# Uso (na raiz do projeto, com Docker ligado): sh scripts/mutacao-manual.sh <M1..M10>
+# Uso (na raiz do projeto, com Docker ligado): sh scripts/mutacao-manual.sh <M1..M11>
 # Registro dos resultados: docs/testes/mutacao-manual.md. O código sempre volta ao original (git restore).
 set -u
 P="$(cd "$(dirname "$0")/.." && pwd)"
@@ -40,6 +40,9 @@ case "$ID" in
   M10) REGRA="Reserva iniciada não é apagada (RN-08): podeSerApagada sempre verdadeiro"
       sed -i "s/        return !estado.iniciada();/        return true;/" "$J/dominio/Reserva.java"
       UNIT="ReservaTest" ;;
+  M11) REGRA="Quem pediu não aprova (RN-06): conferência do solicitante na aprovação removida"
+      sed -i 's/        if (reserva.pertenceA(responsavelId)) {/        if (false) {/' "$J/servico/ServicoDeReservas.java"
+      UNIT="ServicoDeReservasTest"; IT="CucumberIT" ;;
   *) echo "mutação desconhecida: $ID"; exit 2 ;;
 esac
 echo "### $ID — $REGRA"

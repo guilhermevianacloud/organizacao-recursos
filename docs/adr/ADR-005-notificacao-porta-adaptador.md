@@ -22,6 +22,10 @@ RF-11, RN-13, RNF-06, RNF-07 · CEN-05.
 - \+ Trocar de provedor muda só o adaptador.
 - − Mais uma peça para manter; o dublê do WireMock pode ficar desatualizado em relação a um provedor real.
 
+## Riscos
+- O dublê do WireMock pode divergir do provedor real, que não existe neste projeto → o contrato está nos testes INT-01..06; um provedor real exigiria testá-los contra ele.
+- Notificação perdida quando o provedor falha (não há nova tentativa) → a reserva não depende dela; a falha é registrada em log, sem a chave.
+
 ## Evidência necessária
 Matriz de falhas da Aula 08 com WireMock: INT-01 200 válido · INT-02 404 · INT-03 500 com reserva mantida · INT-04 timeout · INT-05 JSON malformado · INT-06 cabeçalho presente e segredo ausente do log.
 

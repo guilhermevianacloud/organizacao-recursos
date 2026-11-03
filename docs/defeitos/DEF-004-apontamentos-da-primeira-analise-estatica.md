@@ -18,6 +18,9 @@ Os outros 10 são de severidade média: 8× `javascript:S9383` (promessas sem tr
 ## Ambiente / versão
 `main` em `883fd8f` (depois do PR #9), análise automática do SonarCloud, sem cobertura.
 
+## Pré-condições
+Projeto importado no SonarCloud com a análise automática ligada (antes do `SONAR_TOKEN` no CI).
+
 ## Passos mínimos para reproduzir
 1. Abrir o projeto `guilhermevianacloud_organizacao-recursos` no SonarCloud, na análise do commit `883fd8f`.
 2. Ver a aba Issues.
@@ -27,6 +30,12 @@ Os outros 10 são de severidade média: 8× `javascript:S9383` (promessas sem tr
 
 ## Resultado esperado / requisito
 0 bugs ou vulnerabilidades críticas (especificação, metas mensuráveis).
+
+## Evidências (sanitizadas)
+Lista das 12 issues obtida pela API pública do SonarCloud (`api/issues/search`, sem token). O token do projeto nunca foi lido nem registrado.
+
+## Frequência, alcance e impacto
+Estático: presente em todo build até a correção. Afeta a meta "0 bugs ou vulnerabilidades críticas"; nenhuma falha observada em uso.
 
 ## Severidade (com justificativa)
 **Alta.** Conta para uma meta da especificação. Nenhum dos apontamentos causava falha observada nos 273 testes. Na interface, porém, uma tela que falhasse ao carregar podia ficar sem mensagem de erro (S9383).

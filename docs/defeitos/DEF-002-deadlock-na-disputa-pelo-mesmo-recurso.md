@@ -14,6 +14,9 @@ Com a exclusion constraint da correção do DEF-001 e sem nenhuma outra proteç�
 ## Ambiente / versão
 Branch `fase-3/nucleo-reservas`, migração V3 aplicada, serviço ainda buscando o recurso sem trava; PostgreSQL 17 (Testcontainers).
 
+## Pré-condições
+Exclusion constraint da V3 aplicada; serviço gravando sem travar o recurso; banco vazio no início do teste.
+
 ## Passos mínimos para reproduzir
 1. Rodar `./mvnw -B verify` (o `DuplaReservaConcorrenciaIT` dispara 20 pedidos simultâneos pela mesma sala, 5 vezes).
 2. Observar o relatório do Failsafe.
@@ -23,6 +26,12 @@ Branch `fase-3/nucleo-reservas`, migração V3 aplicada, serviço ainda buscando
 
 ## Resultado esperado / requisito
 Cada pedido termina aceito ou recusado com conflito (409). Nenhum erro inesperado (seria um 500 na API).
+
+## Evidências (sanitizadas)
+Relatório do Failsafe da execução local: `CannotAcquireLockException … ERROR: deadlock detected` na lista de "exceções inesperadas" do teste. Só dados sintéticos de teste.
+
+## Frequência, alcance e impacto
+Intermitente: 2 de 7 testes numa execução, nenhuma em outras. Atinge só pedidos simultâneos pelo mesmo recurso. O usuário receberia erro 500 em vez de 409; nenhum dado incorreto.
 
 ## Severidade (com justificativa)
 **Alta** — a integridade foi mantida (sem duplicata), mas o usuário receberia erro 500 em vez de uma resposta compreensível, e o teste de carga da Aula 10 exige "nunca 500".
@@ -52,4 +61,4 @@ Cada pedido termina aceito ou recusado com conflito (409). Nenhum erro inesperad
 | Commit da correção | `70dcfff` (trava `FOR UPDATE` por recurso); isolamento do teste em `37544b6` |
 | Pull request | [#3](https://github.com/guilhermevianacloud/organizacao-recursos/pull/3) |
 | Teste de regressão | `servico/DuplaReservaConcorrenciaIT` (sem exceções inesperadas, 5 repetições) |
-| Verde reproduzível | [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) (`main`, `16adf58`) |
+| Verde reproduzível | [CI run 41475669466](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41475669466) (commit `9a4c097`); a execução da versão avaliada está em `docs/evidencias/README.md` |

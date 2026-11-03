@@ -1,10 +1,10 @@
 # Organização de Recursos — Plano de Teste
 
 Estrutura conforme a ISO/IEC/IEEE 29119-3 (Aula 02). Requisitos e regras em [`docs/prd.md`](prd.md); rastreabilidade em [`docs/rtm.md`](rtm.md); inventário de casos em [`docs/testes/plano-tdd.md`](testes/plano-tdd.md).
-Versão 1 — 2026-10-31. Revisar ao fim de cada fase.
+Versão 1 — 2026-10-31; revisada em 2026-11-02 com o que foi executado.
 
 ## 1. Estratégia
-- **Teste guia o código (TDD):** para cada regra de negócio, primeiro o teste falhando pela razão esperada, depois o código mínimo, depois a refatoração. O histórico mostra `test(red)` → `feat(green)` → `refactor`.
+- **Teste guia o código (TDD):** para cada regra de negócio, primeiro o teste falhando pela razão esperada, depois o código mínimo, depois a refatoração. O histórico mostra `test(red)` → `feat(green)`; nenhum ciclo precisou de commit `refactor` (registrado em `docs/testes/evidencia-tdd.md`). Defeitos seguem `test(regressao)` → `fix(<id>)` a partir do DEF-005.
 - **Regras críticas primeiro:** os limitadores de nota (dupla reserva, autorização, pipeline, aplicação que executa) têm prioridade sobre o restante.
 - **Ambiente real para o que é crítico:** persistência e integrações são verificadas com PostgreSQL real (Testcontainers) e WireMock; mock (Mockito) só em teste de unidade isolado. **[Especificação]**
 - **Oráculo verificável:** todo teste tem asserção sobre o resultado; "não lançou exceção" sozinho não é aceito.
@@ -34,7 +34,7 @@ Todos os requisitos RF-01 a RF-14, as regras RN-01 a RN-13 e os não funcionais 
 | BDD | Aprovação de restrito, manutenção, transições | Cucumber-JVM | `src/test/resources/features` | idem |
 | Integração externa | Notificação: matriz INT-01..INT-06 | WireMock | `src/test/java` | idem |
 | Segurança | Matriz perfil × operação, posse (IDOR), erro neutro | MockMvc parametrizado | `src/test/java` | idem |
-| End-to-end | Fluxo login → reservar → aprovar pela interface | a definir com a interface (Q-01) | — | idem |
+| End-to-end | Fluxo login → reservar → aprovar pela interface; mensagens com campo vazio; largura de celular | Playwright (Chromium sem janela), ADR-006 | `src/test/java` (`e2e/InterfaceE2EIT`) | idem |
 | Carga | Disponibilidade e criação sob disputa | Apache JMeter 5.6 (modo CLI) | `perf/` | idem |
 | Mutação manual | Cada regra crítica quebrada derruba um teste | git | `docs/testes/mutacao-manual.md` | idem |
 
@@ -100,3 +100,5 @@ Todos os requisitos RF-01 a RF-14, as regras RN-01 a RN-13 e os não funcionais 
 | Fase 6 (05–06/11) | Cobertura, SonarCloud, end-to-end |
 | Fase 7 (07–08/11) | Carga, mutação manual, RTM completa |
 | Fase 8 (09–10/11) | Relatório de testes no relatório de qualidade |
+
+Planejado em 2026-10-31. Na prática, as Fases 3 a 9 foram executadas entre 2026-10-31 e 2026-11-02, antes das datas acima; o andamento real está em `docs/status-requisitos.md` e no histórico do Git.
