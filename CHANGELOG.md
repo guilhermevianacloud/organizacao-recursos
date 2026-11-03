@@ -6,6 +6,9 @@
 - DEF-005 (relatado pelo Guilherme): data ou hora vazia derrubava a agenda e o relatório; agora a agenda mantém o dia e as outras telas mostram "Informe uma data e um horário válidos.".
 - DEF-006 (achado pelos testes): resposta atrasada da agenda apagava a tela aberta depois.
 
+### Interface
+- Identidade visual nova, só no CSS (PRs #20, #21 e #22): degradê azul → ciano como assinatura, fonte Geist, cantos arredondados e sombras suaves, estados como pílulas com ponto. Agenda com o nome do recurso fixo ao rolar e o rótulo "23h" sem corte.
+
 ### Qualidade
 - Testes novos: OpenAPI pública (RF-14), token vencido (ADR-003), transições REJEITADA e NAO_COMPARECEU no BDD, 4 testes de interface dos DEF-005/006. Total: 98 de unidade + 187 de integração.
 - Mutação M11 (RN-06): 11 de 11 detectadas.

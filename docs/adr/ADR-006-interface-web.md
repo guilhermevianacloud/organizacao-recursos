@@ -27,7 +27,7 @@ Status: aceita (2026-11-01; decidida pelo Claude dentro das recomendações acei
 - \+ Mensagens de erro vêm do ProblemDetail da API, em português, com o código.
 - − Sem componentes reutilizáveis de framework; o JavaScript cresce à mão (um arquivo, ~500 linhas).
 - − Token guardado no `sessionStorage` da aba: some ao fechar a aba (aceito; reduz o tempo de exposição).
-- − Fonte IBM Plex carregada do Google Fonts: sem internet, o navegador usa a fonte do sistema.
+- − Fontes Geist e Geist Mono carregadas do Google Fonts (pelo `@import` do `app.css`): sem internet, o navegador usa a fonte do sistema.
 
 ## Riscos
 - Injeção de HTML com dados da API: todo texto passa por uma função de escape antes de entrar na página.
