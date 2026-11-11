@@ -58,7 +58,7 @@ Intermitente: 2 de 7 testes numa execução, nenhuma em outras. Atinge só pedid
 | Item | Valor |
 |---|---|
 | Issue | [#12](https://github.com/guilhermevianacloud/organizacao-recursos/issues/12) (fechada) |
-| Commit da correção | `70dcfff` (trava `FOR UPDATE` por recurso); isolamento do teste em `37544b6` |
+| Commit da correção | `152c20e` (trava `FOR UPDATE` por recurso); isolamento do teste em `69b73e5` |
 | Pull request | [#3](https://github.com/guilhermevianacloud/organizacao-recursos/pull/3) |
 | Teste de regressão | `servico/DuplaReservaConcorrenciaIT` (sem exceções inesperadas, 5 repetições) |
-| Verde reproduzível | [CI run 41475669466](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41475669466) (commit `9a4c097`); a execução da versão avaliada está em `docs/evidencias/README.md` |
+| Verde reproduzível | [CI run 41475669466](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41475669466) (commit `7a88faf`); a execução da versão avaliada está em `docs/evidencias/README.md` |

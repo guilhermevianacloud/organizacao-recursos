@@ -2,7 +2,7 @@
 
 > Fontes: [`docs/prd.md`](prd.md) (requisitos e regras), [Especificação do Projeto](https://afonsolelis.github.io/aulas_senac/pages/qualidade2/especificacao-projeto.html), catálogo de táticas em [`docs/taticas-arquiteturais-len-bass.md`](taticas-arquiteturais-len-bass.md) (material da Aula 04).
 > Convenção: **Fato** (está nas fontes) · **Suposição** (S-xx, precisa ser confirmada) · **Decisão** (D-xx/ADR). Métricas sem medição ainda são marcadas **validação pendente**.
-> Estado em 2026-11-01: arquitetura **como construída** (`main` em `16adf58`). A versão proposta em 2026-10-31 foi comparada com o código no [ciclo ATAM 01](avaliacao-arquitetural/ciclo-01.md); as divergências encontradas lá (seção 6) foram corrigidas aqui. O histórico do Git guarda a versão proposta.
+> Estado em 2026-11-01: arquitetura **como construída** (`main` em `f84770d`). A versão proposta em 2026-10-31 foi comparada com o código no [ciclo ATAM 01](avaliacao-arquitetural/ciclo-01.md); as divergências encontradas lá (seção 6) foram corrigidas aqui. O histórico do Git guarda a versão proposta.
 
 ## 1. Stack
 | Item | Escolha | Origem |

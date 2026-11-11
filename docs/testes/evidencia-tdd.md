@@ -6,15 +6,15 @@ Cada ciclo tem um commit **vermelho** (`test(red)`: testes escritos, código só
 
 | Ciclo / cenário | Commit red | Saída no red | Commit green | Saída no green |
 |---|---|---|---|---|
-| 1 · RN-01 término após início; RN-02 sobreposição semiaberta (`IntervaloTest`) | `712e7a1` | `Tests run: 13, Failures: 8, Errors: 0` — ex.: "Expecting code to raise a throwable" | `84b5460` | `Tests run: 13, Failures: 0, Errors: 0` |
-| 2 · RN-07 transições (49 pares); RN-08 reserva iniciada; D-08 aprovação automática (`EstadoReservaTest`, `ReservaTest`) | `50e8811` | `Tests run: 85, Failures: 55, Errors: 0` | `c65bb29` | `Tests run: 85, Failures: 0, Errors: 0` |
-| 3 · RN-02 no banco (sala, professor, material); RN-04 manutenção nas fronteiras; Q-02 (`ServicoDeReservasIT`) | `c10e2c2` | integração `Tests run: 17, Failures: 8, Errors: 0` | `515d087` | integração `Tests run: 17, Failures: 0, Errors: 0` |
-| 4 · RN-03 20 pedidos simultâneos (`DuplaReservaConcorrenciaIT`) | `2f6b515` | `Tests run: 7, Failures: 6, Errors: 0` — "pedidos aceitos expected: 1 but was: 10" (depois 7, 6, 4, 6; professor: 4) | `70dcfff` | 3 rodadas seguidas: unidade 85/85, integração 28/28 |
+| 1 · RN-01 término após início; RN-02 sobreposição semiaberta (`IntervaloTest`) | `57ee0cf` | `Tests run: 13, Failures: 8, Errors: 0` — ex.: "Expecting code to raise a throwable" | `b18d2f1` | `Tests run: 13, Failures: 0, Errors: 0` |
+| 2 · RN-07 transições (49 pares); RN-08 reserva iniciada; D-08 aprovação automática (`EstadoReservaTest`, `ReservaTest`) | `a711262` | `Tests run: 85, Failures: 55, Errors: 0` | `06cd9c3` | `Tests run: 85, Failures: 0, Errors: 0` |
+| 3 · RN-02 no banco (sala, professor, material); RN-04 manutenção nas fronteiras; Q-02 (`ServicoDeReservasIT`) | `cbd0394` | integração `Tests run: 17, Failures: 8, Errors: 0` | `3151b6d` | integração `Tests run: 17, Failures: 0, Errors: 0` |
+| 4 · RN-03 20 pedidos simultâneos (`DuplaReservaConcorrenciaIT`) | `f68d7f4` | `Tests run: 7, Failures: 6, Errors: 0` — "pedidos aceitos expected: 1 but was: 10" (depois 7, 6, 4, 6; professor: 4) | `152c20e` | 3 rodadas seguidas: unidade 85/85, integração 28/28 |
 
 ### Observações honestas sobre os ciclos
 - **Testes que passaram já no vermelho**, e por quê: no ciclo 1, os 2 casos de intervalo válido (nenhuma regra recusa) e os 3 casos "não sobrepõe" (o esboço sempre respondia `false`); no ciclo 4, o controle com 20 salas diferentes (todos devem ser aceitos). São casos cujo resultado esperado coincide com o comportamento vazio — não indicam teste fraco, porque os casos opostos da mesma regra falharam.
 - **Ciclo 4 teve um passo intermediário:** a primeira implementação (só a constraint) eliminou as duplicatas mas produziu deadlock intermitente — registrado como [DEF-002](../defeitos/DEF-002-deadlock-na-disputa-pelo-mesmo-recurso.md). O teste **não foi alterado**; a correção (trava por recurso) entrou no mesmo commit verde.
-- **Defeito de teste encontrado e corrigido:** o teste de concorrência não limpava o banco ao terminar e quebrava o teste seguinte (`37544b6`).
+- **Defeito de teste encontrado e corrigido:** o teste de concorrência não limpava o banco ao terminar e quebrava o teste seguinte (`69b73e5`).
 - **Refatoração:** nenhum commit `refactor` nesta fase — o código verde não apresentou duplicação que justificasse.
 
 ## Desvios em relação ao prompt da Aula 09
@@ -25,25 +25,25 @@ Cada ciclo tem um commit **vermelho** (`test(red)`: testes escritos, código só
 ## Evidência no CI
 | Execução | Commit | Resultado |
 |---|---|---|
-| [41210306850](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41210306850) | `70dcfff` | verde — unidade 85, integração 28, 0 falhas |
+| [41210306850](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41210306850) | `152c20e` | verde — unidade 85, integração 28, 0 falhas |
 
 ## Fase 4 — segurança e API
 
 | Ciclo / cenário | Commit red | Saída no red | Commit green | Saída no green |
 |---|---|---|---|---|
-| RF-01, RN-10, RN-12 — matriz de autorização (76 células na época) e contrato da API (`MatrizDeAutorizacaoIT`, `ApiDeReservasIT`) | `05ba5df` | `Tests run: 86, Failures: 67, Errors: 0` — passaram só as células "anônimo → 401" e o token adulterado, porque a segurança já barrava quem não tinha login | `63f6c6a` | integração 114/114 |
+| RF-01, RN-10, RN-12 — matriz de autorização (76 células na época) e contrato da API (`MatrizDeAutorizacaoIT`, `ApiDeReservasIT`) | `407bd67` | `Tests run: 86, Failures: 67, Errors: 0` — passaram só as células "anônimo → 401" e o token adulterado, porque a segurança já barrava quem não tinha login | `aa60caa` | integração 114/114 |
 
 ## Fase 5 — requisitos restantes
 
 | Ciclo / cenário | Commit red | Saída no red | Commit green | Saída no green |
 |---|---|---|---|---|
-| RN-09 auditoria (`AuditoriaIT`) + histórico na matriz | `b3cf2ef` | `Tests run: 90, Failures: 8, Errors: 0` | `828f45e` | integração 128/128 |
-| RF-03 pesquisa (`PesquisaDeRecursosIT`) + RF-12 relatório (`RelatorioDeUtilizacaoIT`) | `dd60458` | `Tests run: 102, Failures: 17, Errors: 0` | `72d7586` | integração 146/146 |
-| RF-11 notificação (`NotificadorHttpIT`, `NotificacaoAposCommitIT`) | `a72965c` | `Tests run: 8, Failures: 7, Errors: 0` | `419fdee` | integração 154/154 |
+| RN-09 auditoria (`AuditoriaIT`) + histórico na matriz | `dd62ddb` | `Tests run: 90, Failures: 8, Errors: 0` | `53233d0` | integração 128/128 |
+| RF-03 pesquisa (`PesquisaDeRecursosIT`) + RF-12 relatório (`RelatorioDeUtilizacaoIT`) | `d69a2fe` | `Tests run: 102, Failures: 17, Errors: 0` | `5cbc1b7` | integração 146/146 |
+| RF-11 notificação (`NotificadorHttpIT`, `NotificacaoAposCommitIT`) | `b9e52c1` | `Tests run: 8, Failures: 7, Errors: 0` | `c1da9ec` | integração 154/154 |
 
 ### Observações
 - **Testes que passaram no red por vacuidade:** `rn09_03_rollbackNaoDeixaAuditoriaOrfa` (sem auditoria nenhuma, não há órfã) e `transacaoDesfeitaNaoNotifica` (nada notificava). Continuam no conjunto porque passam a ter valor quando a gravação e o envio existem; a mutação manual (Fase 7) confirma que detectam quebra.
-- **BDD (Cucumber):** os 13 cenários (18 desde 2026-11-02, com as transições REJEITADA e NAO_COMPARECEU) foram escritos depois das regras implementadas por TDD e passaram na primeira execução (`dc350a0`) — declarado em `docs/testes/bdd-aprovacao-bloqueio.md`.
+- **BDD (Cucumber):** os 13 cenários (18 desde 2026-11-02, com as transições REJEITADA e NAO_COMPARECEU) foram escritos depois das regras implementadas por TDD e passaram na primeira execução (`bad8d1c`) — declarado em `docs/testes/bdd-aprovacao-bloqueio.md`.
 - **Interface:** sem teste automatizado nesta fase (teste de fumaça manual registrado no ADR-006); o end-to-end entra na Fase 6.
 
 ## Evidência no CI (Fases 4 e 5)
@@ -56,7 +56,7 @@ Cada ciclo tem um commit **vermelho** (`test(red)`: testes escritos, código só
 
 | Defeito | Commit do teste de regressão | Saída sem a correção | Commit da correção | Saída com a correção |
 |---|---|---|---|---|
-| DEF-005 data vazia derruba a tela | `c075433`, ajustado em `e9c5227` | `InterfaceE2EIT`: `Tests run: 7, Failures: 3` (os 4 antigos verdes) | `5f41e00` | `./mvnw -B verify`: unidade 98, integração 179, 0 falhas |
-| DEF-006 resposta atrasada da agenda | `e9c5227` | `InterfaceE2EIT`: `Tests run: 8, Failures: 4` (os 3 do DEF-005 e o do DEF-006) | `5f41e00` | idem |
+| DEF-005 data vazia derruba a tela | `218eaa4`, ajustado em `d91b6cb` | `InterfaceE2EIT`: `Tests run: 7, Failures: 3` (os 4 antigos verdes) | `478ceaf` | `./mvnw -B verify`: unidade 98, integração 179, 0 falhas |
+| DEF-006 resposta atrasada da agenda | `d91b6cb` | `InterfaceE2EIT`: `Tests run: 8, Failures: 4` (os 3 do DEF-005 e o do DEF-006) | `478ceaf` | idem |
 
-Observação honesta: no `c075433`, dois dos três testes do DEF-005 falhavam pelo motivo errado. Eles agiam antes de a tela nova carregar e acabavam pegando o defeito da agenda. O `e9c5227` acrescentou a espera e repetiu o vermelho sem a correção, agora pelo motivo certo.
+Observação honesta: no `218eaa4`, dois dos três testes do DEF-005 falhavam pelo motivo errado. Eles agiam antes de a tela nova carregar e acabavam pegando o defeito da agenda. O `d91b6cb` acrescentou a espera e repetiu o vermelho sem a correção, agora pelo motivo certo.

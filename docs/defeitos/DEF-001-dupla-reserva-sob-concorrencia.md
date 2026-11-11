@@ -65,10 +65,10 @@ Sempre que pedidos pelo mesmo recurso chegam ao mesmo tempo (pico, semana de mat
 | Item | Valor |
 |---|---|
 | Issue | [#11](https://github.com/guilhermevianacloud/organizacao-recursos/issues/11) (fechada) |
-| Commit vermelho | `2f6b515` test(red): RN-03 — 20 pedidos simultâneos pelo mesmo recurso |
-| Commit da correção | `70dcfff` feat(green): RN-03 — constraint no banco e trava por recurso (DEF-001, DEF-002) |
+| Commit vermelho | `f68d7f4` test(red): RN-03 — 20 pedidos simultâneos pelo mesmo recurso |
+| Commit da correção | `152c20e` feat(green): RN-03 — constraint no banco e trava por recurso (DEF-001, DEF-002) |
 | Pull request | [#3](https://github.com/guilhermevianacloud/organizacao-recursos/pull/3) |
 | Teste de regressão | `servico/DuplaReservaConcorrenciaIT`, `servico/ProtecaoNoBancoIT` |
-| Verde reproduzível | [CI run 41475669466](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41475669466) (commit `9a4c097`); a execução da versão avaliada está em `docs/evidencias/README.md` |
+| Verde reproduzível | [CI run 41475669466](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41475669466) (commit `7a88faf`); a execução da versão avaliada está em `docs/evidencias/README.md` |
 
 A correção usou a convenção de TDD da Aula 09 (`test(red)` / `feat(green)`), anterior à convenção `fix(<id>)` da Aula 15.

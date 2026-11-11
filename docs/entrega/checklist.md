@@ -2,7 +2,7 @@
 
 Aula 14 (Prompt 1). O repositório foi clonado num diretório novo, **sem reaproveitar nada da máquina de quem
 desenvolveu** — inclusive com um repositório Maven vazio (`-Dmaven.repo.local` apontando para uma pasta nova) — e
-seguiu-se **apenas o README**. Data: 2026-11-01. Branch clonada: `fase-8/relatorio-prova-oral` (commit `c645712`),
+seguiu-se **apenas o README**. Data: 2026-11-01. Branch clonada: `fase-8/relatorio-prova-oral` (commit `9aad158`),
 porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 
 ## Passos do README
@@ -13,10 +13,20 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 | `./mvnw -B verify` com repositório Maven vazio | 1ª tentativa: queda de rede ao baixar do Maven Central ("Connection reset") — não é defeito do projeto; 2ª tentativa (reaproveitando o que já tinha baixado nessa mesma pasta nova): **BUILD SUCCESS** — unidade **98/98**, integração **175/175**, "All coverage checks have been met"; 353 MB de dependências baixadas do zero |
 | Aplicação sobe e responde | provado dentro do mesmo `verify` por `InterfaceE2EIT` (sobe a aplicação inteira e usa um navegador real); `./mvnw spring-boot:run` executado com sucesso pelo Guilherme no mesmo dia (4 migrações, dados de demonstração, porta 8080) |
 
+## Repetição em 2026-11-09 (versão da `rc3`)
+Clone novo da `main` no commit `f8df44d` — hoje `440ca89`, com os mesmos arquivos, depois da reescrita de autoria de
+2026-11-11 —, seguindo só o README. Diferença em relação à primeira rodada: o repositório Maven da máquina foi
+reaproveitado (o teste com repositório vazio é o de 2026-11-01; desde então não entrou dependência nova).
+
+| Passo | Resultado |
+|---|---|
+| `./mvnw -B verify` | **BUILD SUCCESS** — unidade **98/98**, integração **187/187**, 0 falhas; JaCoCo 583 de 595 linhas (98,0%) |
+| `./mvnw spring-boot:run` (porta 8091) | subiu em 18,4 s e levantou o próprio PostgreSQL pelo Docker Compose; `/`, `/app.html`, `/css/app.css` e `/v3/api-docs` responderam 200, `/swagger-ui.html` redirecionou (302) e o login de demonstração devolveu token |
+
 ## Entregáveis da especificação
 | Item | Existe | Atualizado | Caminho |
 |---|---|---|---|
-| Repositório com revisão por pares | sim | parcial — PRs com descrição, integrados na `main`; sem aprovação registrada de outro integrante | GitHub, PRs #1–#19 |
+| Repositório com revisão por pares | sim | parcial — PRs com descrição, integrados na `main`; Rafael e Gustavo são colaboradores desde 2026-11-11, mas ainda sem aprovação registrada no GitHub | GitHub, PRs #1–#24 |
 | Aplicação executável | sim | sim | `README.md` (como subir) |
 | README e documentação da API | sim | sim | `README.md`; `/swagger-ui.html` |
 | RTM | sim | sim | `docs/rtm.md` (e `RTM.md` na raiz) |
@@ -31,12 +41,14 @@ porque a `main` ainda não recebeu os pull requests (ver bloqueador 1).
 
 ## Bloqueadores, em ordem
 1. ~~A `main` só tem o primeiro commit.~~ **Resolvido em 2026-11-01:** PRs #1 a #8 integrados por Guilherme com merge
-   commit; a `main` (`ba66400`) é idêntica à branch da última fase e o CI passou nela (execução 41341089727).
-2. ~~Tag `v1.0.0-rc1`.~~ **Resolvido em 2026-11-01:** tag anotada no commit `ba66400`. Substituída como versão
-   avaliada pela `v1.0.0-rc2`, criada em 2026-11-02 no commit `8be1deb` com CI verde (execução 41377043205), que inclui
+   commit; a `main` (`89746c4`) é idêntica à branch da última fase e o CI passou nela (execução 41341089727).
+2. ~~Tag `v1.0.0-rc1`.~~ **Resolvido em 2026-11-01:** tag anotada no commit `89746c4`. Substituída como versão
+   avaliada pela `v1.0.0-rc2`, criada em 2026-11-02 no commit `ae9d613` com CI verde (execução 41377043205), que inclui
    as correções do SonarCloud (DEF-004), o ciclo ATAM 01 e a arquitetura atualizada; e depois pela `v1.0.0-rc3` (DEF-005,
    DEF-006 e a revisão independente dos documentos). O commit da versão avaliada fica em `docs/evidencias/README.md`.
-3. **Decisão de qualidade:** responsáveis pelos riscos aceitos e a declaração de cada integrante ainda em branco (`docs/decisao-qualidade.md`).
+3. ~~Decisão de qualidade.~~ **Resolvido em 2026-11-11:** Guilherme Viana Lopes e Gustavo Santana assumiram todos os
+   riscos aceitos, e a divisão do trabalho está registrada (`docs/decisao-qualidade.md`).
 4. ~~SonarCloud.~~ **Configurado em 2026-11-01:** Quality Gate aprovado no PR #10. Falta o Guilherme revisar o S4502 no
    site, se concordar com o ADR-007.
-5. **Revisão por pares:** PRs sem aprovação de outro integrante; se Rafael ou Gustavo revisarem, a evidência fica mais forte.
+5. **Revisão por pares:** Rafael e Gustavo já são colaboradores, mas nenhum PR tem aprovação registrada de outro
+   integrante; a evidência só fica no GitHub quando um deles aprovar um PR pela aba "Files changed" → "Review changes".

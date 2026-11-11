@@ -12,7 +12,7 @@
 Na Agenda do dia, apagar a data troca a tela inteira por "Invalid time value". O próprio campo de data some junto, e só recarregando a página dá para voltar.
 
 ## Ambiente / versão
-`v1.0.0-rc2` (`8be1deb`), Microsoft Edge no Windows 11, perfil Solicitante, aplicação local (`./mvnw spring-boot:run`).
+`v1.0.0-rc2` (`ae9d613`), Microsoft Edge no Windows 11, perfil Solicitante, aplicação local (`./mvnw spring-boot:run`).
 
 ## Pré-condições
 Usuário logado; para o Relatório, perfil Responsável ou Administrador; para a Manutenção, Administrador.
@@ -66,7 +66,7 @@ Sempre que um campo de data ou de hora fica vazio, nas quatro telas. Nenhum dado
 | Item | Valor |
 |---|---|
 | Issue | [#17](https://github.com/guilhermevianacloud/organizacao-recursos/issues/17) |
-| Commits do teste de regressão | `c075433` e `e9c5227` |
-| Commit da correção | `5f41e00` fix(DEF-005, DEF-006) |
+| Commits do teste de regressão | `218eaa4` e `d91b6cb` |
+| Commit da correção | `478ceaf` fix(DEF-005, DEF-006) |
 | Pull request | [#19](https://github.com/guilhermevianacloud/organizacao-recursos/pull/19) |
 | Teste de regressão | `e2e/InterfaceE2EIT.def005_*` (3 testes) |
