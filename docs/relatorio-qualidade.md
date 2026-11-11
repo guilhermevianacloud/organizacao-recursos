@@ -10,7 +10,7 @@ Nenhum número foi estimado: o que não foi medido está marcado **não medido**
 | Versão avaliada | tag `v1.0.0-rc3`; o commit dela e a execução do CI nesse commit estão em `docs/evidencias/README.md` |
 | Números de teste e cobertura deste relatório | CI [run 41475669466](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41475669466), último commit com mudança de código antes da tag (`9a4c097`); depois dele, só documentação |
 | Data | 2026-11-02 |
-| Integrantes | Guilherme Viana Lopes · Rafael Souza · Gustavo Santana (turma STADSCAS4NB) |
+| Integrantes | Guilherme Viana Lopes · Rafael Souza Silva · Gustavo Santana (turma STADSCAS4NB) |
 | Ambiente de teste | CI GitHub Actions (`ubuntu-latest`, Java 21 Temurin, PostgreSQL 17 via Testcontainers); local Windows 11, i7-11390H, 15,7 GB |
 | Stack | Java 21 · Spring Boot 3.5.16 · PostgreSQL 17 · Flyway · Spring Security (JWT) |
 

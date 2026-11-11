@@ -3,8 +3,8 @@
 Aula 14 (Prompt 3). A decisão é proporcional à evidência: tudo foi medido em ambiente local e no CI, então esta
 decisão **não** afirma prontidão para produção.
 
-> **Situação: rascunho.** Os campos marcados *a confirmar* dependem do grupo (quem aceita cada risco e a declaração de
-> cada integrante). Nada foi preenchido em nome de outra pessoa.
+> **Situação: rascunho.** A divisão do trabalho foi informada pelo grupo em 2026-11-11 (seção "O que cada integrante
+> fez"). Continuam *a confirmar* pelo grupo: a decisão final e quem aceita cada risco.
 
 ## Decisão
 **Liberar com ressalvas** a versão `v1.0.0-rc3` para avaliação acadêmica. *(a confirmar pelo grupo)*
@@ -31,14 +31,33 @@ decisão **não** afirma prontidão para produção.
 
 ## O que cada integrante fez
 O código, os testes e a documentação do repositório foram escritos com um agente de IA (Claude), seguindo os prompts das
-aulas práticas, como declarado no `README.md`. Cada integrante declara a própria participação:
+aulas práticas, como declarado no `README.md`. O grupo trabalhou junto usando uma única conta do GitHub (a de quem
+tinha o plano do agente); por isso, em 2026-11-11, o histórico da `main` foi reescrito para registrar quem participou
+de cada commit — autor principal e coautores (`Co-authored-by`) —, sem mudar nenhum arquivo. A divisão por assunto,
+informada pelo grupo:
+
+| Assunto | Commits | Participantes |
+|---|---|---|
+| Esqueleto do projeto e build dos testes de integração | 2 | Guilherme, Rafael, Gustavo |
+| Pipeline de CI no GitHub Actions (quebra intencional e reversão, Aula 06) | 4 | Guilherme |
+| Requisitos, arquitetura, plano de teste e RTM (Fase 2) | 1 | Guilherme, Gustavo |
+| Regras de reserva com TDD: intervalo, sobreposição, estados e manutenção (RN-01, 02, 04, 07, 08) | 6 | Guilherme, Rafael, Gustavo |
+| Concorrência: pedidos simultâneos e trava no banco (RN-03, DEF-001, DEF-002) | 3 | Gustavo |
+| Login, autorização, API de reservas e auditoria (RF-01, RF-14, RN-09, RN-10, RN-12) | 5 | Guilherme |
+| Pesquisa de recursos, relatório e notificação com WireMock (RF-03, RF-11, RF-12) | 4 | Rafael, Gustavo |
+| Cenários BDD com Cucumber | 1 | Guilherme, Rafael |
+| Interface web e testes ponta a ponta com Playwright (RF-13, DEF-005, DEF-006) | 5 | Guilherme, Rafael, Gustavo |
+| Cobertura (JaCoCo), SonarCloud e correções da análise | 4 | Guilherme, Gustavo |
+| Desempenho com JMeter (DEF-003) e mutação manual (Aula 12) | 4 | Guilherme, Gustavo |
+| Documentação e entrega: RTM, relatório, prova oral, checklist, evidências, ATAM, revisão | 11 | Guilherme, Rafael, Gustavo |
+| Identidade visual da interface (CSS) | 4 | Guilherme |
 
 | Integrante | O que fez |
 |---|---|
-| Guilherme Viana Lopes | *a preencher pelo próprio integrante* |
-| Rafael Souza | *a preencher pelo próprio integrante* |
-| Gustavo Santana | *a preencher pelo próprio integrante* |
+| Guilherme Viana Lopes | Conduziu o agente na conta do grupo; CI, autenticação/autorização/API/auditoria e identidade visual; participou das regras de reserva, requisitos e arquitetura, BDD, interface, cobertura/SonarCloud, desempenho/mutação e documentação |
+| Rafael Souza Silva | Pesquisa de recursos, relatório e notificação (com Gustavo); participou do esqueleto, das regras de reserva, do BDD, da interface e testes ponta a ponta e da documentação |
+| Gustavo Santana | Concorrência e trava no banco (RN-03); pesquisa, relatório e notificação (com Rafael); participou do esqueleto, de requisitos e arquitetura, das regras de reserva, da interface, de cobertura/SonarCloud, de desempenho/mutação e da documentação |
 
 ## Texto para o formulário de entrega
-Turma STADSCAS4NB (quinta). Integrantes: Guilherme Viana Lopes, Rafael Souza, Gustavo Santana.
+Turma STADSCAS4NB (quinta). Integrantes: Guilherme Viana Lopes, Rafael Souza Silva, Gustavo Santana.
 Repositório: https://github.com/guilhermevianacloud/organizacao-recursos — versão avaliada: tag `v1.0.0-rc3`.
