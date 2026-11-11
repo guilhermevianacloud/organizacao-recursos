@@ -3,7 +3,7 @@
 Sistema para alocar **salas, professores e materiais sem conflitos de horário**.
 Projeto final da disciplina **Qualidade de Software 2026.2** (Senac, prof. Afonso Lelis) — turma STADSCAS4NB.
 
-Integrantes: Guilherme Viana Lopes · Rafael Souza · Gustavo Santana.
+Integrantes: Guilherme Viana Lopes · Rafael Souza Silva · Gustavo Santana.
 
 ## Stack
 - Java 21 (Eclipse Temurin)

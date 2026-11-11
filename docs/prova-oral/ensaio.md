@@ -19,7 +19,7 @@ Critérios de 0 a 2: correção técnica (C), evidência citada (E), domínio de
 | Integrante | Pergunta | C | E | A | O que faltou / arquivo a revisar |
 |---|---|---|---|---|---|
 | Guilherme Viana Lopes | — | — | — | — | *a preencher no ensaio* |
-| Rafael Souza | — | — | — | — | *a preencher no ensaio* |
+| Rafael Souza Silva | — | — | — | — | *a preencher no ensaio* |
 | Gustavo Santana | — | — | — | — | *a preencher no ensaio* |
 
 ## Lacunas mais frequentes
