@@ -18,7 +18,7 @@ decisão **não** afirma prontidão para produção.
 | Nenhuma dupla reserva | `DuplaReservaConcorrenciaIT` (20 simultâneos, 5 repetições); 1 aceita em 5.652 sob carga | sim |
 | Cobertura ≥ 80% linhas / ≥ 70% branches | JaCoCo: 98,0% / 95,0% | sim |
 | 100% dos requisitos críticos na RTM | `docs/rtm.md`: 9 de 9 cobertos (teste verde + mutação detectada) | sim |
-| 0 bugs ou vulnerabilidades críticas | SonarCloud: Quality Gate aprovado; 11 de 12 apontamentos corrigidos, S4502 justificado (ADR-007, risco aceito pelo grupo); 0 defeitos críticos abertos no registro | parcial, até a revisão do S4502 |
+| 0 bugs ou vulnerabilidades críticas | SonarCloud: Quality Gate aprovado; 11 de 12 apontamentos corrigidos, S4502 justificado (ADR-007) e aceito no SonarCloud em 2026-11-11 (status *Accepted*); nota de segurança A, 0 vulnerabilidades abertas; 0 defeitos críticos abertos no registro | sim |
 | Desempenho p95 ≤ 300 ms (meta proposta) | rodada 01: 332 ms e 506 ms | não |
 
 ## Riscos aceitos

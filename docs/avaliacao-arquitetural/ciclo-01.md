@@ -100,7 +100,7 @@ Caminhos relativos a `src/main/java/br/senac/organizacaorecursos/`, linhas no co
 | Cobertura de linhas / ramos (JaCoCo) | 98,0% / 95,0% | artifact `relatorio-de-cobertura` do run 41348450251; gate 80/70 no `verify` |
 | Quality Gate do SonarCloud (`main`, `f84770d`) | **aprovado** | <https://sonarcloud.io/project/overview?id=guilhermevianacloud_organizacao-recursos> |
 | Bugs · code smells · duplicação | 0 · 0 · 0,0% | SonarCloud, `main` |
-| Vulnerabilidades | **1** (`java:S4502`, CSRF), justificada no ADR-007; nota de segurança D até ser marcada como revisada | SonarCloud, `main`; DEF-004 |
+| Vulnerabilidades | **1** (`java:S4502`, CSRF), justificada no ADR-007; nota de segurança D até ser marcada como revisada (marcada como *Accepted* em 2026-11-11: nota A) | SonarCloud, `main`; DEF-004 |
 
 Estas medidas são do commit em que o ciclo foi feito (`f84770d`). As da versão avaliada estão em [`docs/evidencias/README.md`](../evidencias/README.md).
 
@@ -108,7 +108,7 @@ Estas medidas são do commit em que o ciclo foi feito (`f84770d`). As da versão
 | Prioridade | Ação | Responsável | Situação |
 |---|---|---|---|
 | 1 | Corrigir as divergências da seção 6 em `docs/arquitetura.md` | Claude | feito neste PR |
-| 2 | Revisar o S4502 no SonarCloud (aceitar com a justificativa do ADR-007, ou reabrir a decisão) | Guilherme | pendente |
+| 2 | Revisar o S4502 no SonarCloud (aceitar com a justificativa do ADR-007, ou reabrir a decisão) | Guilherme | feito em 2026-11-11 (Accepted) |
 | 3 | DEF-003: aceitar o risco com nome e motivo, ou rodar o próximo experimento de carga | grupo | pendente |
 | 4 | Perguntar ao professor se a restrição do cron diário de treino (Aula 04, Q-05) vale para este projeto | grupo | pendente |
 | 5 | RF-14: a documentação OpenAPI só tem teste de fumaça, sem teste automatizado | — | aceito como baixo risco; sem ação nesta versão |

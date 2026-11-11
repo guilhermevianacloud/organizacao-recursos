@@ -52,7 +52,7 @@ Estático: presente em todo build até a correção. Afeta a meta "0 bugs ou vul
 
 ## Correção
 - S2119: `SecureRandom` num campo estático, reaproveitado.
-- S4502: CSRF continua desligado. A API é stateless, o token vai no cabeçalho `Authorization` e não há cookie, então não existe envio automático de credencial para explorar. A justificativa está no código e no [ADR-007](../adr/ADR-007-csrf-desligado.md), que é uma **proposta**. A marcação como revisado no SonarCloud depende do Guilherme.
+- S4502: CSRF continua desligado. A API é stateless, o token vai no cabeçalho `Authorization` e não há cookie, então não existe envio automático de credencial para explorar. A justificativa está no código e no [ADR-007](../adr/ADR-007-csrf-desligado.md), risco assumido por Guilherme Viana Lopes e Gustavo Santana; apontamento aceito no SonarCloud em 2026-11-11 (status *Accepted*).
 - S9383: dentro de `try`, `await`; nas chamadas disparadas por evento, `emSegundoPlano()`, que mostra o erro na tela.
 - S8786: a leitura do JSON nos testes usa `JsonPath` em vez de regex.
 
@@ -62,7 +62,7 @@ PR #10: CI verde (98 + 175) e análise do SonarCloud pelo CI com **Quality Gate 
 ## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
 | Item | Valor |
 |---|---|
-| Issue | [#14](https://github.com/guilhermevianacloud/organizacao-recursos/issues/14) (aberta até a revisão do S4502) |
+| Issue | [#14](https://github.com/guilhermevianacloud/organizacao-recursos/issues/14) (fechada em 2026-11-11, depois da aceitação do S4502) |
 | Commits da correção | `e3aa7f9` (código) e `65920a5` (documentação) |
 | Pull request | [#10](https://github.com/guilhermevianacloud/organizacao-recursos/pull/10) |
 | Verificação | Quality Gate aprovado no PR #10 e na `main` (`f84770d`); [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) |

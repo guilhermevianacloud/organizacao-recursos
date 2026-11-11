@@ -26,7 +26,7 @@ reaproveitado (o teste com repositório vazio é o de 2026-11-01; desde então n
 ## Entregáveis da especificação
 | Item | Existe | Atualizado | Caminho |
 |---|---|---|---|
-| Repositório com revisão por pares | sim | parcial — PRs com descrição, integrados na `main`; Rafael e Gustavo são colaboradores desde 2026-11-11, mas ainda sem aprovação registrada no GitHub | GitHub, PRs #1–#24 |
+| Repositório com revisão por pares | sim | parcial — PRs com descrição, integrados na `main`; Rafael e Gustavo são colaboradores desde 2026-11-11; aprovação do Rafael registrada no PR #25 | GitHub, PRs #1–#25 |
 | Aplicação executável | sim | sim | `README.md` (como subir) |
 | README e documentação da API | sim | sim | `README.md`; `/swagger-ui.html` |
 | RTM | sim | sim | `docs/rtm.md` (e `RTM.md` na raiz) |
@@ -48,7 +48,6 @@ reaproveitado (o teste com repositório vazio é o de 2026-11-01; desde então n
    DEF-006 e a revisão independente dos documentos). O commit da versão avaliada fica em `docs/evidencias/README.md`.
 3. ~~Decisão de qualidade.~~ **Resolvido em 2026-11-11:** Guilherme Viana Lopes e Gustavo Santana assumiram todos os
    riscos aceitos, e a divisão do trabalho está registrada (`docs/decisao-qualidade.md`).
-4. ~~SonarCloud.~~ **Configurado em 2026-11-01:** Quality Gate aprovado no PR #10. Falta o Guilherme revisar o S4502 no
-   site, se concordar com o ADR-007.
-5. **Revisão por pares:** Rafael e Gustavo já são colaboradores, mas nenhum PR tem aprovação registrada de outro
-   integrante; a evidência só fica no GitHub quando um deles aprovar um PR pela aba "Files changed" → "Review changes".
+4. ~~SonarCloud.~~ **Configurado em 2026-11-01:** Quality Gate aprovado no PR #10. S4502 aceito no SonarCloud em 2026-11-11 (status *Accepted*), com a
+   justificativa do ADR-007; nota de segurança A.
+5. ~~Revisão por pares.~~ **Registrada em 2026-11-11:** Rafael Souza Silva (FahelDev) aprovou o PR #25 no GitHub.
