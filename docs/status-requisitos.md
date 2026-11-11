@@ -46,7 +46,7 @@ Evidência: [CI run 41475669466](https://github.com/guilhermevianacloud/organiza
 ## Fases até a entrega (semana 46)
 Executadas por Guilherme Viana Lopes e Claude (agente de IA), em ordem:
 1. Fase 6 — feito: JaCoCo 80/70 (98,0% / 95,0%) e end-to-end ([run 41324432479](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41324432479)). SonarCloud configurado em 2026-11-01; os apontamentos da 1ª análise estão no DEF-004.
-2. Fase 7 — feito: JMeter (`docs/performance/resultado-01.md`, DEF-003) e mutação manual (10 de 10; a M11 entrou em 2026-11-02).
+2. Fase 7 — feito: JMeter (`docs/performance/resultado-01.md`, DEF-003) e mutação manual (11 de 11; a M11 entrou em 2026-11-02).
 3. Fase 8 — feito: `docs/relatorio-qualidade.md` e `docs/prova-oral/`.
 4. Fase 9 — feito: clone limpo (`docs/entrega/checklist.md`) e pacote de evidências (`docs/evidencias/README.md`).
 
@@ -56,9 +56,9 @@ A Aula 11 pede a divisão das pendências entre os integrantes. As que dependem 
 | Pendência | Por que importa | Responsável |
 |---|---|---|
 | Revisar o apontamento S4502 no SonarCloud (aceitar com a justificativa do ADR-007 ou reabrir) | meta "0 vulnerabilidades críticas" | Guilherme Viana Lopes (dono da conta no SonarCloud) |
-| Decidir o aceite dos riscos (DEF-003, CSRF, token não revogável) e quem os assume | decisão de qualidade da Aula 14 | *a definir pelo grupo* |
-| Declaração de cada integrante em `docs/decisao-qualidade.md` | autoria (10% da nota) | cada integrante, a própria |
-| Revisão por pares nos pull requests | entregável "repositório com revisão por pares" | Rafael Souza e Gustavo Santana (a confirmar) |
+| ~~Decidir o aceite dos riscos (DEF-003, CSRF, token não revogável) e quem os assume~~ — feito em 2026-11-11 | decisão de qualidade da Aula 14 | Guilherme Viana Lopes e Gustavo Santana |
+| ~~Declaração de cada integrante em `docs/decisao-qualidade.md`~~ — feita em 2026-11-11 (divisão informada pelo grupo) | autoria (10% da nota) | grupo |
+| Revisão por pares nos pull requests | entregável "repositório com revisão por pares" | Rafael Souza Silva e Gustavo Santana |
 | Ensaio da prova oral com notas em `docs/prova-oral/ensaio.md` | preparação da S47 | os três |
 | Envio no formulário com a tag avaliada | entrega | *a definir pelo grupo* (um integrante) |
 

@@ -1,6 +1,6 @@
 # ADR-007 — Proteção CSRF desligada na API stateless
 
-Status: proposta (2026-11-01; escrita pelo Claude a partir do apontamento `java:S4502` do SonarCloud) · aguardando revisão de Guilherme Viana Lopes, que marca o apontamento no SonarCloud se concordar
+Status: aceita (proposta em 2026-11-01, escrita pelo Claude a partir do apontamento `java:S4502` do SonarCloud; risco assumido por Guilherme Viana Lopes e Gustavo Santana em 2026-11-11) · falta marcar o apontamento como aceito no SonarCloud (Guilherme Viana Lopes, dono da conta)
 
 ## Contexto e forças
 - A primeira análise do SonarCloud apontou `java:S4502` (segurança, severidade alta) em `ConfiguracaoDeSeguranca`: "Make sure disabling Spring Security's CSRF protection is safe here."

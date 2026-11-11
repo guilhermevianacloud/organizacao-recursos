@@ -16,6 +16,11 @@
 - Ciclo ATAM 01, arquitetura como construída e rastreio dos defeitos com issues no GitHub (PR #15).
 - Documentos corrigidos a partir da revisão independente: números (cobertura 583/595, vazão 270,2/s), afirmações acima da evidência, textos desatualizados, campos que faltavam nos ADRs e nos defeitos.
 
+### Entrega
+- Histórico da `main` reescrito em 2026-11-11 para registrar autor e coautores de cada commit (o grupo usou uma única conta); nenhum arquivo mudou, e os documentos passaram a citar os códigos novos. Divisão do trabalho em `docs/decisao-qualidade.md`.
+- Decisão de qualidade: liberar com ressalvas; Guilherme Viana Lopes e Gustavo Santana assumem os riscos aceitos (DEF-003, CSRF/S4502, token não revogável, Spring Boot 3.5).
+- Índice de evidências refeito para a rc3; checklist com o clone limpo de 2026-11-09; números alinhados (mutação 11 de 11; cobertura do SonarCloud 97,4% explicada).
+
 ## v1.0.0-rc2 — versão candidata para a entrega, com análise estática
 
 ### Qualidade

@@ -5,7 +5,7 @@
 | Identificador | DEF-004 |
 | Situação | corrigido (11 de 12); 1 mantido com justificativa (ADR-007, proposta) |
 | Requisito afetado | RNF-10 ("0 bugs ou vulnerabilidades críticas") · RNF-05 · RF-13 (mensagens compreensíveis na interface) |
-| Encontrado por | SonarCloud, primeira análise (automática, commit `883fd8f`) |
+| Encontrado por | SonarCloud, primeira análise (automática, commit `341ca4b`) |
 | Data | 2026-11-01 |
 
 ## Resumo observável
@@ -16,13 +16,13 @@ A primeira análise do SonarCloud apontou 12 problemas: Security D (1) e Reliabi
 Os outros 10 são de severidade média: 8× `javascript:S9383` (promessas sem tratamento de rejeição em `static/js/app.js`) e 2× `java:S8786` (regex com backtracking em `ApiDeReservasIT`).
 
 ## Ambiente / versão
-`main` em `883fd8f` (depois do PR #9), análise automática do SonarCloud, sem cobertura.
+`main` em `341ca4b` (depois do PR #9), análise automática do SonarCloud, sem cobertura.
 
 ## Pré-condições
 Projeto importado no SonarCloud com a análise automática ligada (antes do `SONAR_TOKEN` no CI).
 
 ## Passos mínimos para reproduzir
-1. Abrir o projeto `guilhermevianacloud_organizacao-recursos` no SonarCloud, na análise do commit `883fd8f`.
+1. Abrir o projeto `guilhermevianacloud_organizacao-recursos` no SonarCloud, na análise do commit `341ca4b`.
 2. Ver a aba Issues.
 
 ## Resultado obtido
@@ -63,6 +63,6 @@ PR #10: CI verde (98 + 175) e análise do SonarCloud pelo CI com **Quality Gate 
 | Item | Valor |
 |---|---|
 | Issue | [#14](https://github.com/guilhermevianacloud/organizacao-recursos/issues/14) (aberta até a revisão do S4502) |
-| Commits da correção | `94522bb` (código) e `be8d143` (documentação) |
+| Commits da correção | `e3aa7f9` (código) e `65920a5` (documentação) |
 | Pull request | [#10](https://github.com/guilhermevianacloud/organizacao-recursos/pull/10) |
-| Verificação | Quality Gate aprovado no PR #10 e na `main` (`16adf58`); [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) |
+| Verificação | Quality Gate aprovado no PR #10 e na `main` (`f84770d`); [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251) |

@@ -3,12 +3,12 @@
 Aulas 06 (Prompt 3) e 07: primeiro ciclo ATAM, comparando a arquitetura **proposta** em `docs/arquitetura.md`
 (2026-10-31) com o **código construído** e as medições.
 
-> **Quando foi feito:** 2026-11-01, com o código pronto (`main` em `16adf58`), e não na semana da Aula 06. Por isso este
+> **Quando foi feito:** 2026-11-01, com o código pronto (`main` em `f84770d`), e não na semana da Aula 06. Por isso este
 > ciclo já usa as medições finais (JaCoCo, SonarCloud, JMeter) e funciona como avaliação da versão candidata.
 > As divergências da seção 6 foram corrigidas em `docs/arquitetura.md` no mesmo pull request.
 
 Evidência de execução: [CI run 41348450251](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/41348450251)
-(commit `16adf58`: unidade 98, integração 175, 0 falhas, gate do JaCoCo atendido, análise do SonarCloud enviada).
+(commit `f84770d`: unidade 98, integração 175, 0 falhas, gate do JaCoCo atendido, análise do SonarCloud enviada).
 
 ## 1. Direcionadores
 | ID | Direcionador | Origem |
@@ -40,7 +40,7 @@ Evidência de execução: [CI run 41348450251](https://github.com/guilhermeviana
 | Manutenibilidade | Testabilidade do tempo | CEN-06 | (M, B) |
 
 ## 4. Táticas com evidência no código
-Caminhos relativos a `src/main/java/br/senac/organizacaorecursos/`, linhas no commit `16adf58`.
+Caminhos relativos a `src/main/java/br/senac/organizacaorecursos/`, linhas no commit `f84770d`.
 
 | Tática (Len Bass) | Onde está | Cenário |
 |---|---|---|
@@ -98,11 +98,11 @@ Caminhos relativos a `src/main/java/br/senac/organizacaorecursos/`, linhas no co
 | Medida | Valor | Fonte |
 |---|---|---|
 | Cobertura de linhas / ramos (JaCoCo) | 98,0% / 95,0% | artifact `relatorio-de-cobertura` do run 41348450251; gate 80/70 no `verify` |
-| Quality Gate do SonarCloud (`main`, `16adf58`) | **aprovado** | <https://sonarcloud.io/project/overview?id=guilhermevianacloud_organizacao-recursos> |
+| Quality Gate do SonarCloud (`main`, `f84770d`) | **aprovado** | <https://sonarcloud.io/project/overview?id=guilhermevianacloud_organizacao-recursos> |
 | Bugs · code smells · duplicação | 0 · 0 · 0,0% | SonarCloud, `main` |
 | Vulnerabilidades | **1** (`java:S4502`, CSRF), justificada no ADR-007; nota de segurança D até ser marcada como revisada | SonarCloud, `main`; DEF-004 |
 
-Estas medidas são do commit em que o ciclo foi feito (`16adf58`). As da versão avaliada estão em [`docs/evidencias/README.md`](../evidencias/README.md).
+Estas medidas são do commit em que o ciclo foi feito (`f84770d`). As da versão avaliada estão em [`docs/evidencias/README.md`](../evidencias/README.md).
 
 ## 8. Ações priorizadas
 | Prioridade | Ação | Responsável | Situação |

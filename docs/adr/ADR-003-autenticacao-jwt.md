@@ -26,7 +26,7 @@ RF-01, RN-10, RNF-04, RNF-05 · CEN-02 · DR-02.
 
 ## Riscos
 - Chave de assinatura vazada permitiria forjar tokens → chave só em variável de ambiente.
-- Token não revogável antes de expirar: um usuário desligado mantém acesso por até 60 min (aceite proposto em `docs/decisao-qualidade.md`).
+- Token não revogável antes de expirar: um usuário desligado mantém acesso por até 60 min (risco assumido por Guilherme Viana Lopes e Gustavo Santana em 2026-11-11; `docs/decisao-qualidade.md`).
 
 ## Evidência necessária
 - Matriz de autorização testada célula por célula (Aula 12); 401 sem token; 403 para perfil errado; token expirado recusado (tempo via `Clock`).

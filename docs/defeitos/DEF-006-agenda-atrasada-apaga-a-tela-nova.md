@@ -12,7 +12,7 @@
 Logo depois do login, a Agenda do dia começa a carregar. Se o usuário abre outra tela antes de a agenda terminar, a resposta atrasada da agenda gera um erro, e o aviso do erro apaga a tela que o usuário abriu.
 
 ## Ambiente / versão
-`v1.0.0-rc2` (`8be1deb`), Chromium (Playwright) e aplicação inteira com PostgreSQL real (Testcontainers).
+`v1.0.0-rc2` (`ae9d613`), Chromium (Playwright) e aplicação inteira com PostgreSQL real (Testcontainers).
 
 ## Pré-condições
 Usuário logado; a agenda ainda carregando (aparece "Carregando…").
@@ -58,7 +58,7 @@ A agenda guarda a referência da própria grade antes de esperar as respostas. D
 | Item | Valor |
 |---|---|
 | Issue | [#18](https://github.com/guilhermevianacloud/organizacao-recursos/issues/18) |
-| Commit do teste de regressão | `e9c5227` |
-| Commit da correção | `5f41e00` fix(DEF-005, DEF-006) |
+| Commit do teste de regressão | `d91b6cb` |
+| Commit da correção | `478ceaf` fix(DEF-005, DEF-006) |
 | Pull request | [#19](https://github.com/guilhermevianacloud/organizacao-recursos/pull/19) |
 | Teste de regressão | `e2e/InterfaceE2EIT.def006_trocarDeTelaAntesDaAgendaCarregarMantemATelaNova` |

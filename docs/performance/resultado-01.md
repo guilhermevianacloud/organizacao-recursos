@@ -1,6 +1,6 @@
 # Resultado da rodada 01 de carga
 
-Aula 10. Requisito escrito antes da rodada: [`rnf.md`](rnf.md) (commit `644787f`). Plano: [`perf/reservas.jmx`](../../perf/reservas.jmx).
+Aula 10. Requisito escrito antes da rodada: [`rnf.md`](rnf.md) (commit `d52e8f0`). Plano: [`perf/reservas.jmx`](../../perf/reservas.jmx).
 Dados brutos: [`perf/resultados/rodada-01.jtl`](../../perf/resultados/rodada-01.jtl) (versionado — cada número abaixo sai dele).
 Relatório HTML do JMeter gerado em `perf/relatorio-01/` (não versionado).
 
@@ -8,7 +8,7 @@ Relatório HTML do JMeter gerado em `perf/relatorio-01/` (não versionado).
 | Item | Valor |
 |---|---|
 | Data | 2026-11-01 |
-| Versão da aplicação | commit `644787f` (branch `fase-7/carga-mutacao`), Spring Boot 3.5.16, Java 21 |
+| Versão da aplicação | commit `d52e8f0` (branch `fase-7/carga-mutacao`), Spring Boot 3.5.16, Java 21 |
 | Banco | PostgreSQL 17 em container (`compose.yaml`), banco recém-criado com os dados de demonstração |
 | Máquina | notebook Intel Core i7-11390H, 8 núcleos lógicos, 15,7 GB de RAM, Windows 11 |
 | Gerador de carga | Apache JMeter 5.6.3, modo CLI, **na mesma máquina** da aplicação |

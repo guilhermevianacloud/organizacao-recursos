@@ -13,7 +13,7 @@ Com 50 usuários simultâneos, o p95 da consulta de disponibilidade foi 332 ms e
 mesmo recurso foi 506 ms; a meta proposta é 300 ms. Integridade e "nunca 500" foram atendidos.
 
 ## Ambiente / versão
-Commit `644787f`; aplicação local com PostgreSQL em container; JMeter 5.6.3 na mesma máquina (i7-11390H, 15,7 GB).
+Commit `d52e8f0`; aplicação local com PostgreSQL em container; JMeter 5.6.3 na mesma máquina (i7-11390H, 15,7 GB).
 
 ## Pré-condições
 Banco recém-criado com os dados de demonstração; JMeter 5.6.3 instalado; nenhuma outra carga na máquina.
@@ -52,14 +52,14 @@ Ver "Próximo experimento" em `docs/performance/resultado-01.md`: medir a espera
 outra máquina, depois ajustar uma variável por vez.
 
 ## Risco aceito?
-**Proposta, aguardando decisão do grupo:** aceitar o risco na entrega `v1.0.0-rc3`, com a justificativa de que o
-impacto é só no tempo de resposta no pior caso, a meta foi proposta pelo próprio grupo e as regras críticas estão
-intactas. Quem aceitar (nome e motivo) fica registrado em `docs/decisao-qualidade.md`; até lá, o defeito segue aberto.
+**Sim, na entrega `v1.0.0-rc3`** — risco assumido por Guilherme Viana Lopes e Gustavo Santana em 2026-11-11 (registrado em `docs/decisao-qualidade.md`).
+Justificativa: o impacto é só no tempo de resposta no pior caso, a meta foi proposta pelo próprio grupo e as regras
+críticas estão intactas. O defeito continua aberto (issue #13) para uma correção futura.
 
 ## Rastreio (Aula 05: issue, commit, PR e teste de regressão)
 | Item | Valor |
 |---|---|
 | Issue | [#13](https://github.com/guilhermevianacloud/organizacao-recursos/issues/13) (aberta) |
-| Meta escrita antes da medição | `644787f` docs: requisito de desempenho antes da primeira rodada de carga |
-| Medição | `70a45a2` (plano JMeter e rodada 01), [PR #7](https://github.com/guilhermevianacloud/organizacao-recursos/pull/7) |
+| Meta escrita antes da medição | `d52e8f0` docs: requisito de desempenho antes da primeira rodada de carga |
+| Medição | `f225fef` (plano JMeter e rodada 01), [PR #7](https://github.com/guilhermevianacloud/organizacao-recursos/pull/7) |
 | Correção | nenhuma ainda |

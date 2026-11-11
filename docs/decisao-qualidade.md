@@ -3,11 +3,11 @@
 Aula 14 (Prompt 3). A decisão é proporcional à evidência: tudo foi medido em ambiente local e no CI, então esta
 decisão **não** afirma prontidão para produção.
 
-> **Situação: rascunho.** A divisão do trabalho foi informada pelo grupo em 2026-11-11 (seção "O que cada integrante
-> fez"). Continuam *a confirmar* pelo grupo: a decisão final e quem aceita cada risco.
+> **Situação: decidida em 2026-11-11.** Guilherme Viana Lopes e Gustavo Santana assumiram todos os riscos aceitos abaixo; a divisão do trabalho foi
+> informada pelo grupo na mesma data (seção "O que cada integrante fez").
 
 ## Decisão
-**Liberar com ressalvas** a versão `v1.0.0-rc3` para avaliação acadêmica. *(a confirmar pelo grupo)*
+**Liberar com ressalvas** a versão `v1.0.0-rc3` para avaliação acadêmica, com os riscos abaixo assumidos por Guilherme Viana Lopes e Gustavo Santana (2026-11-11).
 
 ## Critérios e evidências
 | Critério | Evidência | Atendido? |
@@ -18,16 +18,16 @@ decisão **não** afirma prontidão para produção.
 | Nenhuma dupla reserva | `DuplaReservaConcorrenciaIT` (20 simultâneos, 5 repetições); 1 aceita em 5.652 sob carga | sim |
 | Cobertura ≥ 80% linhas / ≥ 70% branches | JaCoCo: 98,0% / 95,0% | sim |
 | 100% dos requisitos críticos na RTM | `docs/rtm.md`: 9 de 9 cobertos (teste verde + mutação detectada) | sim |
-| 0 bugs ou vulnerabilidades críticas | SonarCloud: Quality Gate aprovado; 11 de 12 apontamentos corrigidos, S4502 justificado (ADR-007, proposta); 0 defeitos críticos abertos no registro | parcial, até a revisão do S4502 |
+| 0 bugs ou vulnerabilidades críticas | SonarCloud: Quality Gate aprovado; 11 de 12 apontamentos corrigidos, S4502 justificado (ADR-007, risco aceito pelo grupo); 0 defeitos críticos abertos no registro | parcial, até a revisão do S4502 |
 | Desempenho p95 ≤ 300 ms (meta proposta) | rodada 01: 332 ms e 506 ms | não |
 
 ## Riscos aceitos
 | Risco | Impacto | Justificativa | Responsável |
 |---|---|---|---|
-| DEF-003 — p95 acima da meta proposta | demora de até ~0,5 s em 5% das criações no pior caso | sem perda de dados nem erro; meta proposta pelo próprio grupo | *a confirmar* |
-| CSRF desligado (S4502, ADR-007) | exposição a CSRF se a credencial passar a ir em cookie | API stateless com token no cabeçalho; condição de revisão no ADR-007 | *a confirmar* |
-| Token JWT não revogável antes de expirar (ADR-003) | usuário desligado mantém acesso por até 60 min | validade curta; revogação imediata exigiria lista de bloqueio ou sessão (condição de revisão do ADR-003) | *a confirmar* |
-| Spring Boot 3.5 fora do suporte gratuito (ADR-001) | vulnerabilidade nova sem correção pública | especificação exige 3.x | Guilherme Viana Lopes (decisão registrada no ADR-001, 2026-10-31) |
+| DEF-003 — p95 acima da meta proposta | demora de até ~0,5 s em 5% das criações no pior caso | sem perda de dados nem erro; meta proposta pelo próprio grupo | Guilherme Viana Lopes e Gustavo Santana (2026-11-11) |
+| CSRF desligado (S4502, ADR-007) | exposição a CSRF se a credencial passar a ir em cookie | API stateless com token no cabeçalho; condição de revisão no ADR-007 | Guilherme Viana Lopes e Gustavo Santana (2026-11-11) |
+| Token JWT não revogável antes de expirar (ADR-003) | usuário desligado mantém acesso por até 60 min | validade curta; revogação imediata exigiria lista de bloqueio ou sessão (condição de revisão do ADR-003) | Guilherme Viana Lopes e Gustavo Santana (2026-11-11) |
+| Spring Boot 3.5 fora do suporte gratuito (ADR-001) | vulnerabilidade nova sem correção pública | especificação exige 3.x | Guilherme Viana Lopes (decisão registrada no ADR-001, 2026-10-31); assumido também por Gustavo Santana (2026-11-11) |
 
 ## O que cada integrante fez
 O código, os testes e a documentação do repositório foram escritos com um agente de IA (Claude), seguindo os prompts das
