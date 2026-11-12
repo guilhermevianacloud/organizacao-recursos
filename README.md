@@ -81,6 +81,7 @@ em português, com um `codigo` estável (ex.: `CONFLITO_DE_HORARIO`).
 | [docs/entrega/checklist.md](docs/entrega/checklist.md) | Checklist da entrega em clone limpo |
 | [docs/evidencias/README.md](docs/evidencias/README.md) | Índice de evidências da versão avaliada |
 | [docs/prova-oral/](docs/prova-oral/) | Perguntas da banca e roteiro de ensaio |
+| [docs/anexos/guia-da-prova.pdf](docs/anexos/guia-da-prova.pdf) | Guia de estudo do grupo para a prova oral: o projeto explicado de forma simples (fonte em `.html`) |
 | [CHANGELOG.md](CHANGELOG.md) | O que entrou em cada versão candidata |
 | [docs/taticas-arquiteturais-len-bass.md](docs/taticas-arquiteturais-len-bass.md) | Catálogo de táticas (material de apoio da Aula 04) |
 
