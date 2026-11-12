@@ -55,10 +55,10 @@ A Aula 11 pede a divisão das pendências entre os integrantes. As que dependem 
 
 | Pendência | Por que importa | Responsável |
 |---|---|---|
-| Revisar o apontamento S4502 no SonarCloud (aceitar com a justificativa do ADR-007 ou reabrir) | meta "0 vulnerabilidades críticas" | Guilherme Viana Lopes (dono da conta no SonarCloud) |
+| ~~Revisar o apontamento S4502 no SonarCloud~~ — aceito no SonarCloud em 2026-11-11 (status *Accepted*) | meta "0 vulnerabilidades críticas" | Guilherme Viana Lopes (dono da conta no SonarCloud) |
 | ~~Decidir o aceite dos riscos (DEF-003, CSRF, token não revogável) e quem os assume~~ — feito em 2026-11-11 | decisão de qualidade da Aula 14 | Guilherme Viana Lopes e Gustavo Santana |
 | ~~Declaração de cada integrante em `docs/decisao-qualidade.md`~~ — feita em 2026-11-11 (divisão informada pelo grupo) | autoria (10% da nota) | grupo |
-| Revisão por pares nos pull requests | entregável "repositório com revisão por pares" | Rafael Souza Silva e Gustavo Santana |
+| Revisão por pares nos pull requests | entregável "repositório com revisão por pares" | Rafael Souza Silva (aprovou o PR #25 em 2026-11-11) e Gustavo Santana |
 | Ensaio da prova oral com notas em `docs/prova-oral/ensaio.md` | preparação da S47 | os três |
 | Envio no formulário com a tag avaliada | entrega | *a definir pelo grupo* (um integrante) |
 
