@@ -2,9 +2,10 @@
 
 Aula 14 (Prompt 2). Índice do que prova a qualidade da versão avaliada.
 
-> **Versão avaliada: tag `v1.0.0-rc3`**, criada em 2026-11-11 no commit `e4e92c0` da `main` (merge do PR #25). Esse
-> commit tem exatamente os mesmos arquivos do commit `667f9a3`, testado pelo CI com sucesso na execução 43087335438;
-> a execução no próprio commit do merge ficou presa na fila do GitHub. Os links de documento abrem a versão **da tag**
+> **Versão avaliada: tag `v1.0.0-rc3`**, criada em 2026-11-11 no commit `e4e92c0` da `main` (merge do PR #25), com CI
+> verde nesse mesmo commit (execução 43089789523). Essa execução ficou cerca de 2 horas na fila do GitHub; como o
+> `e4e92c0` tem exatamente os mesmos arquivos do `667f9a3` (CI verde na execução 43087335438, do PR), a tag foi criada
+> antes de ela terminar. Os links de documento abrem a versão **da tag**
 > (`/blob/v1.0.0-rc3/...`), não a `main`; commits posteriores, como o que completa este índice, não fazem parte da
 > versão avaliada.
 >
@@ -30,9 +31,9 @@ Os artifacts (relatórios para download) das execuções da rc1 e da rc2 já exp
 ## Evidências
 | Evidência | Onde | Situação |
 |---|---|---|
-| Commit avaliado (tag `v1.0.0-rc3`) | [`e4e92c0`](https://github.com/guilhermevianacloud/organizacao-recursos/tree/v1.0.0-rc3) — mesma árvore de arquivos (`0f2aa6a`) do `667f9a3` | pronto |
-| Execução do CI no commit da tag | [execução 43087335438](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/43087335438) (workflow `qualidade`, job `test`, no `667f9a3`, mesmos arquivos da tag): unidade 98, integração 187, 0 falhas, gate do JaCoCo atendido, análise do SonarCloud | pronto (sucesso) |
-| Relatório do JaCoCo (artifact `relatorio-de-cobertura`) | [artifacts da execução 43087335438](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/43087335438#artifacts) (disponíveis até 2027-02-09): 98,0% linhas (583 de 595), 95,0% ramos (134 de 141) | pronto |
+| Commit avaliado (tag `v1.0.0-rc3`) | [`e4e92c0`](https://github.com/guilhermevianacloud/organizacao-recursos/tree/v1.0.0-rc3) | pronto |
+| Execução do CI no commit da tag | [execução 43089789523](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/43089789523) (workflow `qualidade`, job `test`, no próprio `e4e92c0`): unidade 98, integração 187, 0 falhas, gate do JaCoCo atendido; também verde no PR, com os mesmos arquivos ([execução 43087335438](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/43087335438)) | pronto (sucesso) |
+| Relatório do JaCoCo (artifact `relatorio-de-cobertura`) | [artifacts da execução 43089789523](https://github.com/guilhermevianacloud/organizacao-recursos/actions/runs/43089789523#artifacts) (disponíveis até 2027-02-09): 98,0% linhas (583 de 595), 95,0% ramos (134 de 141) | pronto |
 | Quality Gate do SonarCloud | [projeto no SonarCloud, branch `main`](https://sonarcloud.io/project/overview?id=guilhermevianacloud_organizacao-recursos&branch=main): **aprovado**; 0 bugs, 0 code smells; **0 vulnerabilidades abertas, nota de segurança A**; o S4502 (CSRF) foi aceito no SonarCloud em 2026-11-11 (status *Accepted*), com a justificativa do [ADR-007](https://github.com/guilhermevianacloud/organizacao-recursos/blob/v1.0.0-rc3/docs/adr/ADR-007-csrf-desligado.md), risco assumido pelo grupo. O Sonar mostra 97,4% de cobertura porque junta linhas e ramos num número só (ver `docs/relatorio-qualidade.md`, seção 4) | pronto |
 | Resultado de carga | [`docs/performance/resultado-01.md`](https://github.com/guilhermevianacloud/organizacao-recursos/blob/v1.0.0-rc3/docs/performance/resultado-01.md) + [`perf/resultados/rodada-01.jtl`](https://github.com/guilhermevianacloud/organizacao-recursos/blob/v1.0.0-rc3/perf/resultados/rodada-01.jtl) | pronto (não atende a meta proposta: DEF-003, risco assumido) |
 | Matriz de rastreabilidade | [`docs/rtm.md`](https://github.com/guilhermevianacloud/organizacao-recursos/blob/v1.0.0-rc3/docs/rtm.md) | pronto (9 de 9 críticos cobertos) |
