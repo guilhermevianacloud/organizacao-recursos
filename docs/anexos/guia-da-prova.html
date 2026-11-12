@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Guia da prova — Organização de Recursos</title>
+<style>
+  @page { size: A4; margin: 14mm 13mm 16mm 13mm; }
+  :root {
+    --azul: #1d4ed8; --ciano: #0891b2; --tinta: #0f172a; --cinza: #475569; --linha: #e2e8f0;
+    --fundo-azul: #eff6ff; --fundo-verde: #ecfdf5; --verde: #047857; --fundo-amarelo: #fffbeb; --amarelo: #b45309;
+    --fundo-vermelho: #fef2f2; --vermelho: #b91c1c; --fundo-roxo: #f5f3ff; --roxo: #6d28d9;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Segoe UI", system-ui, Arial, sans-serif; color: var(--tinta); font-size: 9.8pt; line-height: 1.42; margin: 0; background: #fff; }
+  h1, h2, h3 { line-height: 1.2; margin: 0; }
+  h2 { font-size: 17pt; color: var(--azul); margin: 0 0 4mm; padding-bottom: 2mm; border-bottom: 3px solid; border-image: linear-gradient(90deg, var(--azul), var(--ciano)) 1; }
+  h3 { font-size: 12pt; margin: 5mm 0 2mm; color: var(--tinta); break-after: avoid; page-break-after: avoid; }
+  h2 { break-after: avoid; page-break-after: avoid; }
+  thead, tr:first-child { break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  ul, ol { margin: 0 0 2.5mm; padding-left: 5mm; }
+  li { margin-bottom: 1mm; }
+  code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.8pt; background: #f1f5f9; padding: 0 1.2mm; border-radius: 1mm; }
+  table { width: 100%; border-collapse: collapse; margin: 1mm 0 3mm; font-size: 9pt; page-break-inside: auto; }
+  tr { page-break-inside: avoid; }
+  th { background: #f1f5f9; text-align: left; font-weight: 600; }
+  th, td { border: 1px solid var(--linha); padding: 1.3mm 2mm; vertical-align: top; }
+  .secao { page-break-before: always; }
+  .num { display: inline-block; background: linear-gradient(135deg, var(--azul), var(--ciano)); color: #fff; border-radius: 50%; width: 9mm; height: 9mm; text-align: center; line-height: 9mm; font-size: 12pt; margin-right: 2mm; }
+  .caixa { border-radius: 2.5mm; padding: 3mm 4mm; margin: 2mm 0 3.5mm; page-break-inside: avoid; }
+  .caixa b.t { display: block; margin-bottom: 1mm; }
+  .ideia { background: var(--fundo-azul); border-left: 4px solid var(--azul); }
+  .prova { background: var(--fundo-roxo); border-left: 4px solid var(--roxo); }
+  .ok { background: var(--fundo-verde); border-left: 4px solid var(--verde); }
+  .alerta { background: var(--fundo-amarelo); border-left: 4px solid var(--amarelo); }
+  .perigo { background: var(--fundo-vermelho); border-left: 4px solid var(--vermelho); }
+  .tag { display: inline-block; font-size: 7.8pt; font-weight: 600; padding: 0.3mm 1.8mm; border-radius: 5mm; white-space: nowrap; }
+  .t-ok { background: #d1fae5; color: var(--verde); }
+  .t-nao { background: #fee2e2; color: var(--vermelho); }
+  .t-risco { background: #fef3c7; color: var(--amarelo); }
+  .grade { display: grid; gap: 3mm; margin: 2mm 0 3mm; }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .g3 { grid-template-columns: 1fr 1fr 1fr; }
+  .g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .cartao { border: 1px solid var(--linha); border-radius: 2.5mm; padding: 2.5mm 3mm; page-break-inside: avoid; }
+  .cartao h4 { margin: 0 0 1mm; font-size: 10pt; color: var(--azul); }
+  .cartao p { margin: 0; font-size: 9pt; color: var(--cinza); }
+  .grande { font-size: 20pt; font-weight: 700; color: var(--azul); line-height: 1.1; }
+  .peq { font-size: 8.5pt; color: var(--cinza); }
+  /* capa */
+  .capa { height: 265mm; display: flex; flex-direction: column; justify-content: space-between; }
+  .faixa { background: linear-gradient(135deg, var(--azul), var(--ciano)); color: #fff; border-radius: 4mm; padding: 14mm 12mm; }
+  .faixa h1 { font-size: 30pt; margin-bottom: 3mm; }
+  .faixa .sub { font-size: 13pt; opacity: .95; }
+  .capa .meta td { border: none; padding: 1mm 0; font-size: 10.5pt; }
+  .capa .meta td:first-child { color: var(--cinza); width: 38mm; }
+  /* diagramas */
+  .fluxo { display: flex; align-items: stretch; gap: 0; margin: 2mm 0 3mm; page-break-inside: avoid; }
+  .fluxo .passo { flex: 1; border: 1.5px solid var(--azul); border-radius: 2mm; padding: 2mm; text-align: center; font-size: 8.8pt; background: #fff; }
+  .fluxo .passo b { display: block; color: var(--azul); font-size: 9.5pt; }
+  .fluxo .seta { align-self: center; padding: 0 1.2mm; color: var(--ciano); font-weight: 700; font-size: 13pt; }
+  .camadas { margin: 2mm 0 3mm; page-break-inside: avoid; }
+  .camada { border-radius: 2mm; padding: 2mm 3mm; margin-bottom: 1.5mm; display: flex; gap: 3mm; align-items: baseline; }
+  .camada b { min-width: 34mm; display: inline-block; }
+  .c1 { background: #dbeafe; } .c2 { background: #e0f2fe; } .c3 { background: #cffafe; } .c4 { background: #ccfbf1; } .c5 { background: #e2e8f0; }
+  .estados { display: flex; gap: 1.5mm; align-items: center; flex-wrap: wrap; margin: 2mm 0; }
+  .est { border-radius: 5mm; padding: 1mm 3mm; font-weight: 600; font-size: 8.8pt; color: #fff; background: var(--azul); }
+  .est.alt { background: #64748b; }
+  .arvore { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.4pt; background: #f8fafc; border: 1px solid var(--linha); border-radius: 2mm; padding: 3mm 4mm; white-space: pre; line-height: 1.38; page-break-inside: avoid; }
+  .rodape-capa { font-size: 8.5pt; color: var(--cinza); }
+  .indice li { margin-bottom: 1.4mm; }
+  .barra { height: 3mm; background: #e2e8f0; border-radius: 2mm; overflow: hidden; margin-top: 1mm; }
+  .barra i { display: block; height: 100%; background: linear-gradient(90deg, var(--azul), var(--ciano)); }
+</style>
+</head>
+<body>
+
+<!-- ============================ CAPA ============================ -->
+<div class="capa">
+  <div>
+    <div class="faixa">
+      <h1>Guia da prova</h1>
+      <div class="sub">Organização de Recursos — o projeto explicado de forma simples, com tudo o que o professor pediu, o que fizemos e como provar.</div>
+    </div>
+    <table class="meta" style="margin-top:8mm">
+      <tr><td>Disciplina</td><td>Qualidade de Software 2026.2 — Senac (prof. Afonso Lelis)</td></tr>
+      <tr><td>Turma</td><td>STADSCAS4NB (quinta-feira)</td></tr>
+      <tr><td>Integrantes</td><td>Guilherme Viana Lopes · Rafael Souza Silva · Gustavo Santana</td></tr>
+      <tr><td>Versão avaliada</td><td>tag <code>v1.0.0-rc3</code> (commit <code>e4e92c0</code>)</td></tr>
+      <tr><td>Repositório</td><td>github.com/guilhermevianacloud/organizacao-recursos</td></tr>
+      <tr><td>Entrega</td><td>12/11/2026 · <b>Prova oral: 19/11/2026</b></td></tr>
+    </table>
+    <div class="caixa ideia" style="margin-top:6mm">
+      <b class="t">Como usar este guia</b>
+      Leia na ordem: em 1 minuto você entende o sistema; depois vê o que foi pedido, como o projeto é montado, os testes, os defeitos e os resultados. A última parte é o treino da prova oral.
+      <br>Caixas <b style="color:var(--roxo)">roxas</b> = <b>o que falar na prova</b>. Caixas <b style="color:var(--amarelo)">amarelas</b> = limite ou cuidado. Todo número vem de um documento do repositório, citado ao lado.
+    </div>
+    <h3>Sumário</h3>
+    <ol class="indice">
+      <li>O projeto em 1 minuto</li>
+      <li>O que o professor pediu × o que fizemos</li>
+      <li>Desmembrando o projeto: linguagem, escopo, estrutura e arquitetura</li>
+      <li>Os testes que fizemos</li>
+      <li>Defeitos encontrados e corrigidos</li>
+      <li>Resultados, riscos e decisão de qualidade</li>
+      <li>Quem fez o quê</li>
+      <li>Preparação para a prova oral</li>
+      <li>Glossário rápido</li>
+    </ol>
+  </div>
+  <div class="rodape-capa">Documento de estudo do grupo, montado a partir dos documentos da pasta <code>docs/</code> e do <code>README.md</code>. Se algum número divergir, vale o documento de origem citado.</div>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<div class="secao">
+<h2><span class="num">1</span>O projeto em 1 minuto</h2>
+
+<div class="grade g3">
+  <div class="cartao"><h4>O problema</h4><p>Reservas em planilha ou e-mail geram a mesma sala, material ou professor alocados duas vezes no mesmo horário, reservas em sala interditada, uso de equipamento caro sem aprovação e nenhum histórico de quem mudou o quê.</p></div>
+  <div class="cartao"><h4>O sistema</h4><p>Um sistema web para reservar <b>salas, professores e materiais sem conflito de horário</b>. Cada reserva aceita é garantida, mesmo quando duas pessoas pedem o mesmo recurso no mesmo instante, e toda mudança fica registrada.</p></div>
+  <div class="cartao"><h4>O que é avaliado</h4><p>Não basta funcionar: é preciso <b>provar com evidência</b> (testes, CI, cobertura, análise estática, carga, rastreabilidade e defeitos registrados).</p></div>
+</div>
+
+<h3>Os três perfis de usuário</h3>
+<table>
+  <tr><th style="width:22%">Perfil</th><th>Quem é</th><th>O que pode fazer no sistema</th></tr>
+  <tr><td><b>Solicitante</b></td><td>professor ou coordenador</td><td>pesquisar recursos livres, reservar, alterar e cancelar <b>as próprias</b> reservas</td></tr>
+  <tr><td><b>Responsável</b></td><td>coordenador de laboratórios</td><td>aprovar ou rejeitar recursos restritos, registrar retirada, devolução e não comparecimento, ver histórico e relatório</td></tr>
+  <tr><td><b>Administrador</b></td><td>secretaria acadêmica</td><td>cadastrar recursos, bloquear para manutenção, ver histórico e relatório</td></tr>
+</table>
+
+<h3>Uma reserva do começo ao fim</h3>
+<div class="fluxo">
+  <div class="passo"><b>1. Login</b>recebe um token (JWT)</div><div class="seta">→</div>
+  <div class="passo"><b>2. Pesquisa</b>filtra por tipo, capacidade, local, competência e horário livre</div><div class="seta">→</div>
+  <div class="passo"><b>3. Reserva</b>nasce SOLICITADA; se o horário já está ocupado → <b>409</b></div><div class="seta">→</div>
+  <div class="passo"><b>4. Aprovação</b>recurso comum: automática · restrito: o Responsável aprova</div><div class="seta">→</div>
+  <div class="passo"><b>5. Uso</b>retirada → EM_USO · devolução → CONCLUÍDA</div>
+</div>
+<p class="peq">Cada passo gera um registro de auditoria imutável e uma notificação (simulada) depois que a mudança é gravada.</p>
+
+<div class="caixa perigo">
+  <b class="t">Os 4 limitadores de nota (o que derruba a nota, mesmo com o resto bom)</b>
+  1) aplicação que não executa · 2) pipeline de CI ausente · 3) falha de autorização · 4) possibilidade de dupla reserva.
+  <br>Por isso o projeto atacou esses quatro <b>primeiro</b>, e cada um tem teste que prova (seção 2).
+</div>
+
+<div class="caixa prova">
+  <b class="t">A frase que resume a disciplina</b>
+  "Uma afirmação de qualidade só vale se aponta para uma evidência e diz o que essa evidência <b>não</b> prova."
+</div>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<div class="secao">
+<h2><span class="num">2</span>O que o professor pediu × o que fizemos</h2>
+<p class="peq">Fonte: especificação do projeto (site do prof. Afonso Lelis), <code>docs/prd.md</code> e <code>docs/status-requisitos.md</code>. Todos os itens abaixo têm teste automatizado verde no CI.</p>
+
+<h3>2.1 Os 14 requisitos funcionais obrigatórios</h3>
+<table>
+  <tr><th style="width:7%">ID</th><th style="width:38%">O que foi pedido</th><th>O que fizemos / teste que prova</th><th style="width:9%"></th></tr>
+  <tr><td>RF-01</td><td>Autenticação e autorização por perfil</td><td>Login com JWT; sem token → 401; perfil errado → 403. <code>MatrizDeAutorizacaoIT</code>, <code>ApiDeReservasIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-02</td><td>Cadastro e consulta de salas, professores e materiais</td><td>Só o Administrador cadastra; dado inválido → 400. Matriz (REC-01 a 04)</td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-03</td><td>Pesquisa por tipo, capacidade, localização, competência e disponibilidade</td><td>5 filtros combináveis. <code>PesquisaDeRecursosIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-04</td><td>Criar, alterar e cancelar reservas</td><td>Cancelar muda o estado, nunca apaga. Matriz (RES-03 a 07), <code>ServicoDeReservasIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-05</td><td>Sobreposição de horários, inclusive na agenda do professor</td><td>Professor é um "recurso"; mesma regra vale para os 3 tipos. <code>IntervaloTest</code>, <code>ServicoDeReservasIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-06</td><td>Proteção contra dupla reserva simultânea</td><td>20 pedidos ao mesmo tempo → 1 aceito. <code>DuplaReservaConcorrenciaIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-07</td><td>Aprovação obrigatória de recursos restritos</td><td>Restrito fica SOLICITADA até o Responsável aprovar. BDD + matriz (RES-08)</td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-08</td><td>Bloqueio de recursos em manutenção</td><td>Pedido no período da manutenção é recusado; fronteiras testadas ao segundo</td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-09</td><td>Retirada e devolução de materiais</td><td>Retirada → EM_USO; devolução → CONCLUÍDA; ambas auditadas</td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-10</td><td>Histórico auditável</td><td>Registro imutável na mesma transação. <code>AuditoriaIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-11</td><td>Notificação simulada ou API externa</td><td>Provedor HTTP testado com WireMock; falha não desfaz a reserva. <code>NotificadorHttpIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-12</td><td>Relatório de utilização, carga horária e conflitos evitados</td><td>Valores conferidos à mão no teste. <code>RelatorioDeUtilizacaoIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-13</td><td>Interface responsiva e mensagens compreensíveis</td><td>Interface web; sem rolagem lateral em 360 px; erros em português. <code>InterfaceE2EIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+  <tr><td>RF-14</td><td>Documentação da API ou dos fluxos</td><td>OpenAPI/Swagger em <code>/swagger-ui.html</code> + README. <code>DocumentacaoDaApiIT</code></td><td><span class="tag t-ok">feito</span></td></tr>
+</table>
+
+<h3>2.2 As regras críticas</h3>
+<table>
+  <tr><th style="width:9%">Regra</th><th>O que diz</th><th style="width:40%">Teste que prova</th></tr>
+  <tr><td>RN-01</td><td>O término deve ser depois do início</td><td><code>IntervaloTest</code>, <code>ApiDeReservasIT</code></td></tr>
+  <tr><td>RN-02</td><td>Reservas ativas do mesmo recurso não se sobrepõem (sala, material, professor)</td><td><code>IntervaloTest</code>, <code>ServicoDeReservasIT</code></td></tr>
+  <tr><td>RN-03</td><td>Dois pedidos simultâneos → uma única reserva aceita</td><td><code>DuplaReservaConcorrenciaIT</code>, <code>ProtecaoNoBancoIT</code></td></tr>
+  <tr><td>RN-04</td><td>Recurso em manutenção não pode ser reservado</td><td><code>ServicoDeReservasIT</code>, BDD</td></tr>
+  <tr><td>RN-05 / 06</td><td>Só o Responsável aprova restrito; quem pediu não aprova a própria</td><td>BDD, matriz, <code>ServicoDeReservasTest</code></td></tr>
+  <tr><td>RN-07</td><td>Só as transições de estado permitidas</td><td><code>EstadoReservaTest</code> (49 pares), BDD</td></tr>
+  <tr><td>RN-08</td><td>Reserva iniciada não pode ser apagada</td><td><code>ReservaTest</code>, <code>AuditoriaIT</code></td></tr>
+  <tr><td>RN-09</td><td>Toda mudança de estado gera auditoria</td><td><code>AuditoriaIT</code></td></tr>
+  <tr><td>RN-10</td><td>Solicitante só mexe nas próprias reservas</td><td><code>MatrizDeAutorizacaoIT</code> (IDOR)</td></tr>
+</table>
+
+<h3>2.3 Estratégia obrigatória de qualidade</h3>
+<table>
+  <tr><th style="width:38%">Pedido do professor</th><th>Como cumprimos</th></tr>
+  <tr><td>Unitários JUnit 5, parametrizados, integração, API caixa-preta e end-to-end</td><td>98 testes de unidade + 187 de integração/API/BDD/E2E (seção 4)</td></tr>
+  <tr><td>Banco em container (Testcontainers) e WireMock</td><td>PostgreSQL 17 real nos testes; WireMock no provedor de notificação</td></tr>
+  <tr><td>Teste automatizado de concorrência</td><td><code>DuplaReservaConcorrenciaIT</code>: 20 pedidos simultâneos, 5 repetições</td></tr>
+  <tr><td>TDD ou BDD com evidência</td><td>Os dois: commits <code>test(red)</code> → <code>feat(green)</code> e 18 cenários Cucumber</td></tr>
+  <tr><td>GitHub Actions em PR, JaCoCo e SonarCloud</td><td>Workflow <code>qualidade</code>; gate 80/70; Quality Gate aprovado</td></tr>
+  <tr><td>JMeter, autorização, validação e erro seguro</td><td>Rodada de carga; matriz com 88 células; 400 com mensagem; erro sem detalhe interno</td></tr>
+  <tr><td>Mock só em unidade isolada</td><td>Mockito só em <code>ServicoDeReservasTest</code>; o resto usa banco real</td></tr>
+</table>
+
+<h3>2.4 Metas mensuráveis</h3>
+<div class="grade g4">
+  <div class="cartao"><p>Cobertura de linhas (meta 80%)</p><div class="grande">98,0%</div><div class="barra"><i style="width:98%"></i></div><p>583 de 595 · <span class="tag t-ok">atingida</span></p></div>
+  <div class="cartao"><p>Cobertura de ramos (meta 70%)</p><div class="grande">95,0%</div><div class="barra"><i style="width:95%"></i></div><p>134 de 141 · <span class="tag t-ok">atingida</span></p></div>
+  <div class="cartao"><p>Críticos na RTM (meta 100%)</p><div class="grande">9 de 9</div><div class="barra"><i style="width:100%"></i></div><p>com teste e mutação · <span class="tag t-ok">atingida</span></p></div>
+  <div class="cartao"><p>Bugs/vulnerabilidades críticas (meta 0)</p><div class="grande">0</div><div class="barra"><i style="width:100%"></i></div><p>Quality Gate aprovado, segurança A · <span class="tag t-ok">atingida</span></p></div>
+</div>
+</div>
+
+<div>
+<h3>2.5 Os 12 entregáveis da especificação</h3>
+<table>
+  <tr><th style="width:42%">Entregável pedido</th><th>Onde está no repositório</th></tr>
+  <tr><td>Repositório com histórico e revisão por pares</td><td>GitHub, pull requests #1 a #26; o Rafael aprovou o PR #25</td></tr>
+  <tr><td>Aplicação executável e instruções de instalação</td><td><code>README.md</code> (testado em clone limpo: <code>docs/entrega/checklist.md</code>)</td></tr>
+  <tr><td>README e documentação da API/fluxos</td><td><code>README.md</code> + Swagger (<code>/swagger-ui.html</code>)</td></tr>
+  <tr><td>RTM ligando requisito, risco, teste e evidência</td><td><code>docs/rtm.md</code> (e <code>RTM.md</code> na raiz apontando para ela)</td></tr>
+  <tr><td>Diagramas de contexto, componentes e sequências</td><td><code>docs/arquitetura.md</code> (C4 níveis 1–3, modelo de dados, 2 sequências)</td></tr>
+  <tr><td>Plano, suíte automatizada e relatório de testes</td><td><code>docs/plano-de-teste.md</code>, <code>src/test/</code>, <code>docs/relatorio-qualidade.md</code></td></tr>
+  <tr><td>Pipeline de integração contínua</td><td><code>.github/workflows/ci.yml</code></td></tr>
+  <tr><td>Relatórios do SonarCloud e do JaCoCo</td><td>SonarCloud (branch <code>main</code>) + artifact <code>relatorio-de-cobertura</code> do CI</td></tr>
+  <tr><td>Plano e resultado do teste de carga</td><td><code>perf/reservas.jmx</code>, <code>docs/performance/resultado-01.md</code>, <code>.jtl</code> versionado</td></tr>
+  <tr><td>Registro de defeitos priorizados e corrigidos</td><td><code>docs/defeitos/</code> (DEF-001 a 006) + issues com rótulo <code>bug</code></td></tr>
+  <tr><td>Relatório final de qualidade</td><td><code>docs/relatorio-qualidade.md</code> + <code>docs/decisao-qualidade.md</code></td></tr>
+  <tr><td>Apresentação e demonstração</td><td>Prova oral em 19/11; roteiro em <code>docs/prova-oral/ensaio.md</code></td></tr>
+</table>
+
+<h3>2.6 Aula por aula: o que cada aula pediu e o que entrou no projeto</h3>
+<table>
+  <tr><th style="width:9%">Aula</th><th style="width:30%">Tema</th><th>O que fizemos no projeto (arquivo)</th></tr>
+  <tr><td>01</td><td>Introdução à qualidade</td><td>Vocabulário usado em tudo: qualidade, verificação × validação, erro → defeito → falha, ISO 25010</td></tr>
+  <tr><td>02</td><td>ATAM e casos de teste</td><td>Plano de teste no formato ISO 29119-3 (<code>docs/plano-de-teste.md</code>); cenários de qualidade em 6 partes</td></tr>
+  <tr><td>03</td><td>Caixa branca × preta; requisitos com IA</td><td>PRD com personas, escopos, 14 RF, 14 RNF com número e regras (<code>docs/prd.md</code>)</td></tr>
+  <tr><td>04</td><td>Arquitetura e ATAM com IA</td><td>C4, utility tree, riscos, trade-offs e ADRs (<code>docs/arquitetura.md</code>, <code>docs/adr/</code>)</td></tr>
+  <tr><td>05</td><td>Gestão de erros; TDD fase red</td><td>Inventário de testes por regra (<code>docs/testes/plano-tdd.md</code>); registro de defeitos</td></tr>
+  <tr><td>06</td><td>Testes em CI; TDD green; 1º ATAM</td><td>GitHub Actions com quebra intencional e reversão (PR #1); ciclo ATAM 01</td></tr>
+  <tr><td>07</td><td>JUnit 5 + JaCoCo + SonarCloud</td><td>Gate 80/70 no <code>verify</code>; SonarCloud no workflow (DEF-004)</td></tr>
+  <tr><td>08</td><td>WireMock e APIs seguras</td><td>Notificação por porta + adaptador; matriz de falhas INT-01 a 06 (ADR-005)</td></tr>
+  <tr><td>09</td><td>TDD e BDD</td><td>Aprovação e bloqueio em Cucumber (<code>aprovacao-bloqueio.feature</code>); evidência red/green</td></tr>
+  <tr><td>10</td><td>Carga e concorrência</td><td>20 pedidos simultâneos; JMeter (<code>docs/performance/</code>); DEF-001, 002 e 003</td></tr>
+  <tr><td>11</td><td>Auditoria e relatórios</td><td>Auditoria na mesma transação; relatório de utilização; status dos requisitos</td></tr>
+  <tr><td>12</td><td>Autorização e RTM</td><td>Matriz de autorização lida pelo teste; RTM fechada; mutação manual (11 de 11)</td></tr>
+  <tr><td>13</td><td>Preparação para a prova oral</td><td>Relatório de qualidade; banco de 15 perguntas (<code>docs/prova-oral/</code>)</td></tr>
+  <tr><td>14</td><td>Entrega final</td><td>Tag <code>v1.0.0-rc3</code>, índice de evidências, checklist em clone limpo, decisão de qualidade</td></tr>
+</table>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<div class="secao">
+<h2><span class="num">3</span>Desmembrando o projeto</h2>
+
+<h3>3.1 Linguagem e ferramentas (a "stack")</h3>
+<table>
+  <tr><th style="width:23%">Peça</th><th style="width:37%">O que é, em uma frase</th><th>Por que usamos</th></tr>
+  <tr><td><b>Java 21</b></td><td>A linguagem de programação do sistema</td><td>Exigida pela especificação</td></tr>
+  <tr><td><b>Spring Boot 3.5.16</b></td><td>Framework que já traz servidor web, segurança e acesso a banco prontos</td><td>Exigido "Spring Boot 3.x" (ADR-001)</td></tr>
+  <tr><td><b>PostgreSQL 17</b></td><td>O banco de dados</td><td>Tem o recurso que impede a dupla reserva (exclusion constraint)</td></tr>
+  <tr><td><b>Flyway</b></td><td>Cria e atualiza as tabelas por scripts numerados (V1 a V4)</td><td>O banco fica igual em toda máquina</td></tr>
+  <tr><td><b>Docker</b></td><td>Roda o PostgreSQL num "container", sem instalar o banco</td><td>Aplicação e testes sobem o banco sozinhos</td></tr>
+  <tr><td><b>Maven Wrapper</b></td><td>Compila e roda os testes (<code>./mvnw</code>)</td><td>Não precisa instalar o Maven</td></tr>
+  <tr><td><b>Spring Security + JWT</b></td><td>Login que devolve um "crachá" digital (token) com validade de 60 min</td><td>Cada pedido mostra o token (ADR-003)</td></tr>
+  <tr><td><b>HTML + CSS + JavaScript</b></td><td>A interface, servida pela própria aplicação</td><td>Um único programa para subir (ADR-006)</td></tr>
+</table>
+
+<div class="caixa ideia">
+  <b class="t">Como rodar (o professor segue só o README)</b>
+  Precisa de <b>JDK 21</b> e <b>Docker</b> ligado. Testes: <code>./mvnw -B verify</code> (no Windows, <code>.\mvnw.cmd -B verify</code>). Aplicação: <code>./mvnw spring-boot:run</code> e abrir <code>http://localhost:8080</code>. Usuários de demonstração: <code>solicitante@demo.invalid</code>, <code>responsavel@demo.invalid</code> e <code>admin@demo.invalid</code>; a senha de demonstração está no README.
+</div>
+
+<h3>3.2 Escopo: o que está dentro e o que ficou fora</h3>
+<div class="grade g2">
+  <div class="caixa ok" style="margin:0"><b class="t">Dentro (5 escopos)</b>
+    E1 Identidade e acesso (login, perfis, posse)<br>
+    E2 Recursos (cadastro e pesquisa)<br>
+    E3 Reservas e agenda (sobreposição, dupla reserva)<br>
+    E4 Aprovação, manutenção e materiais<br>
+    E5 Auditoria, relatórios e notificações</div>
+  <div class="caixa alerta" style="margin:0"><b class="t">Fora (decisão do grupo, no PRD)</b>
+    Integração com o sistema acadêmico real e login institucional · envio real de e-mail/SMS (notificação simulada) · reservas recorrentes e lista de espera · aplicativo nativo (a web é responsiva) · cobrança ou multa</div>
+</div>
+
+<h3>3.3 Estrutura de pastas</h3>
+<div class="arvore">organizacao-recursos/
+├── README.md, CHANGELOG.md, RTM.md      → como rodar, versões, atalho para a RTM
+├── compose.yaml                         → PostgreSQL em container para rodar a aplicação
+├── .github/workflows/ci.yml             → o pipeline de CI (workflow "qualidade")
+├── perf/                                → plano do JMeter (reservas.jmx) e resultado (rodada-01.jtl)
+├── docs/                                → toda a documentação (PRD, arquitetura, testes, defeitos, RTM...)
+└── src/
+    ├── main/java/br/senac/organizacaorecursos/
+    │   ├── api/            → controllers REST (Autenticacao, Recurso, Reserva, Manutencao, Relatorio) e erros
+    │   ├── seguranca/      → Spring Security, geração e leitura do token JWT
+    │   ├── servico/        → regras de uso: ServicoDeReservas, Recursos, Manutencao, Relatorios
+    │   ├── dominio/        → o "coração": Intervalo, EstadoReserva, Reserva, Recurso, Auditoria
+    │   ├── persistencia/   → repositórios JPA (conversa com o banco)
+    │   ├── notificacao/    → porta Notificador + adaptadores HTTP e simulado
+    │   └── configuracao/   → relógio (Clock) e dados de demonstração
+    ├── main/resources/     → db/migration (V1 a V4) e static (telas: HTML, CSS, JS)
+    └── test/               → 21 arquivos Java de teste + o arquivo .feature do BDD</div>
+</div>
+
+<div>
+<h3>3.4 Arquitetura em camadas (de cima para baixo)</h3>
+<div class="camadas">
+  <div class="camada c1"><b>Navegador</b> telas (Agenda do dia, Nova reserva, Minhas reservas, Aprovações, Recursos, Manutenção, Relatório)</div>
+  <div class="camada c2"><b>api + seguranca</b> recebe o pedido HTTP, confere o token e o perfil, valida a entrada, devolve erro em português (ProblemDetail)</div>
+  <div class="camada c3"><b>servico</b> executa o caso de uso: reservar, aprovar, cancelar, retirar, devolver; grava a auditoria na mesma transação</div>
+  <div class="camada c4"><b>dominio</b> regras puras: sobreposição de intervalos e transições de estado (as mais testadas)</div>
+  <div class="camada c5"><b>persistencia / notificacao</b> banco PostgreSQL (com a trava e a constraint) e o envio de aviso para fora</div>
+</div>
+
+<div class="grade g2">
+  <div class="cartao"><h4>C4 nível 1 — Contexto</h4><p>Os 3 perfis usam o sistema; o sistema avisa um provedor de notificação externo (simulado) por HTTP.</p></div>
+  <div class="cartao"><h4>C4 nível 2 — Contêineres</h4><p>Só 2 peças: a aplicação Spring Boot (API + telas) e o PostgreSQL. O banco é o ponto único de verdade sobre conflitos.</p></div>
+</div>
+
+<h3>3.5 Os dados (tabelas)</h3>
+<p><b>usuario</b> (perfil, senha com hash BCrypt) · <b>recurso</b> (tipo SALA, MATERIAL ou PROFESSOR, capacidade, local, competências, restrito) · <b>reserva</b> (recurso, solicitante, início, término, estado) · <b>manutencao</b> · <b>auditoria_reserva</b> (quem, quando, estado anterior → novo, motivo) · <b>tentativa_recusada</b> (cada 409, para contar os "conflitos evitados" no relatório).</p>
+<div class="caixa ideia"><b class="t">Ideia-chave: professor também é "recurso"</b>Sala, material e professor ficam na mesma tabela, com um campo <code>tipo</code>. Assim <b>uma só regra</b> de sobreposição protege os três, e a "agenda do professor" (RF-05) sai de graça.</div>
+
+<h3>3.6 Máquina de estados da reserva</h3>
+<div class="estados">
+  <span class="est">SOLICITADA</span><span>→</span><span class="est">APROVADA</span><span>→</span><span class="est">EM_USO</span><span>→</span><span class="est">CONCLUIDA</span>
+  <span style="margin-left:4mm" class="peq">alternativos:</span><span class="est alt">REJEITADA</span><span class="est alt">CANCELADA</span><span class="est alt">NAO_COMPARECEU</span>
+</div>
+<p>Toda reserva nasce SOLICITADA. Recurso comum é aprovado automaticamente; restrito espera o Responsável. Estados finais não mudam mais. Só <b>SOLICITADA, APROVADA e EM_USO ocupam</b> o recurso (cancelada não bloqueia a sala). O teste <code>EstadoReservaTest</code> confere os <b>49 pares</b> possíveis (7 estados × 7).</p>
+
+<h3>3.7 Como a dupla reserva é impedida (a parte mais cobrada)</h3>
+<div class="fluxo">
+  <div class="passo"><b>A e B</b>pedem a sala 101 no mesmo instante</div><div class="seta">→</div>
+  <div class="passo"><b>Trava</b><code>SELECT ... FOR UPDATE</code> no recurso: B espera A terminar</div><div class="seta">→</div>
+  <div class="passo"><b>A grava</b>reserva + auditoria; COMMIT → 201</div><div class="seta">→</div>
+  <div class="passo"><b>B confere</b>vê o conflito → ROLLBACK → 409 e grava a tentativa recusada</div>
+</div>
+<p><b>Duas camadas (ADR-002):</b> a <b>trava por recurso</b> faz os pedidos esperarem a vez (evita deadlock) e a <b>exclusion constraint</b> no PostgreSQL é a garantia final: o banco recusa duas linhas do mesmo recurso com horários que se cruzam, mesmo que alguém grave direto por SQL.</p>
+<div class="caixa prova"><b class="t">Na prova</b>"Verificar no código se a sala está livre não basta: entre verificar e gravar, outro pedido entra. <code>synchronized</code> também não basta, porque protege uma instância da aplicação, não várias. O banco é o único ponto que todos compartilham."</div>
+</div>
+
+<div>
+<h3>3.8 As 7 decisões de arquitetura (ADRs)</h3>
+<table>
+  <tr><th style="width:10%">ADR</th><th style="width:32%">Decisão</th><th>Por quê / custo</th></tr>
+  <tr><td>001</td><td>Spring Boot 3.5.16</td><td>Especificação pede 3.x. Custo: a versão está fora do suporte gratuito (risco assumido)</td></tr>
+  <tr><td>002</td><td>Trava por recurso + exclusion constraint</td><td>Garante 1 reserva por horário. Custo: fila no pico (DEF-003)</td></tr>
+  <tr><td>003</td><td>Autenticação por JWT (60 min)</td><td>Sem sessão no servidor. Custo: token não pode ser cancelado antes de vencer</td></tr>
+  <tr><td>004</td><td>Intervalos semiabertos <code>[início, término)</code></td><td>8h–10h e 10h–12h <b>não</b> conflitam (encostam, mas não se cruzam)</td></tr>
+  <tr><td>005</td><td>Notificação por porta + adaptador HTTP</td><td>Envio depois do commit, com timeout de 2 s: falha externa não desfaz reserva</td></tr>
+  <tr><td>006</td><td>Interface HTML/CSS/JS servida pelo Spring; E2E com Playwright</td><td>Um único programa para subir; teste da interface em navegador real</td></tr>
+  <tr><td>007</td><td>CSRF desligado</td><td>API sem cookie (token no cabeçalho). Custo: se um dia usar cookie, precisa religar</td></tr>
+</table>
+
+<h3>3.9 Avaliação da arquitetura (ATAM)</h3>
+<div class="grade g2">
+  <div class="cartao"><h4>Ponto de sensibilidade</h4><p>O operador <code>&lt;</code> × <code>&lt;=</code> na sobreposição decide sozinho se reservas encostadas conflitam (mutação M1 prova).</p></div>
+  <div class="cartao"><h4>Ponto de trade-off</h4><p>A trava melhora a <b>integridade</b> e piora a <b>latência</b> no pico (medido no DEF-003). Cache de disponibilidade: descartado, poderia mostrar livre uma sala já ocupada.</p></div>
+  <div class="cartao"><h4>Riscos tratados</h4><p>R-01 constraint contando canceladas (só estados que ocupam) · R-02 IDOR (posse no serviço) · R-03 notificação dentro da transação (envio depois do commit).</p></div>
+  <div class="cartao"><h4>Não-risco</h4><p>Queda do provedor de notificação não afeta reservas: o envio é fora da transação e com timeout.</p></div>
+</div>
+<p class="peq">Fontes: <code>docs/arquitetura.md</code> (seção 11) e <code>docs/avaliacao-arquitetural/ciclo-01.md</code>, que refez a análise sobre o código pronto.</p>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<div class="secao">
+<h2><span class="num">4</span>Os testes que fizemos</h2>
+
+<div class="grade g4">
+  <div class="cartao"><p>Testes automatizados</p><div class="grande">285</div><p>0 falhas no CI</p></div>
+  <div class="cartao"><p>Unidade</p><div class="grande">98</div><p>JUnit 5, AssertJ, Mockito</p></div>
+  <div class="cartao"><p>Integração, API, BDD, E2E</p><div class="grande">187</div><p>banco real (Testcontainers)</p></div>
+  <div class="cartao"><p>Pedidos na carga</p><div class="grande">18.899</div><p>JMeter, 0 erro real</p></div>
+</div>
+
+<h3>4.1 Tipos de teste: a pergunta que cada um responde</h3>
+<table>
+  <tr><th style="width:17%">Tipo</th><th style="width:28%">Pergunta</th><th style="width:20%">Ferramenta</th><th>Exemplo no projeto</th></tr>
+  <tr><td>Unidade</td><td>A regra isolada está certa?</td><td>JUnit 5, AssertJ</td><td><code>IntervaloTest</code>: sobreposição com limites −1 / 0 / +1 segundo</td></tr>
+  <tr><td>Parametrizado</td><td>Vale para a tabela inteira de casos?</td><td><code>@ParameterizedTest</code></td><td><code>EstadoReservaTest</code> (49 pares); matriz de autorização célula a célula</td></tr>
+  <tr><td>Mock (unidade)</td><td>O serviço decide certo sem banco?</td><td>Mockito</td><td><code>ServicoDeReservasTest</code> (ex.: quem pediu não aprova)</td></tr>
+  <tr><td>Integração</td><td>As peças funcionam juntas com o banco real?</td><td>Testcontainers</td><td><code>AuditoriaIT</code>: rollback não deixa auditoria órfã</td></tr>
+  <tr><td>Concorrência</td><td>Resiste a pedidos simultâneos?</td><td><code>ExecutorService</code> + <code>CountDownLatch</code></td><td><code>DuplaReservaConcorrenciaIT</code>: 20 → 1 aceito + 19 com 409, 5 vezes; também na agenda do professor</td></tr>
+  <tr><td>Banco</td><td>O banco barra sozinho?</td><td>SQL direto</td><td><code>ProtecaoNoBancoIT</code>: a constraint recusa sobreposição mesmo sem a aplicação</td></tr>
+  <tr><td>API caixa-preta</td><td>O contrato HTTP está certo?</td><td>MockMvc</td><td><code>RelatorioDeUtilizacaoIT</code> com valores calculados à mão; erro sem detalhe interno</td></tr>
+  <tr><td>Segurança</td><td>Cada perfil só faz o que pode?</td><td>MockMvc parametrizado</td><td><code>MatrizDeAutorizacaoIT</code>: <b>88 células</b>, inclusive IDOR</td></tr>
+  <tr><td>Integração externa</td><td>E se o provedor falhar?</td><td>WireMock</td><td><code>NotificadorHttpIT</code>: INT-01 a 06 (200, 404, 500, timeout, JSON ruim, segredo fora do log)</td></tr>
+  <tr><td>BDD</td><td>A regra de negócio escrita é a que roda?</td><td>Cucumber</td><td><code>aprovacao-bloqueio.feature</code>: 18 cenários Dado/Quando/Então</td></tr>
+  <tr><td>Ponta a ponta</td><td>O fluxo funciona pela tela?</td><td>Playwright (Chromium)</td><td><code>InterfaceE2EIT</code>: 8 testes (login → reservar → aprovar, 360 px, campos vazios)</td></tr>
+  <tr><td>Documentação</td><td>A API está documentada e pública?</td><td>MockMvc</td><td><code>DocumentacaoDaApiIT</code>: OpenAPI e Swagger sem login</td></tr>
+  <tr><td>Carga</td><td>O desempenho atende à meta?</td><td>JMeter 5.6.3</td><td>50 usuários, 70 s (4.6)</td></tr>
+  <tr><td>Mutação manual</td><td>O teste protege mesmo a regra?</td><td>script + <code>git restore</code></td><td>11 de 11 quebras detectadas (4.7)</td></tr>
+  <tr><td>Exploratório</td><td>O que o uso real revela?</td><td>navegador</td><td>O Guilherme achou o DEF-005 usando o sistema</td></tr>
+</table>
+
+<div class="caixa prova"><b class="t">Mock × Testcontainers (pergunta clássica)</b>Mock só em unidade isolada, como manda a especificação: é rápido e alcança caminhos difíceis. Banco, transação e constraint são testados com <b>PostgreSQL real</b> (Testcontainers). <b>Não usamos H2</b>: ele não tem <code>tstzrange</code> nem exclusion constraint, então o teste passaria num banco diferente do real.</div>
+</div>
+
+<div>
+<h3>4.2 TDD: o teste antes do código</h3>
+<p>Ciclo <b>red</b> (o teste falha pela razão certa) → <b>green</b> (código mínimo até passar). Os commits <code>test(red)</code> e <code>feat(green)</code> mostram isso no histórico. Fonte: <code>docs/testes/evidencia-tdd.md</code>.</p>
+<table>
+  <tr><th>Ciclo</th><th style="width:16%">Commit red</th><th style="width:28%">Saída no red</th><th style="width:16%">Commit green</th></tr>
+  <tr><td>RN-01 e RN-02 (<code>IntervaloTest</code>)</td><td><code>57ee0cf</code></td><td>13 testes, 8 falhas</td><td><code>b18d2f1</code></td></tr>
+  <tr><td>RN-07 transições, RN-08 (<code>EstadoReservaTest</code>, <code>ReservaTest</code>)</td><td><code>a711262</code></td><td>85 testes, 55 falhas</td><td><code>06cd9c3</code></td></tr>
+  <tr><td>RN-02 no banco, RN-04 manutenção</td><td><code>cbd0394</code></td><td>17 testes, 8 falhas</td><td><code>3151b6d</code></td></tr>
+  <tr><td>RN-03 20 pedidos simultâneos</td><td><code>f68d7f4</code></td><td>"aceitos: esperado 1, foi 10"</td><td><code>152c20e</code></td></tr>
+  <tr><td>Segurança e API (matriz)</td><td><code>407bd67</code></td><td>86 testes, 67 falhas</td><td><code>aa60caa</code></td></tr>
+</table>
+<div class="caixa alerta"><b class="t">Dizer com honestidade</b>O prompt da Aula 09 pede um teste por vez; nós escrevemos vários testes da mesma regra num commit vermelho e conferimos a falha de cada um. Não houve commit <code>refactor</code> porque o código verde não teve duplicação. Está declarado no próprio documento.</div>
+
+<h3>4.3 BDD com Cucumber</h3>
+<p>Arquivo <code>src/test/resources/features/aprovacao-bloqueio.feature</code>: aprovação de restrito, bloqueio por manutenção (com tabela de fronteiras) e transições, inclusive REJEITADA e NAO_COMPARECEU. São <b>18 cenários</b>. Eles foram escritos depois das regras feitas por TDD e passaram na primeira execução, e isso está declarado.</p>
+
+<h3>4.4 Matriz de autorização</h3>
+<p><code>docs/seguranca/matriz-autorizacao.md</code> é uma tabela operação × perfil (anônimo, Solicitante, Responsável, Administrador) com o código esperado (200, 201, 401, 403). O teste <b>lê a própria tabela</b> e executa as 88 células com token real. Mudou a matriz, mudou o teste.</p>
+<div class="grade g2">
+  <div class="cartao"><h4>401 Unauthorized</h4><p>Não está logado (sem token ou token adulterado/vencido).</p></div>
+  <div class="cartao"><h4>403 Forbidden</h4><p>Está logado, mas o perfil não pode (ex.: Solicitante aprovando).</p></div>
+</div>
+<p><b>IDOR</b> = trocar o id na URL para mexer na reserva de outro. Células RES-06 e RES-07: o Solicitante tenta cancelar ou alterar a reserva de outro → <b>403</b>.</p>
+
+<h3>4.5 CI, cobertura e análise estática</h3>
+<ul>
+  <li><b>GitHub Actions</b> (workflow <code>qualidade</code>, job <code>test</code>): a cada pull request e a cada push na <code>main</code>, roda <code>./mvnw -B verify</code> num servidor limpo. Os relatórios ficam guardados 90 dias.</li>
+  <li><b>Por que <code>verify</code> e não <code>test</code>:</b> o <code>verify</code> roda também os testes de integração e o <b>gate</b> do JaCoCo.</li>
+  <li><b>Branch protection:</b> a <code>main</code> só aceita merge com o CI verde. Prova da Aula 06 (PR #1): a execução 41207912465 ficou <b>vermelha de propósito</b> e voltou a verde com <code>git revert</code>.</li>
+  <li><b>JaCoCo:</b> o build <b>falha</b> abaixo de 80% de linhas ou 70% de ramos (provado subindo a meta para 99%).</li>
+  <li><b>SonarCloud:</b> a 1ª análise achou 12 apontamentos (DEF-004); 11 foram corrigidos e 1 (S4502, CSRF) foi justificado no ADR-007 e aceito. Resultado: Quality Gate aprovado, nota de segurança A.</li>
+</ul>
+<div class="caixa alerta"><b class="t">97,4% no Sonar × 98,0%/95,0% no JaCoCo</b>É o mesmo relatório. O Sonar junta linhas e ramos num número só: (583 + 134) ÷ (595 + 141) = 717 ÷ 736 = 97,4%.</div>
+</div>
+
+<div>
+<h3>4.6 Teste de carga com JMeter</h3>
+<p>A meta foi escrita <b>antes</b> de medir (<code>docs/performance/rnf.md</code>). Carga: 50 usuários, 70 s, 70% consultas e 30% criações, <b>todos disputando a mesma sala e o mesmo horário</b> (pior caso de propósito).</p>
+<table>
+  <tr><th>Operação</th><th>Pedidos</th><th>p95</th><th>Meta</th><th>Respostas</th><th>Erro real</th></tr>
+  <tr><td>Consulta de disponibilidade</td><td>13.197</td><td><b>332 ms</b></td><td>≤ 300 ms <span class="tag t-nao">não atende</span></td><td>200 = 13.197</td><td>0%</td></tr>
+  <tr><td>Criação de reserva</td><td>5.652</td><td><b>506 ms</b></td><td>≤ 300 ms <span class="tag t-nao">não atende</span></td><td>201 = 1 · 409 = 5.651</td><td>0%</td></tr>
+  <tr><td>Integridade (RN-03)</td><td colspan="5">1 reserva aceita em 5.652 tentativas; 5.651 tentativas recusadas gravadas no banco <span class="tag t-ok">atende</span></td></tr>
+</table>
+<div class="grade g2">
+  <div class="caixa ideia" style="margin:0"><b class="t">p95 em português</b>95% dos pedidos foram mais rápidos que esse valor. É mais honesto que a média, que esconde os lentos.</div>
+  <div class="caixa ideia" style="margin:0"><b class="t">Por que 409 não é erro</b>Na disputa pela mesma sala, recusar com 409 é o comportamento <b>correto</b>. Erro real seria 500 ou falha de asserção: zero.</div>
+</div>
+<div class="caixa alerta"><b class="t">Limites (o que o p95 NÃO permite afirmar)</b>Foi medido numa máquina local, com o JMeter na mesma máquina, numa única rodada e com um único usuário no CSV. <b>Não diz nada sobre produção.</b> A causa provável é a fila na trava do recurso, mas ainda é hipótese (DEF-003).</div>
+
+<h3>4.7 Mutação manual: "o teste protege mesmo?"</h3>
+<p>Quebramos cada regra crítica <b>de propósito</b>, rodamos os testes e desfizemos com <code>git restore</code>. Se o teste continuasse verde, seria uma lacuna. Para reproduzir: <code>sh scripts/mutacao-manual.sh M5</code>.</p>
+<table>
+  <tr><th style="width:7%">#</th><th style="width:22%">Regra</th><th>Quebra feita</th><th style="width:27%">Teste que pegou</th></tr>
+  <tr><td>M1</td><td>Sobreposição</td><td><code>&lt;</code> trocado por <code>&lt;=</code></td><td><code>IntervaloTest</code></td></tr>
+  <tr><td>M2</td><td>Dupla reserva</td><td>tirou a trava e a constraint</td><td><code>DuplaReservaConcorrenciaIT</code>, <code>ProtecaoNoBancoIT</code></td></tr>
+  <tr><td>M3</td><td>Aprovação de restrito</td><td>todo recurso aprovado na criação</td><td><code>ReservaTest</code>, BDD</td></tr>
+  <tr><td>M4</td><td>Manutenção</td><td>verificação removida</td><td><code>ServicoDeReservasIT</code>, BDD</td></tr>
+  <tr><td>M5</td><td>Posse (IDOR)</td><td>conferência do dono removida</td><td>Matriz (RES-06, RES-07)</td></tr>
+  <tr><td>M6</td><td>Perfil que aprova</td><td><code>@PreAuthorize</code> removido</td><td>Matriz (RES-08)</td></tr>
+  <tr><td>M7</td><td>Auditoria</td><td>gravação removida</td><td><code>AuditoriaIT</code></td></tr>
+  <tr><td>M8</td><td>Estados</td><td>SOLICITADA → EM_USO liberado</td><td><code>EstadoReservaTest</code>, <code>ReservaTest</code></td></tr>
+  <tr><td>M9</td><td>Término após início</td><td>duração zero aceita</td><td><code>IntervaloTest</code></td></tr>
+  <tr><td>M10</td><td>Reserva iniciada</td><td>pode ser apagada</td><td><code>ReservaTest</code></td></tr>
+  <tr><td>M11</td><td>Quem pediu não aprova</td><td>conferência removida</td><td><code>ServicoDeReservasTest</code></td></tr>
+</table>
+<div class="caixa ok"><b class="t">Resultado: 11 de 11 detectadas</b>As 9 regras críticas da RTM têm teste que pega a quebra (100%).</div>
+<div class="caixa prova"><b class="t">Na prova: "cobertura de 98% prova o quê?"</b>Prova que o código <b>rodou</b> nos testes, não que o resultado foi <b>verificado</b>: um teste sem asserção também dá cobertura. Por isso fizemos a mutação manual.</div>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<div class="secao">
+<h2><span class="num">5</span>Defeitos encontrados e corrigidos</h2>
+<p>Cada defeito tem um arquivo em <code>docs/defeitos/</code> e uma issue no GitHub. Desde o DEF-005, a correção segue <code>test(regressao)</code> (teste que reproduz o defeito) → <code>fix(DEF-xxx)</code>.</p>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:30%">O que aconteceu</th><th style="width:13%">Severidade</th><th>Como achamos e corrigimos</th><th style="width:12%">Situação</th></tr>
+  <tr><td>DEF-001</td><td>20 pedidos simultâneos geraram várias reservas (10, 7, 6, 4, 6)</td><td>Crítica / P0</td><td>Achado pelo teste de concorrência; corrigido com exclusion constraint + trava</td><td><span class="tag t-ok">corrigido</span></td></tr>
+  <tr><td>DEF-002</td><td>Com só a constraint, às vezes dava deadlock (erro 500)</td><td>Alta / P1</td><td>Mesmo teste ("exceções inesperadas"); corrigido com a trava por recurso</td><td><span class="tag t-ok">corrigido</span></td></tr>
+  <tr><td>DEF-003</td><td>p95 acima da meta sob carga (332 e 506 ms)</td><td>Média / P2</td><td>Achado pelo JMeter; causa ainda é hipótese</td><td><span class="tag t-risco">risco aceito</span></td></tr>
+  <tr><td>DEF-004</td><td>12 apontamentos da 1ª análise do SonarCloud</td><td>Alta / P1</td><td>11 corrigidos; S4502 justificado (ADR-007) e aceito</td><td><span class="tag t-ok">corrigido</span></td></tr>
+  <tr><td>DEF-005</td><td>Data vazia derrubava a agenda e o relatório ("Invalid time value")</td><td>Média / P1</td><td>Achado pelo Guilherme usando o sistema; 3 testes de interface</td><td><span class="tag t-ok">corrigido</span></td></tr>
+  <tr><td>DEF-006</td><td>Resposta atrasada da agenda apagava a tela aberta depois</td><td>Baixa / P2</td><td>Achado pelo teste E2E (falha intermitente); resposta retida de propósito no teste</td><td><span class="tag t-ok">corrigido</span></td></tr>
+</table>
+<div class="grade g2">
+  <div class="cartao"><h4>Severidade × prioridade</h4><p><b>Severidade</b> = tamanho do dano. <b>Prioridade</b> = urgência de corrigir. São independentes.</p></div>
+  <div class="cartao"><h4>Erro → defeito → falha</h4><p>Engano humano → problema no código → comportamento errado que alguém vê.</p></div>
+</div>
+<div class="caixa prova"><b class="t">Na prova: "o DEF-002 aparecia às vezes. Vocês rodaram de novo até passar?"</b>Não. Teste intermitente é defeito a investigar, não "instabilidade". Era deadlock entre pedidos simultâneos; a trava por recurso faz os pedidos do mesmo recurso esperarem a vez. Depois disso, ele ficou 3 rodadas sem "exceções inesperadas", mas 3 rodadas não provam que nunca mais vai acontecer.</div>
+<p class="peq">Também corrigimos problemas <b>dos testes</b> (não do produto): o teste de concorrência não limpava o banco; a 1ª tentativa da M2 foi inválida sem <code>clean</code>; testes de interface agiam antes de a tela carregar.</p>
+
+<!-- ============================ 6 ============================ -->
+<h2 style="margin-top:7mm"><span class="num">6</span>Resultados, riscos e decisão</h2>
+<div class="caixa ok"><b class="t">Decisão de qualidade (2026-11-11): liberar com ressalvas a v1.0.0-rc3 para avaliação acadêmica</b>Todos os 14 RF com teste; os 4 limitadores tratados; metas de cobertura, RTM e análise estática atingidas. <b>Não</b> afirma prontidão para produção: tudo foi medido em ambiente local e no CI.</div>
+<table>
+  <tr><th>Risco aceito</th><th>Impacto</th><th>Por que aceitamos</th></tr>
+  <tr><td>DEF-003: p95 acima da meta</td><td>até ~0,5 s em 5% das criações, no pior caso</td><td>sem perda de dados nem erro; a meta foi proposta pelo grupo</td></tr>
+  <tr><td>CSRF desligado (S4502, ADR-007)</td><td>exposição se a credencial for para cookie</td><td>token vai no cabeçalho, não em cookie</td></tr>
+  <tr><td>Token JWT não revogável (ADR-003)</td><td>usuário desligado acessa por até 60 min</td><td>validade curta; revogar exigiria lista de bloqueio</td></tr>
+  <tr><td>Spring Boot 3.5 sem suporte gratuito (ADR-001)</td><td>falha nova sem correção pública</td><td>a especificação exige 3.x</td></tr>
+</table>
+<p class="peq">Riscos assumidos por Guilherme Viana Lopes e Gustavo Santana em 2026-11-11 (<code>docs/decisao-qualidade.md</code>). Evidência da versão: CI 43089789523 no commit da tag (98 + 187 testes, 0 falhas).</p>
+</div>
+
+<!-- ============================ 7 ============================ -->
+<div class="secao">
+<h2><span class="num">7</span>Quem fez o quê</h2>
+<p>O código, os testes e a documentação foram escritos com um agente de IA (Claude), seguindo os prompts das aulas, como declarado no README. O grupo usou uma única conta do GitHub; em 2026-11-11 o histórico foi reescrito para registrar autor e coautores de cada commit, sem mudar nenhum arquivo. Divisão informada pelo grupo (<code>docs/decisao-qualidade.md</code>):</p>
+<table>
+  <tr><th>Assunto</th><th style="width:9%">Commits</th><th style="width:30%">Participantes</th></tr>
+  <tr><td>Esqueleto do projeto e build dos testes de integração</td><td>2</td><td>Guilherme, Rafael, Gustavo</td></tr>
+  <tr><td>Pipeline de CI (quebra intencional e reversão)</td><td>4</td><td>Guilherme</td></tr>
+  <tr><td>Requisitos, arquitetura, plano de teste e RTM</td><td>1</td><td>Guilherme, Gustavo</td></tr>
+  <tr><td>Regras de reserva com TDD (RN-01, 02, 04, 07, 08)</td><td>6</td><td>Guilherme, Rafael, Gustavo</td></tr>
+  <tr><td>Concorrência e trava no banco (RN-03, DEF-001, DEF-002)</td><td>3</td><td>Gustavo</td></tr>
+  <tr><td>Login, autorização, API e auditoria</td><td>5</td><td>Guilherme</td></tr>
+  <tr><td>Pesquisa, relatório e notificação com WireMock</td><td>4</td><td>Rafael, Gustavo</td></tr>
+  <tr><td>Cenários BDD com Cucumber</td><td>1</td><td>Guilherme, Rafael</td></tr>
+  <tr><td>Interface web e testes com Playwright (DEF-005, DEF-006)</td><td>5</td><td>Guilherme, Rafael, Gustavo</td></tr>
+  <tr><td>Cobertura (JaCoCo), SonarCloud e correções</td><td>4</td><td>Guilherme, Gustavo</td></tr>
+  <tr><td>Desempenho com JMeter e mutação manual</td><td>4</td><td>Guilherme, Gustavo</td></tr>
+  <tr><td>Documentação e entrega</td><td>11</td><td>Guilherme, Rafael, Gustavo</td></tr>
+  <tr><td>Identidade visual da interface (CSS)</td><td>4</td><td>Guilherme</td></tr>
+</table>
+<div class="caixa alerta"><b class="t">Atenção para a prova</b>O professor avalia o <b>domínio de autoria</b>: cada integrante precisa explicar <b>todas</b> as partes, inclusive as que não fez. Por isso o banco de perguntas distribui as perguntas para cada pessoa responder sobre partes que não escreveu.</div>
+</div>
+
+<!-- ============================ 8 ============================ -->
+<div class="secao">
+<h2><span class="num">8</span>Preparação para a prova oral (19/11)</h2>
+
+<h3>8.1 As 15 perguntas da banca, com a ideia da resposta</h3>
+<p class="peq">Distribuição de <code>docs/prova-oral/perguntas.md</code>. Responda <b>sem ler</b> e sempre cite a evidência (arquivo, teste ou número).</p>
+<table>
+  <tr><th style="width:4%">#</th><th style="width:33%">Pergunta</th><th>Ideia da resposta forte</th><th style="width:11%">Quem</th></tr>
+  <tr><td>1</td><td>Qual mecanismo impede a dupla reserva e qual teste prova?</td><td>Trava por recurso + exclusion constraint (ADR-002); <code>DuplaReservaConcorrenciaIT</code> 20 → 1, e <code>ProtecaoNoBancoIT</code></td><td>Rafael</td></tr>
+  <tr><td>2</td><td>Por que mock num ponto e Testcontainers em outro?</td><td>Regra da especificação: mock só em unidade isolada; banco e transação com PostgreSQL real; H2 não tem a constraint</td><td>Gustavo</td></tr>
+  <tr><td>3</td><td>O que o p95 permite e não permite afirmar?</td><td>332/506 ms nesta máquina, neste cenário de pior caso; nada sobre produção</td><td>Guilherme</td></tr>
+  <tr><td>4</td><td>Qual teste falha se a aprovação de restrito for removida?</td><td>M3 e M6: <code>ReservaTest</code>, BDD e células RES-08 da matriz</td><td>Rafael</td></tr>
+  <tr><td>5</td><td>Por que 8h–10h não conflita com 10h–12h?</td><td>Intervalo semiaberto <code>[início, término)</code>, ADR-004; <code>IntervaloTest</code> (RN02-01, RN02-04)</td><td>Gustavo</td></tr>
+  <tr><td>6</td><td>O DEF-002 apareceu "às vezes". Rodaram até passar?</td><td>Não: era deadlock; corrigido com a trava; o teste não foi alterado</td><td>Guilherme</td></tr>
+  <tr><td>7</td><td>Como sabem que a auditoria está na mesma transação?</td><td><code>AuditoriaIT.rn09_03_rollbackNaoDeixaAuditoriaOrfa</code>: força o rollback e confere que não sobra auditoria</td><td>Rafael</td></tr>
+  <tr><td>8</td><td>Cobertura de 98%: o que prova e o que não prova?</td><td>Que o código rodou, não que foi verificado; lacunas em <code>lacunas-de-cobertura.md</code>; mutação 11 de 11</td><td>Gustavo</td></tr>
+  <tr><td>9</td><td>Solicitante cancela a reserva de outro trocando o id?</td><td>Não: 403 (RES-06/07); autorização ≠ autenticação; mutação M5 prova o teste</td><td>Guilherme</td></tr>
+  <tr><td>10</td><td>De onde saíram as 3,5 h da Sala A no relatório?</td><td>Do cálculo à mão no comentário de <code>RelatorioDeUtilizacaoIT</code>, não do resultado da API</td><td>Rafael</td></tr>
+  <tr><td>11</td><td>Se o provedor de notificação cair, a reserva some?</td><td>Não: envio depois do commit, timeout 2 s (ADR-005); <code>NotificacaoAposCommitIT</code>, INT-03/04</td><td>Gustavo</td></tr>
+  <tr><td>12</td><td>Por que o CI roda <code>verify</code>? E se um teste falhar no PR?</td><td><code>verify</code> inclui integração e o gate; branch protection bloqueia o merge; execução vermelha do PR #1</td><td>Guilherme</td></tr>
+  <tr><td>13</td><td>Diferença entre 401 e 403?</td><td>401 sem login/token inválido (<code>tokenAdulteradoResponde401</code>); 403 logado sem permissão</td><td>Rafael</td></tr>
+  <tr><td>14</td><td>O erro de validação vaza detalhe interno?</td><td>Não: <code>TratamentoDeErros</code> devolve ProblemDetail em português com <code>codigo</code>; <code>ApiDeReservasIT.semDetalheInterno</code></td><td>Gustavo</td></tr>
+  <tr><td>15</td><td>Qual decisão tem mais trade-offs e qual o custo?</td><td>ADR-002: integridade × latência; o custo medido é a fila no pico (DEF-003)</td><td>Guilherme</td></tr>
+</table>
+</div>
+
+<div>
+<h3>8.2 O que o professor costuma pedir "na mesa" e como responder</h3>
+<table>
+  <tr><th style="width:44%">Ele pede…</th><th>Você mostra…</th></tr>
+  <tr><td>O commit vermelho de um TDD</td><td><code>docs/testes/evidencia-tdd.md</code> → ex.: <code>f68d7f4</code> (aceitos: esperado 1, foi 10)</td></tr>
+  <tr><td>Quebrar a regra de manutenção e ver qual teste falha</td><td><code>sh scripts/mutacao-manual.sh M4</code> → <code>ServicoDeReservasIT.EmManutencao</code> e a feature</td></tr>
+  <tr><td>Uma linha da RTM até o teste</td><td><code>docs/rtm.md</code> → arquivo do teste → execução do CI</td></tr>
+  <tr><td>Remover a proteção de concorrência</td><td>Mutação M2 → <code>DuplaReservaConcorrenciaIT</code> fica vermelho</td></tr>
+  <tr><td>De onde saiu o p95; se o 409 contou como erro</td><td><code>perf/resultados/rodada-01.jtl</code>; 409 não é erro (recusa correta)</td></tr>
+  <tr><td>A auditoria de uma reserva cancelada</td><td>Histórico pela API ou pela tela (Responsável/Administrador)</td></tr>
+  <tr><td>Refazer à mão uma linha do relatório</td><td>Comentário de cálculo em <code>RelatorioDeUtilizacaoIT</code></td></tr>
+  <tr><td>Solicitante mexendo na reserva de outro</td><td>Requisição → 403; célula RES-06 da matriz</td></tr>
+  <tr><td>Provocar erro de validação e ler a resposta</td><td>Término antes do início → 400 com mensagem em português, sem stack trace</td></tr>
+  <tr><td>Um número do relatório e a fonte</td><td><code>docs/relatorio-qualidade.md</code> (cada número tem a fonte ao lado)</td></tr>
+  <tr><td>Clonar e seguir o README</td><td><code>docs/entrega/checklist.md</code> (clone limpo repetido em 2026-11-09)</td></tr>
+  <tr><td>A execução do CI ligada à tag</td><td><code>docs/evidencias/README.md</code> → execução 43089789523 no <code>e4e92c0</code></td></tr>
+</table>
+
+<h3>8.3 Roteiro da apresentação (8 minutos)</h3>
+<div class="fluxo">
+  <div class="passo"><b>1. Problema</b>dupla alocação e limitadores</div><div class="seta">→</div>
+  <div class="passo"><b>2. Arquitetura</b>C4, recurso único, proteção no banco</div><div class="seta">→</div>
+  <div class="passo"><b>3. Demonstração</b>login, reservar, 409, aprovação, relatório</div><div class="seta">→</div>
+  <div class="passo"><b>4. Testes e CI</b>TDD, matriz, BDD, E2E, gate</div><div class="seta">→</div>
+  <div class="passo"><b>5. RTM</b>9 de 9, mutação 11 de 11, defeitos</div><div class="seta">→</div>
+  <div class="passo"><b>6. Limites</b>DEF-003, S4502, ambiente local</div>
+</div>
+<div class="caixa alerta"><b class="t">Falta fazer antes da prova</b>O ensaio com os três respondendo sem ler, com nota de 0 a 2 em correção técnica, evidência citada e domínio de autoria. Registrar as notas reais em <code>docs/prova-oral/ensaio.md</code> (ainda não realizado).</div>
+
+<!-- ============================ 9 ============================ -->
+<h2 style="margin-top:6mm"><span class="num">9</span>Glossário rápido</h2>
+<table>
+  <tr><td style="width:24%"><b>ADR</b></td><td>Registro curto de uma decisão: contexto, alternativas, decisão, consequências</td></tr>
+  <tr><td><b>ATAM</b></td><td>Método para avaliar a arquitetura: riscos, não-riscos, pontos de sensibilidade e de trade-off</td></tr>
+  <tr><td><b>C4</b></td><td>Diagramas em 4 níveis de zoom: contexto, contêineres, componentes, código</td></tr>
+  <tr><td><b>CI</b></td><td>Integração contínua: os testes rodam sozinhos a cada mudança enviada</td></tr>
+  <tr><td><b>Exclusion constraint</b></td><td>Regra do PostgreSQL que recusa duas linhas com intervalos que se cruzam</td></tr>
+  <tr><td><b>Flaky</b></td><td>Teste intermitente; passar no "rodar de novo" não resolve</td></tr>
+  <tr><td><b>IDOR</b></td><td>Acessar o dado de outro trocando o id na URL</td></tr>
+  <tr><td><b>JWT</b></td><td>Token assinado devolvido no login e enviado em cada pedido</td></tr>
+  <tr><td><b>Oráculo</b></td><td>O que diz se o resultado do teste está certo ("não deu exceção" não basta)</td></tr>
+  <tr><td><b>p95</b></td><td>95% dos pedidos foram mais rápidos que esse tempo</td></tr>
+  <tr><td><b>ProblemDetail</b></td><td>Formato padrão de resposta de erro (com <code>codigo</code> estável, ex.: <code>CONFLITO_DE_HORARIO</code>)</td></tr>
+  <tr><td><b>Quality Gate</b></td><td>Conjunto de condições do SonarCloud que aprova ou reprova o código</td></tr>
+  <tr><td><b>RTM</b></td><td>Matriz de rastreabilidade: requisito → risco → teste → evidência</td></tr>
+  <tr><td><b>Testcontainers</b></td><td>Sobe um PostgreSQL real em Docker durante o teste</td></tr>
+  <tr><td><b>WireMock</b></td><td>Servidor HTTP falso para simular a API externa (inclusive falhas)</td></tr>
+  <tr><td><b>Valor limite</b></td><td>Testar −1 / 0 / +1 em volta da fronteira (ex.: 1 segundo antes, no início, 1 segundo depois)</td></tr>
+</table>
+</div>
+
+</body>
+</html>
